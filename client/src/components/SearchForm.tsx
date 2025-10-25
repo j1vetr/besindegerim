@@ -12,24 +12,24 @@ export function SearchForm({ initialQuery = "" }: SearchFormProps) {
     <form
       method="GET"
       action="/ara"
-      className="w-full max-w-2xl mx-auto"
+      className="w-full"
       data-testid="form-search"
     >
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         <Input
           type="search"
           name="q"
           defaultValue={initialQuery}
           placeholder="Gıda ara... (ör: domates, tavuk, elma)"
-          className="h-12 md:h-14 text-base flex-1"
+          className="text-base border-2 rounded-xl flex-1"
           data-testid="input-search"
           autoComplete="off"
         />
         <Button
           type="submit"
           size="lg"
-          className="h-12 md:h-14 px-6"
           data-testid="button-search"
+          aria-label="Gıda ara"
         >
           <Search className="h-5 w-5" />
           <span className="sr-only">Ara</span>

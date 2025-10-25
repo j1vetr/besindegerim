@@ -1,5 +1,6 @@
 // USDA FoodData Central API Client
 import type { USDAFoodResponse, InsertFood, MicronutrientsData } from "@shared/schema";
+import { getFoodImage } from "./openfoodfacts-client";
 
 const USDA_API_BASE = "https://api.nal.usda.gov/fdc/v1";
 const API_KEY = process.env.FOODDATA_API_KEY;
@@ -140,6 +141,31 @@ export function normalizeFoodData(
     micronutrients: Object.keys(micronutrients).length > 0 ? micronutrients : null,
     imageUrl: null, // We'll use placeholders or add images later
   };
+}
+
+/**
+ * Normalize USDA food data with image fetching from OpenFoodFacts/Wikimedia
+ */
+export async function normalizeFoodDataWithImage(
+  usdaFood: any,
+  turkishName?: string
+): Promise<Omit<InsertFood, "slug">> {
+  const baseData = normalizeFoodData(usdaFood, turkishName);
+  
+  // Fetch image from OpenFoodFacts or Wikimedia Commons
+  try {
+    const imageUrl = await getFoodImage(
+      baseData.nameEn || "food", 
+      turkishName || baseData.name
+    );
+    return {
+      ...baseData,
+      imageUrl,
+    };
+  } catch (error) {
+    console.error("Error fetching food image:", error);
+    return baseData;
+  }
 }
 
 /**

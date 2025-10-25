@@ -2,185 +2,212 @@
 
 ## Design Approach
 
-**Selected Approach:** Utility-focused design system with health/nutrition industry references
-- Primary inspiration: MyFitnessPal's clarity + Cronometer's data density + Health app minimalism
-- Focus on information hierarchy and readability for nutrition data
-- Mobile-first, professional aesthetic without AI-generated feel
+**Selected Approach:** Modern health app aesthetic with vibrant visual design
+- Inspiration: MyFitnessPal's clarity + Duolingo's playful energy + modern gradient trends
+- Focus: Data legibility wrapped in engaging, contemporary visual design
+- Mobile-first with generous spacing and touch-friendly interactions
 
 ## Core Design Principles
 
-1. **Data Clarity First:** Nutrition information must be immediately scannable
-2. **Trustworthy Professionalism:** Medical/health-adjacent design language
-3. **Turkish Localization:** All content, formatting, and cultural nuances in Turkish
-4. **Serving-Based Transparency:** Highlight real portion sizes prominently
+1. **Vibrant Clarity:** Nutrition data presented beautifully without sacrificing readability
+2. **Modern Turkish Health Resource:** Professional yet fun, localized experience
+3. **Serving Transparency:** Portion sizes prominently displayed with visual emphasis
+4. **Visual Hierarchy:** Bold gradients and shadows guide attention to key information
+
+---
+
+## Color System
+
+**Primary Gradient:**
+- Green: #22c55e → #16a34a (use for buttons, hero overlays, accent cards)
+- Apply: bg-gradient-to-r from-[#22c55e] to-[#16a34a]
+
+**Secondary Accents:**
+- Teal: #14b8a6 (badges, progress bars, icons)
+- Cyan: #06b6d4 (hover states, secondary highlights)
+
+**Base Colors:**
+- Background: Soft gradient from white to #f0fdf4 (green-50)
+- Cards: Pure white with shadow-xl and shadow-green-100/20
+- Text Primary: #1f2937 (gray-800)
+- Text Secondary: #6b7280 (gray-500)
+
+**Application:**
+- Hero background: gradient overlay on food imagery
+- Calorie cards: white with green gradient border-l-4
+- Hover states: transition to teal/cyan accents
+- Glassmorphism: white backgrounds with backdrop-blur-lg and bg-white/80
 
 ---
 
 ## Typography
 
-**Font Families:**
-- Primary: Inter or system-ui for maximum legibility
-- Headings: Inter Semi-Bold (600)
-- Body: Inter Regular (400)
-- Data/Numbers: Inter Medium (500) for emphasis
+**Fonts:** Inter (via Google Fonts CDN)
 
-**Type Scale:**
-- H1: text-3xl md:text-4xl (gıda adı)
-- H2: text-2xl md:text-3xl (section başlıkları)
-- H3: text-xl (alt başlıklar)
-- Body: text-base (genel içerik)
-- Data labels: text-sm (besin etiketleri)
-- Large numbers: text-4xl md:text-5xl (kalori kartı ana sayı)
+**Scale & Hierarchy:**
+- H1: text-4xl md:text-6xl font-bold (hero, page titles)
+- H2: text-3xl md:text-4xl font-bold (section headers)
+- H3: text-2xl font-semibold (subsections)
+- Body: text-base md:text-lg (general content)
+- Data Labels: text-sm font-medium uppercase tracking-wide (nutrient names)
+- Calorie Numbers: text-6xl md:text-7xl font-black (hero calorie display)
+- Small Text: text-xs (metadata, units)
+
+**Treatment:**
+- Headlines: Use gradient text with bg-clip-text for major headings
+- Bold weights (600-900) for emphasis
+- Generous letter-spacing on labels for modern feel
 
 ---
 
 ## Layout & Spacing
 
-**Spacing System:** Tailwind units of 2, 4, 6, 8, 12, 16
-- Section padding: py-12 md:py-16
-- Card padding: p-4 md:p-6
-- Component gaps: gap-4 or gap-6
-- Container: max-w-6xl mx-auto px-4
+**Spacing System:** Tailwind units of 4, 6, 8, 12, 16, 20, 24
+- Section padding: py-16 md:py-24 lg:py-32
+- Card padding: p-6 md:p-8
+- Component gaps: gap-6 md:gap-8
+- Container: max-w-7xl mx-auto px-6 md:px-8
 
 **Grid Strategy:**
-- Mobile: Single column (grid-cols-1)
-- Tablet: 2 columns where appropriate (md:grid-cols-2)
-- Desktop: 3 columns for alternatives grid (lg:grid-cols-3)
+- Mobile: grid-cols-1
+- Tablet: grid-cols-2 (md:)
+- Desktop: grid-cols-3 lg:grid-cols-4 (popular foods, alternatives)
 
----
-
-## Color Palette
-
-**Base:**
-- Background: Açık ton (soft white/cream - very light, warm neutral)
-- Surface: Pure white cards with subtle shadows
-- Text: Dark gray (high contrast for readability)
-- Borders: Light gray (subtle separation)
-
-**Accent:**
-- Primary: Yeşil (green) - use for CTAs, highlights, active states
-- Success: Lighter green for positive indicators
-- Neutral: Gray for secondary actions
-
-**Application:**
-- Use green sparingly for emphasis (search button, portion callouts, links)
-- Maintain high contrast ratios for accessibility
-- White cards on light background with shadow-sm for depth
+**Breathing Room:** Generous whitespace between sections (mb-16 to mb-24)
 
 ---
 
 ## Component Library
 
-### Homepage (/)
+### Homepage Hero
 
-**Hero Section (Compact):**
-- NO large hero image
-- Simple centered layout: max-w-2xl
-- H1: "Gıda Besin Değerleri" (text-3xl md:text-4xl)
-- Subtitle: Brief tagline about serving-based nutrition
-- Search bar: Large input (h-12 md:h-14) with green search button
-- Spacing: py-16 md:py-24
+**Visual Treatment:**
+- Full-width section with large food photography background (hero image: 1920x800px vibrant food composition)
+- Gradient overlay: bg-gradient-to-br from-[#22c55e]/90 to-[#16a34a]/80
+- Content: Centered, max-w-4xl
+- H1: "Türkiye'nin En Kapsamlı Gıda Besin Değerleri Rehberi" (white text with text-shadow)
+- Subtitle: Light text explaining serving-based approach
+- Search Bar: Large (h-16), white background with shadow-2xl, rounded-2xl, integrated green gradient search button
+- Glassmorphism effect on search container: backdrop-blur-md bg-white/90
+- Height: min-h-[600px] md:min-h-[700px]
+- Button on image: backdrop-blur-md with bg-white/20 treatment
 
 **Popular Foods Section:**
-- Grid: 2 columns mobile (grid-cols-2), 3-4 desktop (md:grid-cols-3 lg:grid-cols-4)
-- Cards: White background, shadow-sm, rounded-lg, p-4
-- Each card: Small food image (if available), food name, calorie preview
-- Hover: subtle shadow-md transition
+- py-20, light gradient background
+- H2: "Popüler Gıdalar" with green gradient underline decoration
+- Grid: grid-cols-2 md:grid-cols-3 lg:grid-cols-4, gap-6
+- Cards: White, rounded-xl, shadow-lg hover:shadow-2xl, transform hover:scale-105, transition-all duration-300
+- Each card: Food image (250x250px, rounded-t-xl), name (font-semibold), calorie badge with teal background
 
 ### Food Detail Page (/:slug)
 
-**Header Section:**
-- H1: Gıda adı (mb-6)
-- Food image: 300x300px (or placeholder), rounded-lg, shadow-sm
-- Image placement: Left side on desktop (md:flex with image + content)
+**Hero Section:**
+- Large food image: 600x400px (or larger), rounded-2xl, shadow-2xl
+- Desktop layout: Two-column (md:grid-cols-2), gap-12
+- Left: Image with subtle gradient border
+- Right: Food name (H1), serving info badge (teal background, rounded-full, px-4 py-2)
 
-**Main Calorie Card (Prominent):**
-- Large white card with green accent border-l-4
-- Layout: Horizontal flex
-- Left: Serving info - "1 {servingLabel}" (text-base text-gray-600)
-- Right: Large calorie number (text-5xl font-semibold) + "kcal" label
-- Padding: p-6, rounded-lg, shadow-md
-- This card should be visually dominant
+**Calorie Showcase Card:**
+- Prominent card with green gradient border-l-8, shadow-xl
+- Glassmorphism: backdrop-blur-sm with subtle white/95 background
+- Layout: Flex with icon (large calorie flame icon from Heroicons)
+- Serving size: text-lg text-gray-600 with portion emoji
+- Calorie number: text-7xl font-black with gradient text effect
+- Label: "kalori" in text-2xl
+- Padding: p-8 md:p-10, rounded-2xl
 
-**Nutrition Table:**
-- Clean table design with alternating row backgrounds (stripe pattern)
-- Headers: font-medium, border-b-2
-- Rows: py-3 px-4 spacing
-- Columns: Besin adı | Miktar | Birim
-- All values in serving-based units
-- Include macros (protein, yağ, karbonhidrat) first, then available micronutrients
-- Mobile: Stack to vertical cards if needed
+**Macronutrient Cards:**
+- Three-column grid (grid-cols-3 gap-4)
+- Each: White card, rounded-xl, p-6, shadow-md
+- Icon at top (Protein/Fat/Carb icons from Heroicons in teal)
+- Large number (text-3xl font-bold)
+- Progress bar: h-2 rounded-full bg-gray-200 with teal fill showing percentage
+- Label below bar
 
-**Alternatives Section (6 Foods):**
-- H2: "Benzer Gıdalar" or "Alternatifler"
-- Grid: 2 columns mobile, 3 desktop (grid-cols-2 md:grid-cols-3)
-- Cards: Similar to homepage popular foods
-- Each shows: name, small image, calorie preview
-- Link to respective /:slug pages
+**Detailed Nutrition Table:**
+- Modern table with alternating row backgrounds (even:bg-green-50/30)
+- Header: bg-gradient-to-r from-green-500 to-green-600, text-white, rounded-t-xl
+- Rows: py-4 px-6, hover:bg-green-50 transition
+- Borders: border-b border-gray-100
+- Values: font-medium for emphasis
+- Include nutrient icons from Heroicons inline
 
----
-
-## Images
-
-**Food Images:**
-- Detail page: 300x300px square, centered or left-aligned on desktop
-- List/Grid cards: 120x120px thumbnails
-- Placeholder: Simple green-tinted geometric pattern or food icon
-- All images: rounded-lg, object-cover
-
-**NO Hero Images:** This is a data-focused utility site, not a marketing page
+**Alternatives Section:**
+- H2: "Benzer Gıdalar" with gradient accent
+- Grid: grid-cols-2 md:grid-cols-3, gap-6
+- Cards: Image (200x200px), overlay with gradient on hover, name, calorie badge
+- Shadow-lg, rounded-xl, overflow-hidden for image containment
 
 ---
 
-## Interactions & States
+## Images & Visual Elements
 
-**Minimal Animation:**
-- Hover: subtle shadow transitions (transition-shadow duration-200)
-- Link hover: green underline or color change
-- Button hover: slight brightness increase
-- NO complex animations, NO scroll-triggered effects
+**Food Photography:**
+- Hero: 1920x800px vibrant, high-quality food compositions
+- Detail page: 600x400px professional food shots
+- Grid cards: 250x250px square thumbnails
+- All: rounded corners, subtle shadows, object-cover
+- Placeholder: Gradient green pattern with food icon from Heroicons
 
-**Button Styles:**
-- Primary (green): rounded-lg, px-6 py-3, font-medium
-- Secondary: border with gray, hover to green
-- States handled by component library
+**Icons:** Heroicons (via CDN)
+- Nutrient types: protein (beaker), fat (droplet), carbs (lightning)
+- UI elements: search, fire (calories), chart
+- Size: w-6 h-6 for inline, w-12 h-12 for feature icons
+- Color: Teal (#14b8a6) for consistency
 
----
-
-## Mobile-First Considerations
-
-**Touch Targets:**
-- Minimum 44x44px for all interactive elements
-- Generous spacing between clickable items (gap-4)
-
-**Responsive Behavior:**
-- Search bar: Full width on mobile
-- Food detail: Stack image above content on mobile
-- Tables: Transform to cards or horizontal scroll
-- Alternatives grid: 2 columns mobile, expand on desktop
+**Badges & Labels:**
+- Rounded-full for tags
+- Gradient backgrounds for calorie indicators
+- Shadow-sm for depth
 
 ---
 
-## SEO & Accessibility
+## Effects & Animations
 
-**Semantic HTML:**
-- Proper heading hierarchy (h1 → h2 → h3)
-- Descriptive alt text for all images
-- ARIA labels where needed
+**Glassmorphism:**
+- Search bar, overlay elements: backdrop-blur-lg bg-white/80
+- Borders: border border-white/20
+- Shadow: shadow-2xl with colored shadow tints
 
-**Content Structure:**
-- All content in HTML (JS kapalı durumda bile)
-- Logical tab order
-- High contrast text (WCAG AA minimum)
+**Hover Effects:**
+- Cards: transform scale-105, shadow-lg → shadow-2xl
+- Buttons: brightness-110
+- Images: subtle zoom (scale-105) with overflow-hidden container
+- Duration: transition-all duration-300
+
+**Shadows:**
+- Cards: shadow-lg default, shadow-2xl on hover
+- Hero elements: shadow-2xl
+- Calorie card: shadow-xl with green tint (shadow-green-500/10)
+
+**Gradients:**
+- Backgrounds: subtle radial-gradient or linear
+- Borders: gradient-to-r for accent lines
+- Text: bg-clip-text for headlines
 
 ---
 
-## Design Quality Standards
+## Mobile Optimization
 
-- **Information Density:** Balance between data-rich and scannable
-- **Professional Medical Aesthetic:** Similar to health apps, not consumer marketing
-- **Turkish UX Patterns:** Proper decimal separators (virgül), unit conventions
-- **Serving Clarity:** Always emphasize "1 porsiyon" or actual serving size
-- **No AI Smell:** Avoid generic gradients, excessive shadows, or template-like patterns
+**Touch Targets:** Minimum 48px height for all interactive elements
+**Responsive Images:** srcset for different densities
+**Stack Behavior:** 
+- Food detail: Image above content on mobile
+- Macro cards: Full width stack on mobile, row on tablet+
+- Tables: Horizontal scroll with sticky first column
+**Spacing Scale Down:** py-16 on mobile → py-24 on desktop
 
-This design creates a trustworthy, data-focused nutrition resource that prioritizes clarity and usability over visual flair, perfectly suited for Turkish users seeking accurate serving-based nutrition information.
+---
+
+## Accessibility & Quality
+
+- High contrast maintained despite vibrant colors (WCAG AA)
+- Semantic HTML with proper heading hierarchy
+- ARIA labels for icons and interactive elements
+- Alt text for all food images describing the food
+- Keyboard navigation with visible focus states (green ring)
+- Turkish decimal formatting (virgül for decimals)
+
+---
+
+This modern, vibrant design creates an engaging Turkish nutrition resource that makes data exploration delightful while maintaining professional health app credibility through clear information hierarchy and serving-based transparency.
