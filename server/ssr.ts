@@ -1,6 +1,6 @@
 // SSR Routes - Server-side rendering for all pages
 import type { Express, Request, Response } from "express";
-import { HomePage } from "../client/src/pages/HomePage";
+import HomePage from "../client/src/pages/HomePage";
 import { FoodDetailPage } from "../client/src/pages/FoodDetailPage";
 import { NotFoundPage } from "../client/src/pages/NotFoundPage";
 import { SearchResultsPage } from "../client/src/pages/SearchResultsPage";

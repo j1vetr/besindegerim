@@ -1,21 +1,22 @@
-import { useQuery } from "@tanstack/react-query";
+import React from "react";
 import { type Food } from "@shared/schema";
 import { FoodCard } from "@/components/FoodCard";
 import { SearchForm } from "@/components/SearchForm";
 import { Header } from "@/components/Header";
 import { Sparkles, TrendingUp, Zap, Database } from "lucide-react";
 
-export default function HomePage() {
-  const currentPath = "/";
+interface HomePageProps {
+  categories?: string[];
+  popularFoods?: Food[];
+  currentPath?: string;
+}
 
-  const { data: categories = [] } = useQuery<string[]>({
-    queryKey: ["/api/categories"],
-  });
-
-  const { data: popularFoods = [], isLoading } = useQuery<Food[]>({
-    queryKey: ["/api/random"],
-    refetchOnWindowFocus: false,
-  });
+export default function HomePage({ 
+  categories = [], 
+  popularFoods = [],
+  currentPath = "/"
+}: HomePageProps = {}) {
+  const isLoading = false;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#0a0e1a] via-[#0f172a] to-[#020617] text-slate-50">
@@ -76,23 +77,22 @@ export default function HomePage() {
 
             {/* Stats Grid - Futuristic Pills */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-4xl mx-auto">
-              {[
-                { icon: Database, label: "98+ Gıda", color: "emerald" },
-                { icon: TrendingUp, label: "Gerçek Porsiyon", color: "cyan" },
-                { icon: Zap, label: "USDA Verisi", color: "purple" },
-                { icon: Sparkles, label: "Vitamin & Mineral", color: "blue" },
-              ].map((stat, index) => (
-                <div
-                  key={index}
-                  className="backdrop-blur-xl bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-emerald-500/50 transition-all duration-500 group"
-                  data-testid={`stat-pill-${index}`}
-                >
-                  <stat.icon className={`w-8 h-8 mx-auto mb-3 text-${stat.color}-400 group-hover:scale-110 transition-transform`} />
-                  <p className="text-sm md:text-base font-bold text-slate-100">
-                    {stat.label}
-                  </p>
-                </div>
-              ))}
+              <div className="backdrop-blur-xl bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-emerald-500/50 transition-all duration-500 group" data-testid="stat-pill-0">
+                <Database className="w-8 h-8 mx-auto mb-3 text-emerald-400 group-hover:scale-110 transition-transform" />
+                <p className="text-sm md:text-base font-bold text-slate-100">98+ Gıda</p>
+              </div>
+              <div className="backdrop-blur-xl bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-emerald-500/50 transition-all duration-500 group" data-testid="stat-pill-1">
+                <TrendingUp className="w-8 h-8 mx-auto mb-3 text-cyan-400 group-hover:scale-110 transition-transform" />
+                <p className="text-sm md:text-base font-bold text-slate-100">Gerçek Porsiyon</p>
+              </div>
+              <div className="backdrop-blur-xl bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-emerald-500/50 transition-all duration-500 group" data-testid="stat-pill-2">
+                <Zap className="w-8 h-8 mx-auto mb-3 text-purple-400 group-hover:scale-110 transition-transform" />
+                <p className="text-sm md:text-base font-bold text-slate-100">USDA Verisi</p>
+              </div>
+              <div className="backdrop-blur-xl bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-emerald-500/50 transition-all duration-500 group" data-testid="stat-pill-3">
+                <Sparkles className="w-8 h-8 mx-auto mb-3 text-blue-400 group-hover:scale-110 transition-transform" />
+                <p className="text-sm md:text-base font-bold text-slate-100">Vitamin & Mineral</p>
+              </div>
             </div>
           </div>
 
@@ -181,48 +181,35 @@ export default function HomePage() {
 
             {/* Features Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                {
-                  icon: Database,
-                  title: "USDA Verisi",
-                  desc: "Amerika Tarım Bakanlığı'ndan doğrulanmış, bilimsel verilerle desteklenen besin değerleri",
-                  color: "emerald",
-                },
-                {
-                  icon: TrendingUp,
-                  title: "Gerçek Porsiyon",
-                  desc: "100g yerine gerçek porsiyon bazlı kalori hesaplama. Örnek: '1 orta domates = 22 kal'",
-                  color: "cyan",
-                },
-                {
-                  icon: Sparkles,
-                  title: "Detaylı Bilgi",
-                  desc: "Kalori, makro besinler, 20+ vitamin ve minerallerle tam analiz",
-                  color: "purple",
-                },
-              ].map((feature, index) => (
-                <div
-                  key={index}
-                  className="group backdrop-blur-xl bg-white/5 rounded-3xl p-8 border border-white/10 hover:bg-white/10 hover:border-emerald-500/50 transition-all duration-500 hover:scale-105 hover:-translate-y-2"
-                  data-testid={`feature-card-${index}`}
-                >
-                  {/* Icon with Glow */}
-                  <div className={`w-16 h-16 bg-gradient-to-br from-${feature.color}-500/20 to-${feature.color}-600/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-${feature.color}-500/20`}>
-                    <feature.icon className={`w-8 h-8 text-${feature.color}-400`} />
-                  </div>
-
-                  <h3 className="text-2xl font-bold text-slate-100 mb-3">
-                    {feature.title}
-                  </h3>
-                  
-                  <p className="text-slate-400 leading-relaxed">
-                    {feature.desc}
-                  </p>
-
-                  {/* Neon Accent Bar */}
-                  <div className={`mt-6 h-1 w-16 bg-gradient-to-r from-${feature.color}-500 to-transparent rounded-full group-hover:w-full transition-all duration-700`}></div>
+              {/* Feature 1: USDA Verisi */}
+              <div className="group backdrop-blur-xl bg-white/5 rounded-3xl p-8 border border-white/10 hover:bg-white/10 hover:border-emerald-500/50 transition-all duration-500 hover:scale-105 hover:-translate-y-2" data-testid="feature-card-0">
+                <div className="w-16 h-16 bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-emerald-500/20">
+                  <Database className="w-8 h-8 text-emerald-400" />
                 </div>
-              ))}
+                <h3 className="text-2xl font-bold text-slate-100 mb-3">USDA Verisi</h3>
+                <p className="text-slate-400 leading-relaxed">Amerika Tarım Bakanlığı'ndan doğrulanmış, bilimsel verilerle desteklenen besin değerleri</p>
+                <div className="mt-6 h-1 w-16 bg-gradient-to-r from-emerald-500 to-transparent rounded-full group-hover:w-full transition-all duration-700"></div>
+              </div>
+
+              {/* Feature 2: Gerçek Porsiyon */}
+              <div className="group backdrop-blur-xl bg-white/5 rounded-3xl p-8 border border-white/10 hover:bg-white/10 hover:border-emerald-500/50 transition-all duration-500 hover:scale-105 hover:-translate-y-2" data-testid="feature-card-1">
+                <div className="w-16 h-16 bg-gradient-to-br from-cyan-500/20 to-cyan-600/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-cyan-500/20">
+                  <TrendingUp className="w-8 h-8 text-cyan-400" />
+                </div>
+                <h3 className="text-2xl font-bold text-slate-100 mb-3">Gerçek Porsiyon</h3>
+                <p className="text-slate-400 leading-relaxed">100g yerine gerçek porsiyon bazlı kalori hesaplama. Örnek: '1 orta domates = 22 kal'</p>
+                <div className="mt-6 h-1 w-16 bg-gradient-to-r from-cyan-500 to-transparent rounded-full group-hover:w-full transition-all duration-700"></div>
+              </div>
+
+              {/* Feature 3: Detaylı Bilgi */}
+              <div className="group backdrop-blur-xl bg-white/5 rounded-3xl p-8 border border-white/10 hover:bg-white/10 hover:border-emerald-500/50 transition-all duration-500 hover:scale-105 hover:-translate-y-2" data-testid="feature-card-2">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-500/20 to-purple-600/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-purple-500/20">
+                  <Sparkles className="w-8 h-8 text-purple-400" />
+                </div>
+                <h3 className="text-2xl font-bold text-slate-100 mb-3">Detaylı Bilgi</h3>
+                <p className="text-slate-400 leading-relaxed">Kalori, makro besinler, 20+ vitamin ve minerallerle tam analiz</p>
+                <div className="mt-6 h-1 w-16 bg-gradient-to-r from-purple-500 to-transparent rounded-full group-hover:w-full transition-all duration-700"></div>
+              </div>
             </div>
           </div>
         </section>
