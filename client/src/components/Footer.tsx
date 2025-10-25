@@ -83,7 +83,16 @@ export function Footer() {
           <div className="flex items-center gap-1">
             <span>Sağlıklı yaşam için</span>
             <Heart className="h-4 w-4 fill-red-500 text-red-500" />
-            <span>ile yapıldı</span>
+            <a 
+              href="https://toov.com.tr" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="font-semibold text-foreground hover:text-primary transition-colors"
+              data-testid="link-toov"
+            >
+              TOOV
+            </a>
+            <span>tarafından yapıldı</span>
           </div>
         </div>
 

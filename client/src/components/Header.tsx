@@ -35,9 +35,6 @@ export function Header({ categories = [], currentPath = "/" }: HeaderProps = {})
                 className="h-10 w-auto"
                 data-testid="img-logo"
               />
-              <span className="hidden text-xl font-bold text-foreground sm:inline">
-                Besin Değerim
-              </span>
             </div>
           </a>
 
