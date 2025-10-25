@@ -52,14 +52,17 @@ export function HomePage({ popularFoods, categories, currentPath }: HomePageProp
 
             {/* Stats Pills - Quick Metrics */}
             <div className="flex flex-wrap justify-center gap-4 mt-12">
-              <div className="backdrop-blur-md bg-white/20 rounded-full px-6 py-3 border border-white/30">
-                <span className="text-white font-bold text-lg">14+ Gıda</span>
+              <div className="backdrop-blur-md bg-white/20 rounded-full px-6 py-3 border border-white/30 hover:bg-white/30 transition-colors">
+                <span className="text-white font-bold text-lg">98+ Gıda</span>
               </div>
-              <div className="backdrop-blur-md bg-white/20 rounded-full px-6 py-3 border border-white/30">
+              <div className="backdrop-blur-md bg-white/20 rounded-full px-6 py-3 border border-white/30 hover:bg-white/30 transition-colors">
                 <span className="text-white font-bold text-lg">Gerçek Porsiyon</span>
               </div>
-              <div className="backdrop-blur-md bg-white/20 rounded-full px-6 py-3 border border-white/30">
+              <div className="backdrop-blur-md bg-white/20 rounded-full px-6 py-3 border border-white/30 hover:bg-white/30 transition-colors">
                 <span className="text-white font-bold text-lg">USDA Verisi</span>
+              </div>
+              <div className="backdrop-blur-md bg-white/20 rounded-full px-6 py-3 border border-white/30 hover:bg-white/30 transition-colors">
+                <span className="text-white font-bold text-lg">Vitamin & Mineral</span>
               </div>
             </div>
           </div>
@@ -106,7 +109,7 @@ export function HomePage({ popularFoods, categories, currentPath }: HomePageProp
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">Detaylı Bilgi</h3>
                   <p className="text-gray-600 leading-relaxed">
-                    Kalori, protein, karbonhidrat ve mikrobesinler
+                    Kalori, makro besinler, vitamin ve minerallerle tam analiz
                   </p>
                 </CardContent>
               </Card>
@@ -135,8 +138,8 @@ export function HomePage({ popularFoods, categories, currentPath }: HomePageProp
                 </p>
               </div>
               
-              {/* Food Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Food Grid - Stunning Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 {popularFoods.map((food) => (
                   <FoodCard key={food.id} food={food} />
                 ))}

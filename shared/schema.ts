@@ -19,13 +19,19 @@ export const foods = pgTable("foods", {
   // Serving information from USDA API
   servingSize: decimal("serving_size", { precision: 10, scale: 2 }).notNull(), // in grams
   servingLabel: text("serving_label").notNull(), // e.g., "1 orta domates", "1 porsiyon"
-  // Nutrition per serving
+  // Nutrition per serving - Macronutrients
   calories: decimal("calories", { precision: 10, scale: 2 }).notNull(),
   protein: decimal("protein", { precision: 10, scale: 2 }), // grams
-  fat: decimal("fat", { precision: 10, scale: 2 }), // grams
+  fat: decimal("fat", { precision: 10, scale: 2 }), // grams - total fat
+  saturatedFat: decimal("saturated_fat", { precision: 10, scale: 2 }), // grams
+  transFat: decimal("trans_fat", { precision: 10, scale: 2 }), // grams
+  cholesterol: decimal("cholesterol", { precision: 10, scale: 2 }), // milligrams
   carbs: decimal("carbs", { precision: 10, scale: 2 }), // grams
   fiber: decimal("fiber", { precision: 10, scale: 2 }), // grams
   sugar: decimal("sugar", { precision: 10, scale: 2 }), // grams
+  addedSugar: decimal("added_sugar", { precision: 10, scale: 2 }), // grams
+  sodium: decimal("sodium", { precision: 10, scale: 2 }), // milligrams
+  potassium: decimal("potassium", { precision: 10, scale: 2 }), // milligrams
   // Micronutrients stored as JSON (flexible structure for available data)
   // Example: { "vitamin_c": { "amount": 10, "unit": "mg" }, "calcium": { "amount": 20, "unit": "mg" } }
   micronutrients: jsonb("micronutrients"),

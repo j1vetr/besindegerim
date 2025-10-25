@@ -1,4 +1,4 @@
-// USDA FoodData Central API Client
+// Enhanced USDA FoodData Central API Client with full nutrition + Branded Foods support
 import type { USDAFoodResponse, InsertFood, MicronutrientsData } from "@shared/schema";
 import { searchPexelsImage } from "./pexels-client";
 
@@ -10,10 +10,25 @@ if (!API_KEY) {
 }
 
 /**
- * Search for foods by query
+ * Search for foods by query (includes Foundation, SR Legacy, Branded)
  */
-export async function searchFoods(query: string, pageSize: number = 10): Promise<any[]> {
+export async function searchFoods(query: string, pageSize: number = 25, dataType?: string[]): Promise<any[]> {
   const url = `${USDA_API_BASE}/foods/search?api_key=${API_KEY}&query=${encodeURIComponent(query)}&pageSize=${pageSize}`;
+
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`USDA API error: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  return data.foods || [];
+}
+
+/**
+ * Search specifically for branded foods (Lay's, Doritos, Coca-Cola, etc.)
+ */
+export async function searchBrandedFoods(query: string, pageSize: number = 25): Promise<any[]> {
+  const url = `${USDA_API_BASE}/foods/search?api_key=${API_KEY}&query=${encodeURIComponent(query)}&dataType=Branded&pageSize=${pageSize}`;
 
   const response = await fetch(url);
   if (!response.ok) {
@@ -39,52 +54,10 @@ export async function getFoodById(fdcId: number): Promise<any> {
 }
 
 /**
- * Normalize USDA food data to our database schema
- * Important: Uses serving-based calculations, NOT per 100g
+ * Enhanced nutrient extraction with ALL USDA nutrients
+ * Includes macros, micros, vitamins, minerals
  */
-export function normalizeFoodData(
-  usdaFood: any,
-  turkishName?: string
-): Omit<InsertFood, "slug"> {
-  const fdcId = usdaFood.fdcId;
-  const nameEn = usdaFood.description || usdaFood.lowercaseDescription || "";
-  const name = turkishName || nameEn;
-
-  // Extract serving information from USDA data
-  let servingSize = 100; // Default to 100g if no portion data
-  let servingLabel = "1 porsiyon (100g)";
-
-  // Check for food portions (preferred)
-  if (usdaFood.foodPortions && usdaFood.foodPortions.length > 0) {
-    const portion = usdaFood.foodPortions[0]; // Use first portion
-    
-    // Only use gramWeight if available, otherwise use 100g default
-    if (portion.gramWeight && portion.gramWeight > 0) {
-      servingSize = portion.gramWeight;
-      const grams = Math.round(servingSize);
-      servingLabel = `1 porsiyon (${grams}g)`;
-    } else {
-      // No gramWeight available, use 100g default
-      servingSize = 100;
-      servingLabel = "1 porsiyon (100g)";
-    }
-  } else if (usdaFood.servingSize && usdaFood.servingSizeUnit) {
-    // Check if servingSizeUnit is already in grams
-    const unit = usdaFood.servingSizeUnit.toLowerCase();
-    if (unit === 'g' || unit === 'gram' || unit === 'grams') {
-      servingSize = usdaFood.servingSize;
-      const grams = Math.round(servingSize);
-      servingLabel = `1 porsiyon (${grams}g)`;
-    } else {
-      // Unknown unit, use 100g default
-      servingSize = 100;
-      servingLabel = "1 porsiyon (100g)";
-    }
-  }
-
-  // Extract nutrients and calculate per serving
-  const nutrients = usdaFood.foodNutrients || [];
-  
+function extractAllNutrients(nutrients: any[], servingSize: number) {
   // Helper to find nutrient by ID and calculate per serving
   const getNutrient = (nutrientId: number): number | undefined => {
     const foodNutrient = nutrients.find((fn: any) => fn.nutrient?.id === nutrientId);
@@ -95,39 +68,53 @@ export function normalizeFoodData(
     return (valuePer100g * servingSize) / 100;
   };
 
-  // Macronutrients (USDA nutrient IDs)
-  const calories = getNutrient(1008) || 0; // Energy (kcal)
-  const protein = getNutrient(1003); // Protein
-  const fat = getNutrient(1004); // Total lipid (fat)
-  const carbs = getNutrient(1005); // Carbohydrate
-  const fiber = getNutrient(1079); // Fiber
-  const sugar = getNutrient(2000); // Total sugars
+  // MACRONUTRIENTS (using official USDA nutrient IDs)
+  const macros = {
+    calories: getNutrient(1008) || 0, // Energy (kcal)
+    protein: getNutrient(1003), // Protein
+    fat: getNutrient(1004), // Total lipid (fat)
+    saturatedFat: getNutrient(1258), // Fatty acids, total saturated
+    transFat: getNutrient(1257), // Fatty acids, total trans
+    cholesterol: getNutrient(1253), // Cholesterol
+    carbs: getNutrient(1005), // Carbohydrate, by difference
+    fiber: getNutrient(1079), // Fiber, total dietary
+    sugar: getNutrient(2000), // Sugars, total including NLEA
+    addedSugar: getNutrient(1235), // Added sugars
+    sodium: getNutrient(1093), // Sodium, Na
+    potassium: getNutrient(1092), // Potassium, K
+  };
 
-  // Micronutrients - collect available ones
+  // MICRONUTRIENTS - comprehensive vitamin & mineral mapping
   const micronutrients: MicronutrientsData = {};
 
   const micronutrientMap: Record<number, string> = {
-    1162: "vitamin_c", // Vitamin C
-    1106: "vitamin_a", // Vitamin A
-    1114: "vitamin_d", // Vitamin D
-    1109: "vitamin_e", // Vitamin E
-    1185: "vitamin_k", // Vitamin K
-    1175: "vitamin_b6", // Vitamin B6
-    1178: "vitamin_b12", // Vitamin B12
-    1165: "thiamin", // Thiamin
-    1166: "riboflavin", // Riboflavin
-    1167: "niacin", // Niacin
-    1177: "folate", // Folate
-    1087: "calcium", // Calcium
-    1089: "iron", // Iron
-    1090: "magnesium", // Magnesium
-    1091: "phosphorus", // Phosphorus
-    1092: "potassium", // Potassium
-    1093: "sodium", // Sodium
-    1095: "zinc", // Zinc
-    1098: "copper", // Copper
-    1101: "manganese", // Manganese
-    1103: "selenium", // Selenium
+    // Vitamins
+    1106: "vitamin_a", // Vitamin A, RAE
+    1162: "vitamin_c", // Vitamin C, total ascorbic acid
+    1114: "vitamin_d", // Vitamin D (D2 + D3)
+    1109: "vitamin_e", // Vitamin E (alpha-tocopherol)
+    1185: "vitamin_k", // Vitamin K (phylloquinone)
+    1165: "thiamin", // Thiamin (B1)
+    1166: "riboflavin", // Riboflavin (B2)
+    1167: "niacin", // Niacin (B3)
+    1175: "vitamin_b6", // Vitamin B-6
+    1178: "vitamin_b12", // Vitamin B-12
+    1177: "folate", // Folate, total
+    1176: "folate_dfe", // Folate, DFE
+    1170: "pantothenic_acid", // Pantothenic acid (B5)
+    1180: "choline", // Choline, total
+    
+    // Minerals
+    1087: "calcium", // Calcium, Ca
+    1089: "iron", // Iron, Fe
+    1090: "magnesium", // Magnesium, Mg
+    1091: "phosphorus", // Phosphorus, P
+    1095: "zinc", // Zinc, Zn
+    1098: "copper", // Copper, Cu
+    1101: "manganese", // Manganese, Mn
+    1103: "selenium", // Selenium, Se
+    1096: "fluoride", // Fluoride, F
+    1100: "iodine", // Iodine, I
   };
 
   nutrients.forEach((foodNutrient: any) => {
@@ -138,11 +125,75 @@ export function normalizeFoodData(
       const valuePerServing = (valuePer100g * servingSize) / 100;
       
       micronutrients[key] = {
-        amount: Math.round(valuePerServing * 10) / 10, // Round to 1 decimal
+        amount: Math.round(valuePerServing * 100) / 100, // Round to 2 decimals
         unit: foodNutrient.nutrient.unitName || "mg",
       };
     }
   });
+
+  return { macros, micronutrients };
+}
+
+/**
+ * Normalize USDA food data to our database schema (ENHANCED VERSION)
+ * Supports Foundation, Survey, and Branded Foods
+ */
+export function normalizeFoodData(
+  usdaFood: any,
+  turkishName?: string
+): Omit<InsertFood, "slug"> {
+  const fdcId = usdaFood.fdcId;
+  const dataType = usdaFood.dataType; // "Foundation", "SR Legacy", "Branded", etc.
+  
+  // Name handling - prioritize Turkish, then description
+  let nameEn = usdaFood.description || usdaFood.lowercaseDescription || "";
+  
+  // For branded foods, use brandOwner + brandName if available
+  if (dataType === "Branded" && usdaFood.brandOwner && usdaFood.brandName) {
+    nameEn = `${usdaFood.brandOwner} ${usdaFood.brandName}`;
+  }
+  
+  const name = turkishName || nameEn;
+
+  // Extract serving information from USDA data
+  let servingSize = 100; // Default to 100g
+  let servingLabel = "1 porsiyon (100g)";
+
+  // Priority 1: Food portions (most accurate)
+  if (usdaFood.foodPortions && usdaFood.foodPortions.length > 0) {
+    const portion = usdaFood.foodPortions[0];
+    
+    if (portion.gramWeight && portion.gramWeight > 0) {
+      servingSize = portion.gramWeight;
+      const grams = Math.round(servingSize);
+      
+      // Use portion description if available
+      if (portion.portionDescription) {
+        servingLabel = `${portion.portionDescription} (${grams}g)`;
+      } else {
+        servingLabel = `1 porsiyon (${grams}g)`;
+      }
+    }
+  } 
+  // Priority 2: Serving size field
+  else if (usdaFood.servingSize && usdaFood.servingSizeUnit) {
+    const unit = usdaFood.servingSizeUnit.toLowerCase();
+    if (unit === 'g' || unit === 'gram' || unit === 'grams') {
+      servingSize = usdaFood.servingSize;
+      const grams = Math.round(servingSize);
+      servingLabel = `1 porsiyon (${grams}g)`;
+    }
+  }
+  // Priority 3: Branded foods often have household serving size
+  else if (dataType === "Branded" && usdaFood.householdServingFullText) {
+    // Try to extract grams from household serving
+    servingLabel = usdaFood.householdServingFullText;
+    // Keep 100g default for calculations unless specified
+  }
+
+  // Extract all nutrients
+  const nutrients = usdaFood.foodNutrients || [];
+  const { macros, micronutrients } = extractAllNutrients(nutrients, servingSize);
 
   return {
     fdcId,
@@ -150,14 +201,22 @@ export function normalizeFoodData(
     nameEn,
     servingSize: servingSize.toString(),
     servingLabel,
-    calories: calories.toString(),
-    protein: protein?.toString(),
-    fat: fat?.toString(),
-    carbs: carbs?.toString(),
-    fiber: fiber?.toString(),
-    sugar: sugar?.toString(),
+    // Macronutrients
+    calories: macros.calories.toString(),
+    protein: macros.protein?.toString(),
+    fat: macros.fat?.toString(),
+    saturatedFat: macros.saturatedFat?.toString(),
+    transFat: macros.transFat?.toString(),
+    cholesterol: macros.cholesterol?.toString(),
+    carbs: macros.carbs?.toString(),
+    fiber: macros.fiber?.toString(),
+    sugar: macros.sugar?.toString(),
+    addedSugar: macros.addedSugar?.toString(),
+    sodium: macros.sodium?.toString(),
+    potassium: macros.potassium?.toString(),
+    // Micronutrients
     micronutrients: Object.keys(micronutrients).length > 0 ? micronutrients : null,
-    imageUrl: null, // We'll use placeholders or add images later
+    imageUrl: null,
   };
 }
 
@@ -171,9 +230,10 @@ export async function normalizeFoodDataWithImage(
 ): Promise<Omit<InsertFood, "slug">> {
   const baseData = normalizeFoodData(usdaFood, turkishName);
   
-  // Fetch image from Pexels using Turkish name
+  // Fetch image from Pexels using Turkish name or English name
   try {
-    const imageUrl = await searchPexelsImage(turkishName || baseData.name);
+    const searchQuery = turkishName || baseData.name;
+    const imageUrl = await searchPexelsImage(searchQuery);
     return {
       ...baseData,
       category: category || "Diğer",
@@ -185,7 +245,7 @@ export async function normalizeFoodDataWithImage(
     return {
       ...baseData,
       category: category || "Diğer",
-      imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80", // Generic food image
+      imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80",
     };
   }
 }
