@@ -1,225 +1,425 @@
-# Design Guidelines for besindegerim.com - Futuristic Edition
+# Design Guidelines for besindegerim.com - Minimal Edition
 
-## Design Approach
+## Design Philosophy
 
-**Selected Approach:** Apple Vision Pro meets health tech - ultra-modern futuristic design
-- Inspiration: Apple Vision Pro UI + Stripe's premium aesthetics + Duolingo's engagement
-- Focus: Glassmorphic depth, neon accents, 3D transforms, premium floating interfaces
-- Dark-mode first with high contrast and vibrant neon highlights
+**Approach:** Clean, professional, minimal design with dark green, black, and white tones.
 
-## Core Design Principles
+**Motto:** "Less is more"
 
-1. **Futuristic Depth:** Multi-layered glassmorphism with floating UI elements
-2. **Neon Vitality:** Electric accents create energy while maintaining nutrition data clarity
-3. **Premium Interactivity:** Subtle 3D transforms and smooth animations on all interactions
-4. **Dark Sophistication:** Deep backgrounds with high-contrast neon text and glowing elements
+- Focus: Content first, effects second
+- Palette: Dark green (#1f8a4d), black (#000), white (#f5f5f5)
+- Style: Solid colors, clean borders, minimal effects
+- No gradients, no glassmorphism, no neon, no heavy animations
 
 ---
 
 ## Color System
 
-**Background Layers:**
-- Base: #0a0e1a (deep navy-black)
-- Gradient overlay: radial-gradient from #0f172a to #020617
-- Section accents: #1a1f35 (slate-900)
+### Primary Colors
+```
+Background:
+--bg-primary: #000000           /* Pure black - main background */
+--bg-secondary: #0b1d16         /* Deep green-black - sections */
+--bg-card: #111111              /* Dark gray - cards */
 
-**Neon Primary (Green):**
-- Bright: #10b981 (emerald-500)
-- Glow: #34d399 (emerald-400)
-- Application: Primary buttons, key metrics, gradient starts, neon glows
+Text:
+--text-primary: #f5f5f5         /* Light white - headings */
+--text-secondary: #c7c7c7       /* Gray white - body text */
+--text-muted: #7f7f7f           /* Muted gray - labels */
 
-**Electric Accents:**
-- Cyan: #06b6d4 (cyan-500) - hover states, secondary highlights
-- Blue: #3b82f6 (blue-500) - interactive elements
-- Purple: #a855f7 (purple-500) - premium features, badges
+Accent:
+--accent-green: #1f8a4d         /* Dark green - buttons, highlights */
+--accent-green-hover: #27a35f   /* Lighter green - hover state */
 
-**Glassmorphism:**
-- Card backgrounds: bg-white/5 to bg-white/10
-- Backdrop blur: backdrop-blur-xl
-- Borders: border border-white/10 with subtle neon glow
-- Shadows: Multi-layer with neon tints (shadow-2xl shadow-emerald-500/20)
+Borders:
+--border-green: rgba(31, 138, 77, 0.3)   /* Green border */
+--border-subtle: rgba(255, 255, 255, 0.1) /* Subtle white border */
+```
 
-**Text:**
-- Primary: #f8fafc (slate-50) - headings, key data
-- Secondary: #cbd5e1 (slate-300) - body text
-- Accent: Neon gradient text for major headings
+### Tailwind Classes
+```css
+bg-black           /* Pure black background */
+bg-[#0b1d16]       /* Deep green-black */
+bg-[#111]          /* Card background */
 
-**Neon Glow Effects:**
-- box-shadow: 0 0 20px rgba(16, 185, 129, 0.4) for green elements
-- box-shadow: 0 0 15px rgba(6, 182, 212, 0.3) for cyan accents
-- Animate glow intensity on hover
+text-white         /* Primary text */
+text-white/80      /* Secondary text */
+text-white/60      /* Muted text */
+
+bg-[#1f8a4d]       /* Accent green */
+text-[#1f8a4d]     /* Green text */
+
+border-white/10    /* Subtle border */
+border-white/20    /* Medium border */
+border-[#1f8a4d]   /* Green border */
+```
 
 ---
 
 ## Typography
 
-**Fonts:** Inter (via Google Fonts CDN)
+### Font Family
+```css
+font-family: Inter, system-ui, sans-serif;
+```
 
-**Scale & Hierarchy:**
-- H1: text-5xl md:text-7xl font-black tracking-tight (neon gradient text)
-- H2: text-3xl md:text-5xl font-bold (section headers with glow)
-- H3: text-2xl md:text-3xl font-semibold (subsections)
-- Body: text-base md:text-lg font-light (slate-300)
-- Data Labels: text-xs md:text-sm font-medium uppercase tracking-widest (slate-400)
-- Calorie Numbers: text-7xl md:text-8xl font-black (neon green with glow)
-- Micro Text: text-xs font-light (metadata)
+### Hierarchy
+```
+H1 - Hero Heading:
+  text-5xl sm:text-6xl font-bold tracking-tight text-white
 
-**Treatment:**
-- Headlines: bg-gradient-to-r from-emerald-400 via-cyan-400 to-purple-400 with bg-clip-text
-- Neon text-shadow on key numbers: 0 0 30px currentColor
-- Ultra-wide tracking on labels (tracking-[0.2em])
-- Thin to black weight range for hierarchy
+H2 - Section Heading:
+  text-3xl sm:text-4xl font-semibold text-white
+
+H3 - Subsection:
+  text-xl sm:text-2xl font-semibold text-white
+
+Body Text:
+  text-base text-white/80
+
+Small Text:
+  text-sm text-white/60
+
+Label Text:
+  text-xs uppercase tracking-wide text-white/50
+```
+
+### Rules
+- ✅ Clean, readable fonts
+- ✅ Good contrast (white on dark)
+- ✅ Font weights: 400, 600, 700 only
+- ❌ NO gradient text
+- ❌ NO text shadows
+- ❌ NO glow effects
 
 ---
 
 ## Layout & Spacing
 
-**Spacing System:** Tailwind units of 4, 6, 8, 12, 16, 20, 24, 32
-- Section padding: py-20 md:py-32 lg:py-40
-- Card padding: p-8 md:p-10
-- Floating element gaps: gap-8 md:gap-12
-- Container: max-w-7xl mx-auto px-6 md:px-12
+### Container
+```css
+max-w-7xl mx-auto px-4 sm:px-6 lg:px-8
+```
 
-**Grid Strategy:**
-- Mobile: grid-cols-1
-- Tablet: grid-cols-2 (md:)
-- Desktop: grid-cols-3 lg:grid-cols-4
+### Section Padding
+```css
+py-12 sm:py-16 lg:py-20
+```
 
-**Depth Layers:** z-index hierarchy for floating elements (10, 20, 30, 40, 50)
+### Component Padding
+```css
+p-6    /* Cards */
+p-4    /* Small components */
+p-3    /* Tiny components */
+```
+
+### Grid Systems
+```css
+/* Food Cards */
+grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6
+
+/* Features */
+grid grid-cols-1 md:grid-cols-3 gap-8
+```
 
 ---
 
-## Component Library
+## Components
 
-### Homepage Hero
+### Cards (Food Cards)
 
 **Structure:**
-- Full-width section with futuristic food photography (1920x1080px vibrant macro shot with dramatic lighting)
-- Multi-layer gradient overlay: from-emerald-900/60 via-cyan-900/40 to-purple-900/50
-- Glassmorphic content container: backdrop-blur-2xl bg-white/5 border border-white/10, max-w-4xl centered
-- Height: min-h-screen
-- 3D Transform: Subtle perspective transform on scroll
+```jsx
+<div className="bg-[#111] border border-white/10 rounded-md overflow-hidden hover:border-[#1f8a4d]/50 transition-colors">
+  <img src="..." alt="..." className="w-full h-48 object-cover" />
+  <div className="p-4">
+    <h3 className="text-lg font-semibold text-white">Food Name</h3>
+    <p className="text-sm text-white/60 mt-1">Category</p>
+    <div className="flex items-center justify-between mt-4">
+      <span className="text-2xl font-bold text-[#1f8a4d]">22 kcal</span>
+      <span className="text-xs text-white/50">1 orta</span>
+    </div>
+  </div>
+</div>
+```
 
-**Content:**
-- H1: Neon gradient text "Türkiye'nin Geleceği: Besin Değerleri Platformu"
-- Subtitle: text-lg md:text-xl text-slate-300 with subtle glow
-- Search Bar: h-20, glassmorphic (backdrop-blur-xl bg-white/10), rounded-3xl, border-2 border-emerald-500/30, neon glow shadow
-- Search button: Integrated gradient button with pulsing glow animation
-- CTA button on hero: backdrop-blur-xl bg-white/10 treatment, no hover states defined
+**Rules:**
+- ✅ Solid background (`bg-[#111]`)
+- ✅ Thin border (`border border-white/10`)
+- ✅ Small radius (`rounded-md`)
+- ✅ Hover: border color change only
+- ✅ Simple transition (`transition-colors`)
+- ❌ NO glassmorphism
+- ❌ NO 3D transforms
+- ❌ NO shadows (except minimal if needed)
 
-**Popular Foods Grid:**
-- py-24, deep background with subtle grid pattern overlay
-- H2: "Popüler Gıdalar" with animated neon underline
-- Cards: Glassmorphic (bg-white/5 backdrop-blur-xl), rounded-2xl, border border-white/10, floating effect (translateY on hover), neon border-l-4 border-emerald-500
-- Food images: 300x300px, rounded-xl, subtle 3D tilt on hover
-- Calorie badge: Floating pill with neon gradient background, pulsing glow
+### Buttons
 
-### Food Detail Page
+**Primary Button (Green):**
+```jsx
+<button className="bg-[#1f8a4d] text-white px-6 py-2.5 rounded-md font-medium hover:bg-[#27a35f] transition-colors">
+  Button Text
+</button>
+```
 
-**Hero Section:**
-- Large food image: 800x500px dramatic macro shot with bokeh, rounded-3xl, multi-layer shadow with neon tints
-- Layout: Two-column (md:grid-cols-2), gap-16
-- Left: Image with animated neon border gradient
-- Right: Glassmorphic info card with 3D depth
+**Outline Button:**
+```jsx
+<button className="border border-[#1f8a4d] text-[#1f8a4d] px-6 py-2.5 rounded-md font-medium hover:bg-[#1f8a4d]/10 transition-colors">
+  Button Text
+</button>
+```
 
-**Mega Calorie Display Card:**
-- Floating glassmorphic card: backdrop-blur-2xl bg-gradient-to-br from-white/10 to-white/5
-- Neon gradient border-l-8: from-emerald-500 to-cyan-500
-- Layout: Centered with large flame icon (w-16 h-16) in neon gradient
-- Serving size: Floating badge above with backdrop-blur-md
-- Calorie number: text-8xl md:text-9xl font-black with multi-color neon glow
-- 3D transform on hover: scale-105 with rotateX subtle tilt
+**Rules:**
+- ✅ Solid colors
+- ✅ Simple hover (color change)
+- ✅ Optional: subtle translate (`hover:-translate-y-0.5`)
+- ❌ NO gradients
+- ❌ NO glow effects
+- ❌ NO heavy transforms
 
-**Macronutrient Cards:**
-- Grid: grid-cols-3 gap-6
-- Each card: Glassmorphic with neon accent (protein=emerald, fat=cyan, carbs=purple)
-- Icon: w-12 h-12 with matching neon glow
-- Animated progress bar: h-3 rounded-full with gradient fill and glow effect
-- Numbers: text-4xl font-bold with neon text-shadow
-- 3D hover: translateY(-4px) with increased glow
+### Input Fields
 
-**Detailed Nutrition Table:**
-- Glassmorphic container with backdrop-blur-xl
-- Header: Gradient background (emerald to cyan) with glow shadow
-- Rows: hover:bg-white/5 transition with border-b border-white/5
-- Alternating subtle neon accents on nutrient categories
-- Icons inline with neon tint matching nutrient type
+```jsx
+<input 
+  className="bg-black/50 border border-white/20 text-white px-4 py-2.5 rounded-md focus:border-[#1f8a4d] focus:outline-none transition-colors"
+  placeholder="Search..."
+/>
+```
 
-**Similar Foods Section:**
-- H2: Animated neon gradient text
-- Grid: grid-cols-2 md:grid-cols-4, gap-8
-- Cards: Floating glassmorphic with 3D tilt on hover
-- Images: 250x250px with neon gradient overlay on hover
-- Neon calorie badges with pulsing animation
+**Rules:**
+- ✅ Solid dark background
+- ✅ Thin border
+- ✅ Focus: green border
+- ✅ Simple transitions
+- ❌ NO glassmorphism
+- ❌ NO blur effects
 
----
+### Badges/Pills
 
-## Images
+```jsx
+<span className="bg-[#1f8a4d] text-white text-xs px-3 py-1 rounded-full font-medium">
+  Label
+</span>
+```
 
-**Hero Section:** 
-- Main hero: 1920x1080px vibrant macro food photography with dramatic studio lighting, shallow depth of field, dark moody background
-
-**Food Detail Pages:**
-- Feature image: 800x500px professional macro shots with bokeh effects, high contrast lighting
-
-**Grid Cards:**
-- Thumbnails: 300x300px square, professional food photography with dark backgrounds
-- All images: Sharp focus, vibrant colors that pop against dark UI
-
-**Placeholder:** Dark gradient from slate-900 to slate-800 with glowing food icon
-
----
-
-## Effects & Animations
-
-**Glassmorphism:**
-- All cards: backdrop-blur-xl with bg-white/5 to bg-white/10
-- Layered borders: border border-white/10 with neon accent borders
-- Multi-layer shadows with neon color tints
-
-**3D Transforms:**
-- Cards: hover:scale-105 hover:-translateY-2 with perspective
-- Buttons: Active state with subtle rotateX
-- Images: Tilt effect on hover (rotateY/rotateX subtle)
-
-**Neon Glow Animations:**
-- Pulsing glow on CTAs: animate-pulse with glow intensity
-- Border gradients: animated gradient position shift
-- Text shadows: Breathing glow effect on key metrics
-
-**Hover States:**
-- Duration: transition-all duration-500 for smoothness
-- Cards: Increased glow + 3D lift + border brightness
-- Images: Scale-110 with overflow-hidden
-- Buttons: Brightness-110 + intensified glow
-
-**Scroll Animations:**
-- Parallax on hero image
-- Fade-in with translateY for section reveals
-- Stagger animations for grid items
+**Rules:**
+- ✅ Solid backgrounds
+- ✅ Small size
+- ✅ `rounded-full` for pills
+- ❌ NO neon effects
+- ❌ NO glow
 
 ---
 
-## Mobile Optimization
+## Effects & Interactions
 
-- Touch targets: 56px minimum height
-- Reduce 3D effects on mobile for performance
-- Stack all grids to single column on mobile
-- Simplified animations, maintain glassmorphism
-- Neon glows reduced intensity on mobile to preserve battery
+### ✅ ALLOWED
+
+```css
+/* Simple color transitions */
+transition-colors duration-200
+
+/* Opacity changes */
+hover:opacity-90
+
+/* Border color changes */
+hover:border-[#1f8a4d]
+
+/* Minimal transforms (optional) */
+hover:-translate-y-0.5
+
+/* Simple shadows (if absolutely needed) */
+shadow-sm
+```
+
+### ❌ NOT ALLOWED
+
+```css
+/* NO gradients */
+bg-gradient-to-r from-green-500 to-cyan-500
+
+/* NO glassmorphism */
+backdrop-blur-xl bg-white/5
+
+/* NO glow shadows */
+shadow-[0_0_30px_rgba(34,197,94,0.5)]
+
+/* NO 3D transforms */
+hover:scale-110 hover:rotate-3
+
+/* NO animations */
+animate-pulse animate-bounce
+
+/* NO neon effects */
+text-shadow: 0 0 20px #22c55e
+
+/* NO complex transitions */
+transition-all duration-500
+```
+
+---
+
+## Page Sections
+
+### Hero Section
+
+**Structure:**
+```jsx
+<section className="bg-black py-20">
+  <div className="max-w-7xl mx-auto px-4 text-center">
+    <h1 className="text-5xl sm:text-6xl font-bold text-white">
+      Besin Değerleri
+    </h1>
+    <p className="text-xl text-white/80 mt-4 max-w-2xl mx-auto">
+      Gerçek porsiyon bazlı kalori ve besin değerleri
+    </p>
+  </div>
+</section>
+```
+
+**Rules:**
+- ✅ Black background
+- ✅ Clean white text
+- ✅ Minimal spacing
+- ❌ NO animated backgrounds
+- ❌ NO glowing orbs
+- ❌ NO gradient overlays
+
+### Content Sections
+
+```jsx
+<section className="bg-[#0b1d16] py-16">
+  <div className="max-w-7xl mx-auto px-4">
+    <h2 className="text-3xl sm:text-4xl font-semibold text-white mb-12">
+      Section Title
+    </h2>
+    {/* Content */}
+  </div>
+</section>
+```
+
+**Rules:**
+- ✅ Deep green-black background
+- ✅ White headings
+- ✅ Generous whitespace
+- ✅ Grid layouts
+- ❌ NO effects
+
+### Footer
+
+```jsx
+<footer className="bg-black border-t border-white/10 py-8">
+  <div className="max-w-7xl mx-auto px-4 text-center">
+    <p className="text-white/60 text-sm">
+      © 2025 besindegerim.com
+    </p>
+  </div>
+</footer>
+```
+
+---
+
+## Responsive Design
+
+### Breakpoints
+```
+sm: 640px   /* Tablet */
+md: 768px   /* Small desktop */
+lg: 1024px  /* Desktop */
+xl: 1280px  /* Large desktop */
+```
+
+### Mobile-First
+- Mobile: 1 column
+- Tablet: 2 columns
+- Desktop: 3-4 columns
+- Touch targets: min 44px
 
 ---
 
 ## Accessibility
 
-- WCAG AAA contrast with neon text on dark backgrounds
-- High contrast mode support
-- Focus states: Neon ring-2 ring-emerald-400 with glow
-- Reduced motion support: Disable 3D transforms and animations
-- Turkish locale: Proper decimal/thousand separators
-- Semantic HTML with ARIA labels for all glassmorphic elements
-- Keyboard navigation with visible neon focus indicators
+### Contrast
+- White text / black background: 21:1 ✅
+- White text / dark green: 9.5:1 ✅
+- Green button / white text: 4.5:1 ✅
+
+### Focus States
+```css
+focus:outline-none focus:ring-2 focus:ring-[#1f8a4d] focus:ring-offset-2 focus:ring-offset-black
+```
 
 ---
 
-This futuristic design creates an immersive Turkish nutrition platform that feels like stepping into the future of health tech while maintaining data clarity through sophisticated glassmorphism and strategic neon highlighting.
+## Example Components
+
+### Minimal Food Card
+```jsx
+<div className="bg-[#111] border border-white/10 rounded-md overflow-hidden hover:border-[#1f8a4d]/50 transition-colors">
+  <img src="/api/placeholder/400/300" alt="Food" className="w-full h-48 object-cover" />
+  <div className="p-4">
+    <div className="flex items-center justify-between mb-2">
+      <h3 className="text-lg font-semibold text-white">Domates</h3>
+      <span className="text-xs px-2 py-1 bg-[#1f8a4d]/20 text-[#1f8a4d] rounded-full">Sebze</span>
+    </div>
+    <div className="flex items-baseline justify-between mt-4">
+      <span className="text-2xl font-bold text-[#1f8a4d]">22 kcal</span>
+      <span className="text-xs text-white/50">1 orta domates (123g)</span>
+    </div>
+    <div className="flex gap-2 mt-3">
+      <span className="text-xs px-2 py-1 bg-white/5 text-white/60 rounded">1.1g protein</span>
+      <span className="text-xs px-2 py-1 bg-white/5 text-white/60 rounded">4.8g karb</span>
+      <span className="text-xs px-2 py-1 bg-white/5 text-white/60 rounded">0.2g yağ</span>
+    </div>
+  </div>
+</div>
+```
+
+### Minimal Hero
+```jsx
+<section className="bg-black py-20">
+  <div className="max-w-4xl mx-auto px-4 text-center">
+    <h1 className="text-5xl sm:text-6xl font-bold text-white mb-6">
+      Besin Değerleri Platformu
+    </h1>
+    <p className="text-xl text-white/80 mb-12">
+      Gerçek porsiyon bazlı kalori ve besin değerleri. USDA verisi.
+    </p>
+    <div className="max-w-2xl mx-auto">
+      <div className="flex gap-3">
+        <input 
+          className="flex-1 bg-black/50 border border-white/20 text-white px-6 py-3 rounded-md focus:border-[#1f8a4d] focus:outline-none transition-colors"
+          placeholder="Gıda ara... (ör: domates, elma)"
+        />
+        <button className="bg-[#1f8a4d] text-white px-8 py-3 rounded-md font-medium hover:bg-[#27a35f] transition-colors">
+          Ara
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+```
+
+---
+
+## Summary
+
+### ✅ DO USE
+- Dark green (#1f8a4d), black (#000), white (#f5f5f5)
+- Solid backgrounds
+- Thin borders (1px)
+- Small border-radius (`rounded-md`)
+- Simple transitions (colors, opacity)
+- Clean typography
+- Generous spacing
+
+### ❌ DON'T USE
+- Gradients
+- Glassmorphism/blur
+- Neon effects
+- Glow shadows
+- Animations (pulse, bounce)
+- 3D transforms (scale, rotate)
+- Too many effects
+
+**Design Principle:** Clean, professional, content-focused. Let the data shine.
