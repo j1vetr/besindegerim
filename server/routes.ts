@@ -1,5 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import express from "express";
+import path from "path";
 import { storage } from "./storage";
 import { registerSSRRoutes } from "./ssr";
 import { searchFoods, getFoodById, normalizeFoodData, generateSlug } from "./usda-client";
@@ -7,6 +9,12 @@ import { cache } from "./cache";
 import type { InsertFood } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Serve static files from client/public in development
+  if (app.get("env") === "development") {
+    const publicPath = path.resolve(import.meta.dirname, "..", "client", "public");
+    app.use(express.static(publicPath));
+  }
+
   // API routes for backend operations
   // All API routes are prefixed with /api
 
