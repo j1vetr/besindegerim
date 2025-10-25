@@ -1,8 +1,8 @@
-# kacgram.net - Türkçe Gıda Besin Değerleri Platformu
+# besindegerim.com - Türkçe Besin Değerleri Platformu
 
 ## Proje Özeti
 
-kacgram.net, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tamamen SSR (Server-Side Rendering) tabanlı bir Türkçe gıda besin değerleri platformudur. USDA FoodData Central API'sinden veri çeker ve JavaScript kapalıyken bile çalışacak şekilde tasarlanmıştır.
+besindegerim.com, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tamamen SSR (Server-Side Rendering) tabanlı bir Türkçe besin değerleri platformudur. USDA FoodData Central API'sinden veri çeker, Pexels API'den profesyonel görseller alır ve JavaScript kapalıyken bile çalışacak şekilde tasarlanmıştır.
 
 ## Temel Özellikler
 

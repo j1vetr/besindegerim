@@ -4,6 +4,8 @@ import { HomePage } from "../client/src/pages/HomePage";
 import { FoodDetailPage } from "../client/src/pages/FoodDetailPage";
 import { NotFoundPage } from "../client/src/pages/NotFoundPage";
 import { SearchResultsPage } from "../client/src/pages/SearchResultsPage";
+import { CategoryPage } from "../client/src/pages/CategoryPage";
+import { LegalPage } from "../client/src/pages/LegalPage";
 import { renderComponentToHTML } from "./render";
 import {
   buildMetaForHome,
@@ -41,10 +43,10 @@ export function registerSSRRoutes(app: Express): void {
 
       // Build meta tags for search
       const meta = {
-        title: `"${query}" Arama Sonuçları - kacgram.net`,
-        description: `${query} için gıda besin değerleri arama sonuçları. ${results.length} gıda bulundu.`,
+        title: `"${query}" Arama Sonuçları - besindegerim.com`,
+        description: `${query} için besin değerleri arama sonuçları. ${results.length} gıda bulundu.`,
         keywords: `${query}, kalori, besin değeri, arama`,
-        canonical: `${process.env.BASE_URL || "https://kacgram.net"}/ara?q=${encodeURIComponent(query)}`,
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/ara?q=${encodeURIComponent(query)}`,
       };
 
       const jsonLd = [buildOrganizationJsonLd()];
@@ -113,12 +115,12 @@ export function registerSSRRoutes(app: Express): void {
 
       if (!food) {
         // Food not found - render 404 page
-        const htmlBody = renderComponentToHTML(NotFoundPage({}));
+        const htmlBody = renderComponentToHTML(NotFoundPage());
         const meta = {
-          title: "Sayfa Bulunamadı - kacgram.net",
+          title: "Sayfa Bulunamadı - besindegerim.com",
           description: "Aradığınız gıda bulunamadı.",
           keywords: "404, bulunamadı",
-          canonical: `${process.env.BASE_URL || "https://kacgram.net"}/${slug}`,
+          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/${slug}`,
         };
         const fullHTML = injectHead(htmlBody, meta);
         return res.status(404).send(fullHTML);
@@ -174,13 +176,92 @@ export function registerSSRRoutes(app: Express): void {
     }
   });
 
+  // Category routes
+  app.get("/kategori/:category", async (req: Request, res: Response) => {
+    try {
+      const category = decodeURIComponent(req.params.category);
+      
+      // Get foods in this category
+      const foods = await storage.getFoodsByCategory(category);
+
+      // Render category page
+      const htmlBody = renderComponentToHTML(
+        CategoryPage({ category, foods })
+      );
+
+      // Build meta tags
+      const meta = {
+        title: `${category} - Besin Değerleri | besindegerim.com`,
+        description: `${category} kategorisindeki gıdaların besin değerleri, kalori ve makro bilgileri. ${foods.length} gıda bulundu.`,
+        keywords: `${category}, besin değerleri, kalori, protein, karbonhidrat`,
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/kategori/${encodeURIComponent(category)}`,
+      };
+
+      const jsonLd = [buildOrganizationJsonLd()];
+
+      // Inject head and send response
+      const fullHTML = injectHead(htmlBody, meta, jsonLd);
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.send(fullHTML);
+    } catch (error) {
+      console.error("SSR Error (category):", error);
+      res.status(500).send("Server Error");
+    }
+  });
+
+  // Legal pages routes
+  const legalPages = [
+    "gizlilik-politikasi",
+    "kullanim-kosullari",
+    "kvkk",
+    "cerez-politikasi",
+    "hakkimizda",
+    "iletisim",
+  ];
+
+  legalPages.forEach((slug) => {
+    app.get(`/${slug}`, async (req: Request, res: Response) => {
+      try {
+        // Render legal page
+        const htmlBody = renderComponentToHTML(LegalPage({ slug }));
+
+        // Title mapping
+        const titles: Record<string, string> = {
+          "gizlilik-politikasi": "Gizlilik Politikası",
+          "kullanim-kosullari": "Kullanım Koşulları",
+          "kvkk": "KVKK Aydınlatma Metni",
+          "cerez-politikasi": "Çerez Politikası",
+          "hakkimizda": "Hakkımızda",
+          "iletisim": "İletişim",
+        };
+
+        const meta = {
+          title: `${titles[slug]} | besindegerim.com`,
+          description: `besindegerim.com ${titles[slug]} sayfası.`,
+          keywords: `${titles[slug]}, besin değerleri`,
+          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/${slug}`,
+        };
+
+        const jsonLd = [buildOrganizationJsonLd()];
+
+        // Inject head and send response
+        const fullHTML = injectHead(htmlBody, meta, jsonLd);
+        res.setHeader("Content-Type", "text/html; charset=utf-8");
+        res.send(fullHTML);
+      } catch (error) {
+        console.error(`SSR Error (${slug}):`, error);
+        res.status(500).send("Server Error");
+      }
+    });
+  });
+
   // robots.txt
   app.get("/robots.txt", (req: Request, res: Response) => {
     const robotsTxt = `User-agent: *
 Allow: /
 Disallow: /api/*
 
-Sitemap: ${process.env.BASE_URL || "https://kacgram.net"}/sitemap.xml`;
+Sitemap: ${process.env.BASE_URL || "https://besindegerim.com"}/sitemap.xml`;
 
     res.setHeader("Content-Type", "text/plain");
     res.send(robotsTxt);
@@ -189,7 +270,7 @@ Sitemap: ${process.env.BASE_URL || "https://kacgram.net"}/sitemap.xml`;
   // Dynamic sitemap.xml
   app.get("/sitemap.xml", async (req: Request, res: Response) => {
     try {
-      const baseUrl = process.env.BASE_URL || "https://kacgram.net";
+      const baseUrl = process.env.BASE_URL || "https://besindegerim.com";
       
       // Get all foods for sitemap
       const cacheKey = "sitemap_foods";

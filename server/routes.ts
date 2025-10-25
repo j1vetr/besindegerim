@@ -100,6 +100,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  /**
+   * API: Get all categories
+   * GET /api/categories
+   */
+  app.get("/api/categories", async (req, res) => {
+    try {
+      const cacheKey = "all_categories";
+      let categories = cache.get<string[]>(cacheKey);
+
+      if (!categories) {
+        categories = await storage.getAllCategories();
+        cache.set(cacheKey, categories, 3600000); // Cache for 1 hour
+      }
+
+      res.json(categories);
+    } catch (error) {
+      console.error("Categories API Error:", error);
+      res.status(500).json({ error: "Failed to get categories" });
+    }
+  });
+
+  /**
+   * API: Get foods by category
+   * GET /api/category/:category
+   */
+  app.get("/api/category/:category", async (req, res) => {
+    try {
+      const category = decodeURIComponent(req.params.category);
+      const cacheKey = `category_${category}`;
+      let foods = cache.get<any[]>(cacheKey);
+
+      if (!foods) {
+        foods = await storage.getFoodsByCategory(category);
+        cache.set(cacheKey, foods, 600000); // Cache for 10 minutes
+      }
+
+      res.json(foods);
+    } catch (error) {
+      console.error("Category Foods API Error:", error);
+      res.status(500).json({ error: "Failed to get foods by category" });
+    }
+  });
+
   // Register SSR routes (must be last to catch all non-API routes)
   registerSSRRoutes(app);
 

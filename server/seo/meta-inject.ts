@@ -27,10 +27,10 @@ export interface FoodMetaData {
  */
 export function buildMetaForFood(data: FoodMetaData): MetaTags {
   const { name, servingLabel, kcalPerServing, slug } = data;
-  const baseUrl = process.env.BASE_URL || "https://kacgram.net";
+  const baseUrl = process.env.BASE_URL || "https://besindegerim.com";
   const canonical = `${baseUrl}/${slug}`;
 
-  const title = `${name} Besin Değerleri - ${kcalPerServing} kcal | kacgram.net`;
+  const title = `${name} Besin Değerleri - ${kcalPerServing} kcal | besindegerim.com`;
   const description = `${name} gıdasının gerçek porsiyon bazlı besin değerleri: ${servingLabel} başına ${kcalPerServing} kalori. Protein, karbonhidrat, yağ ve vitamin bilgileri.`;
   const keywords = `${name}, kalori, besin değeri, ${name} kalorisi, gıda, beslenme, sağlıklı yaşam, diyet`;
 
@@ -56,12 +56,12 @@ export function buildMetaForFood(data: FoodMetaData): MetaTags {
  * Build meta tags for the homepage
  */
 export function buildMetaForHome(): MetaTags {
-  const baseUrl = process.env.BASE_URL || "https://kacgram.net";
-  const title = "Gıda Besin Değerleri - Gerçek Porsiyon Bazlı Kalori | kacgram.net";
+  const baseUrl = process.env.BASE_URL || "https://besindegerim.com";
+  const title = "Besin Değerleri - Gerçek Porsiyon Bazlı Kalori | besindegerim.com";
   const description =
-    "Türkiye'nin en kapsamlı gıda besin değerleri veritabanı. Gerçek porsiyon bazlı kalori, protein, karbonhidrat ve vitamin bilgileri. USDA verilerine dayalı doğru besin analizi.";
+    "Türkiye'nin en kapsamlı gıda besin değerleri platformu. Gerçek porsiyon bazlı kalori, protein, karbonhidrat ve vitamin bilgileri. Pexels görselleriyle profesyonel besin analizi.";
   const keywords =
-    "gıda besin değerleri, kalori hesaplama, porsiyon kalorisi, besin tablosu, sağlıklı beslenme, diyet, protein, karbonhidrat, vitamin";
+    "besin değerleri, kalori hesaplama, porsiyon kalorisi, besin tablosu, sağlıklı beslenme, diyet, protein, karbonhidrat, vitamin";
 
   return {
     title,
@@ -94,7 +94,7 @@ export function buildFoodJsonLd(data: {
   fiber?: number;
   sugar?: number;
 }): object {
-  const baseUrl = process.env.BASE_URL || "https://kacgram.net";
+  const baseUrl = process.env.BASE_URL || "https://besindegerim.com";
 
   return {
     "@context": "https://schema.org",
@@ -115,7 +115,7 @@ export function buildFoodJsonLd(data: {
  * Generate BreadcrumbList JSON-LD for a food page
  */
 export function buildBreadcrumbJsonLd(foodName: string, slug: string): object {
-  const baseUrl = process.env.BASE_URL || "https://kacgram.net";
+  const baseUrl = process.env.BASE_URL || "https://besindegerim.com";
 
   return {
     "@context": "https://schema.org",
@@ -141,16 +141,16 @@ export function buildBreadcrumbJsonLd(foodName: string, slug: string): object {
  * Generate Organization JSON-LD
  */
 export function buildOrganizationJsonLd(): object {
-  const baseUrl = process.env.BASE_URL || "https://kacgram.net";
+  const baseUrl = process.env.BASE_URL || "https://besindegerim.com";
 
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "kacgram.net",
+    name: "Besin Değerim",
     url: baseUrl,
     logo: `${baseUrl}/logo.png`,
     description:
-      "Gerçek porsiyon bazlı gıda besin değerleri ve kalori bilgileri",
+      "Türkiye'nin en kapsamlı besin değerleri platformu - Gerçek porsiyon bazlı kalori ve besin bilgileri",
   };
 }
 
