@@ -23,6 +23,60 @@ import type { Food } from "@shared/schema";
  * Register SSR routes
  */
 export function registerSSRRoutes(app: Express): void {
+  // Legal pages routes - MUST come before /:slug catch-all route
+  const legalPages = [
+    "gizlilik-politikasi",
+    "kullanim-kosullari",
+    "kvkk",
+    "cerez-politikasi",
+    "hakkimizda",
+    "iletisim",
+  ];
+
+  legalPages.forEach((slug) => {
+    app.get(`/${slug}`, async (req: Request, res: Response) => {
+      try {
+        // Get categories from cache
+        const categoriesCacheKey = "all_categories";
+        let categories: string[] | undefined = cache.get<string[]>(categoriesCacheKey);
+        if (!categories) {
+          categories = await storage.getAllCategories();
+          cache.set(categoriesCacheKey, categories, 3600000);
+        }
+
+        // Render legal page
+        const htmlBody = renderComponentToHTML(LegalPage({ slug, categories, currentPath: req.path }));
+
+        // Title mapping
+        const titles: Record<string, string> = {
+          "gizlilik-politikasi": "Gizlilik Politikası",
+          "kullanim-kosullari": "Kullanım Koşulları",
+          "kvkk": "KVKK Aydınlatma Metni",
+          "cerez-politikasi": "Çerez Politikası",
+          "hakkimizda": "Hakkımızda",
+          "iletisim": "İletişim",
+        };
+
+        const meta = {
+          title: `${titles[slug]} | besindegerim.com`,
+          description: `besindegerim.com ${titles[slug]} sayfası.`,
+          keywords: `${titles[slug]}, besin değerleri`,
+          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/${slug}`,
+        };
+
+        const jsonLd = [buildOrganizationJsonLd()];
+
+        // Inject head and send response
+        const fullHTML = injectHead(htmlBody, meta, jsonLd);
+        res.setHeader("Content-Type", "text/html; charset=utf-8");
+        res.send(fullHTML);
+      } catch (error) {
+        console.error(`SSR Error (${slug}):`, error);
+        res.status(500).send("Server Error");
+      }
+    });
+  });
+
   // Search results route
   app.get("/ara", async (req: Request, res: Response) => {
     try {
@@ -242,59 +296,6 @@ export function registerSSRRoutes(app: Express): void {
     }
   });
 
-  // Legal pages routes
-  const legalPages = [
-    "gizlilik-politikasi",
-    "kullanim-kosullari",
-    "kvkk",
-    "cerez-politikasi",
-    "hakkimizda",
-    "iletisim",
-  ];
-
-  legalPages.forEach((slug) => {
-    app.get(`/${slug}`, async (req: Request, res: Response) => {
-      try {
-        // Get categories from cache
-        const categoriesCacheKey = "all_categories";
-        let categories: string[] | undefined = cache.get<string[]>(categoriesCacheKey);
-        if (!categories) {
-          categories = await storage.getAllCategories();
-          cache.set(categoriesCacheKey, categories, 3600000);
-        }
-
-        // Render legal page
-        const htmlBody = renderComponentToHTML(LegalPage({ slug, categories, currentPath: req.path }));
-
-        // Title mapping
-        const titles: Record<string, string> = {
-          "gizlilik-politikasi": "Gizlilik Politikası",
-          "kullanim-kosullari": "Kullanım Koşulları",
-          "kvkk": "KVKK Aydınlatma Metni",
-          "cerez-politikasi": "Çerez Politikası",
-          "hakkimizda": "Hakkımızda",
-          "iletisim": "İletişim",
-        };
-
-        const meta = {
-          title: `${titles[slug]} | besindegerim.com`,
-          description: `besindegerim.com ${titles[slug]} sayfası.`,
-          keywords: `${titles[slug]}, besin değerleri`,
-          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/${slug}`,
-        };
-
-        const jsonLd = [buildOrganizationJsonLd()];
-
-        // Inject head and send response
-        const fullHTML = injectHead(htmlBody, meta, jsonLd);
-        res.setHeader("Content-Type", "text/html; charset=utf-8");
-        res.send(fullHTML);
-      } catch (error) {
-        console.error(`SSR Error (${slug}):`, error);
-        res.status(500).send("Server Error");
-      }
-    });
-  });
 
   // robots.txt
   app.get("/robots.txt", (req: Request, res: Response) => {
