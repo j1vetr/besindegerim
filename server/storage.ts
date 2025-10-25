@@ -13,6 +13,8 @@ export interface IStorage {
   getAllFoods(limit?: number): Promise<Food[]>;
   getRandomFoods(count: number, excludeId?: string): Promise<Food[]>;
   searchFoods(query: string, limit?: number): Promise<Food[]>;
+  getFoodsByCategory(category: string, limit?: number): Promise<Food[]>;
+  getAllCategories(): Promise<string[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -83,6 +85,23 @@ export class DatabaseStorage implements IStorage {
       .from(foods)
       .where(sql`LOWER(${foods.name}) LIKE ${searchPattern}`)
       .limit(limit);
+  }
+
+  async getFoodsByCategory(category: string, limit: number = 50): Promise<Food[]> {
+    return db
+      .select()
+      .from(foods)
+      .where(eq(foods.category, category))
+      .orderBy(desc(foods.calories))
+      .limit(limit);
+  }
+
+  async getAllCategories(): Promise<string[]> {
+    const results = await db
+      .selectDistinct({ category: foods.category })
+      .from(foods)
+      .orderBy(foods.category);
+    return results.map((r) => r.category).filter(Boolean);
   }
 }
 
