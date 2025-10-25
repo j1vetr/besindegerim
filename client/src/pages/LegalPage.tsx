@@ -1,5 +1,11 @@
+import React from "react";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+
 interface LegalPageProps {
   slug: string;
+  categories?: string[];
+  currentPath?: string;
 }
 
 interface LegalContent {
@@ -274,18 +280,29 @@ const legalPages: Record<string, LegalContent> = {
 
 export function LegalPage(props?: LegalPageProps) {
   const slug = props?.slug || "";
+  const categories = props?.categories;
+  const currentPath = props?.currentPath;
   const content = legalPages[slug];
 
   if (!content) {
     return (
-      <div className="container mx-auto px-4 py-12">
-        <h1 className="text-3xl font-bold">Sayfa Bulunamadı</h1>
+      <div className="min-h-screen flex flex-col">
+        <Header categories={categories} currentPath={currentPath} />
+        <main className="flex-1">
+          <div className="container mx-auto px-4 py-12">
+            <h1 className="text-3xl font-bold">Sayfa Bulunamadı</h1>
+          </div>
+        </main>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-12">
+    <div className="min-h-screen flex flex-col">
+      <Header categories={categories} currentPath={currentPath} />
+      <main className="flex-1 bg-gradient-to-br from-white via-green-50/20 to-white">
+        <div className="container mx-auto max-w-4xl px-4 py-12">
       <h1 className="mb-8 text-4xl font-bold text-foreground" data-testid="text-page-title">
         {content.title}
       </h1>
@@ -316,6 +333,9 @@ export function LegalPage(props?: LegalPageProps) {
           Son güncelleme: {new Date().toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' })}
         </p>
       </div>
+        </div>
+      </main>
+      <Footer />
     </div>
   );
 }

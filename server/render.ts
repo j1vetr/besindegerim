@@ -1,4 +1,5 @@
 // SSR Rendering logic
+import React from "react";
 import { renderToString } from "react-dom/server";
 import type { ReactElement } from "react";
 import { readFileSync } from "fs";

@@ -3,15 +3,21 @@ import { type Food } from "@shared/schema";
 import { CalorieCard } from "@/components/CalorieCard";
 import { NutritionTable } from "@/components/NutritionTable";
 import { FoodCard } from "@/components/FoodCard";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 interface FoodDetailPageProps {
   food: Food;
   alternatives: Food[];
+  categories?: string[];
+  currentPath?: string;
 }
 
-export function FoodDetailPage({ food, alternatives }: FoodDetailPageProps) {
+export function FoodDetailPage({ food, alternatives, categories, currentPath }: FoodDetailPageProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-green-50/20 to-white">
+    <div className="min-h-screen flex flex-col">
+      <Header categories={categories} currentPath={currentPath} />
+      <main className="flex-1 bg-gradient-to-br from-white via-green-50/20 to-white">
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-12 md:py-20">
         {/* Hero Section - Food Image & Name */}
         <div className="mb-16">
@@ -160,6 +166,8 @@ export function FoodDetailPage({ food, alternatives }: FoodDetailPageProps) {
           </a>
         </div>
       </div>
+      </main>
+      <Footer />
     </div>
   );
 }

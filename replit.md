@@ -219,6 +219,6 @@ npx tsx server/debug-usda.ts
 
 ## İletişim
 
-- Site: kacgram.net
+- Site: besindegerim.com
 - Dil: Türkçe
-- API: USDA FoodData Central
+- API: USDA FoodData Central, Pexels API

@@ -36,9 +36,17 @@ export function registerSSRRoutes(app: Express): void {
       // Search in database
       const results = await storage.searchFoods(query, 50);
 
+      // Get categories from cache
+      const categoriesCacheKey = "all_categories";
+      let categories: string[] | undefined = cache.get<string[]>(categoriesCacheKey);
+      if (!categories) {
+        categories = await storage.getAllCategories();
+        cache.set(categoriesCacheKey, categories, 3600000);
+      }
+
       // Render search results page
       const htmlBody = renderComponentToHTML(
-        SearchResultsPage({ query, results })
+        SearchResultsPage({ query, results, categories, currentPath: req.path })
       );
 
       // Build meta tags for search
@@ -73,9 +81,18 @@ export function registerSSRRoutes(app: Express): void {
         cache.set(cacheKey, popularFoods, 600000); // Cache for 10 minutes
       }
 
+      // Get categories from cache or database
+      const categoriesCacheKey = "all_categories";
+      let categories: string[] | undefined = cache.get<string[]>(categoriesCacheKey);
+
+      if (!categories) {
+        categories = await storage.getAllCategories();
+        cache.set(categoriesCacheKey, categories, 3600000); // Cache for 1 hour
+      }
+
       // Render homepage component
       const htmlBody = renderComponentToHTML(
-        HomePage({ popularFoods })
+        HomePage({ popularFoods, categories, currentPath: req.path })
       );
 
       // Build meta tags
@@ -102,6 +119,14 @@ export function registerSSRRoutes(app: Express): void {
         return res.status(404).send("Not Found");
       }
 
+      // Get categories from cache
+      const categoriesCacheKey = "all_categories";
+      let categories: string[] | undefined = cache.get<string[]>(categoriesCacheKey);
+      if (!categories) {
+        categories = await storage.getAllCategories();
+        cache.set(categoriesCacheKey, categories, 3600000);
+      }
+
       // Get food from cache or database
       const cacheKey = `food_${slug}`;
       let food: Food | undefined = cache.get<Food>(cacheKey);
@@ -115,7 +140,7 @@ export function registerSSRRoutes(app: Express): void {
 
       if (!food) {
         // Food not found - render 404 page
-        const htmlBody = renderComponentToHTML(NotFoundPage());
+        const htmlBody = renderComponentToHTML(NotFoundPage({ categories, currentPath: req.path }));
         const meta = {
           title: "Sayfa Bulunamadı - besindegerim.com",
           description: "Aradığınız gıda bulunamadı.",
@@ -137,7 +162,7 @@ export function registerSSRRoutes(app: Express): void {
 
       // Render food detail page
       const htmlBody = renderComponentToHTML(
-        FoodDetailPage({ food, alternatives })
+        FoodDetailPage({ food, alternatives, categories, currentPath: req.path })
       );
 
       // Build meta tags
@@ -184,9 +209,17 @@ export function registerSSRRoutes(app: Express): void {
       // Get foods in this category
       const foods = await storage.getFoodsByCategory(category);
 
+      // Get categories from cache
+      const categoriesCacheKey = "all_categories";
+      let categories: string[] | undefined = cache.get<string[]>(categoriesCacheKey);
+      if (!categories) {
+        categories = await storage.getAllCategories();
+        cache.set(categoriesCacheKey, categories, 3600000);
+      }
+
       // Render category page
       const htmlBody = renderComponentToHTML(
-        CategoryPage({ category, foods })
+        CategoryPage({ category, foods, categories, currentPath: req.path })
       );
 
       // Build meta tags
@@ -222,8 +255,16 @@ export function registerSSRRoutes(app: Express): void {
   legalPages.forEach((slug) => {
     app.get(`/${slug}`, async (req: Request, res: Response) => {
       try {
+        // Get categories from cache
+        const categoriesCacheKey = "all_categories";
+        let categories: string[] | undefined = cache.get<string[]>(categoriesCacheKey);
+        if (!categories) {
+          categories = await storage.getAllCategories();
+          cache.set(categoriesCacheKey, categories, 3600000);
+        }
+
         // Render legal page
-        const htmlBody = renderComponentToHTML(LegalPage({ slug }));
+        const htmlBody = renderComponentToHTML(LegalPage({ slug, categories, currentPath: req.path }));
 
         // Title mapping
         const titles: Record<string, string> = {

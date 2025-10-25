@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import React from "react";
 import { Heart } from "lucide-react";
 
 export function Footer() {
@@ -27,18 +27,14 @@ export function Footer() {
             <h3 className="text-sm font-semibold text-foreground">Kurumsal</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/hakkimizda" data-testid="link-about">
-                  <span className="text-muted-foreground hover:text-foreground transition-colors hover-elevate rounded px-1">
-                    Hakkımızda
-                  </span>
-                </Link>
+                <a href="/hakkimizda" data-testid="link-about" className="text-muted-foreground hover:text-foreground transition-colors hover-elevate rounded px-1">
+                  Hakkımızda
+                </a>
               </li>
               <li>
-                <Link href="/iletisim" data-testid="link-contact">
-                  <span className="text-muted-foreground hover:text-foreground transition-colors hover-elevate rounded px-1">
-                    İletişim
-                  </span>
-                </Link>
+                <a href="/iletisim" data-testid="link-contact" className="text-muted-foreground hover:text-foreground transition-colors hover-elevate rounded px-1">
+                  İletişim
+                </a>
               </li>
             </ul>
           </div>
@@ -48,32 +44,24 @@ export function Footer() {
             <h3 className="text-sm font-semibold text-foreground">Yasal</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/gizlilik-politikasi" data-testid="link-privacy">
-                  <span className="text-muted-foreground hover:text-foreground transition-colors hover-elevate rounded px-1">
-                    Gizlilik Politikası
-                  </span>
-                </Link>
+                <a href="/gizlilik-politikasi" data-testid="link-privacy" className="text-muted-foreground hover:text-foreground transition-colors hover-elevate rounded px-1">
+                  Gizlilik Politikası
+                </a>
               </li>
               <li>
-                <Link href="/kullanim-kosullari" data-testid="link-terms">
-                  <span className="text-muted-foreground hover:text-foreground transition-colors hover-elevate rounded px-1">
-                    Kullanım Koşulları
-                  </span>
-                </Link>
+                <a href="/kullanim-kosullari" data-testid="link-terms" className="text-muted-foreground hover:text-foreground transition-colors hover-elevate rounded px-1">
+                  Kullanım Koşulları
+                </a>
               </li>
               <li>
-                <Link href="/kvkk" data-testid="link-kvkk">
-                  <span className="text-muted-foreground hover:text-foreground transition-colors hover-elevate rounded px-1">
-                    KVKK
-                  </span>
-                </Link>
+                <a href="/kvkk" data-testid="link-kvkk" className="text-muted-foreground hover:text-foreground transition-colors hover-elevate rounded px-1">
+                  KVKK
+                </a>
               </li>
               <li>
-                <Link href="/cerez-politikasi" data-testid="link-cookie">
-                  <span className="text-muted-foreground hover:text-foreground transition-colors hover-elevate rounded px-1">
-                    Çerez Politikası
-                  </span>
-                </Link>
+                <a href="/cerez-politikasi" data-testid="link-cookie" className="text-muted-foreground hover:text-foreground transition-colors hover-elevate rounded px-1">
+                  Çerez Politikası
+                </a>
               </li>
             </ul>
           </div>

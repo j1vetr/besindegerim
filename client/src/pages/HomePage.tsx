@@ -2,14 +2,20 @@ import React from "react";
 import { type Food } from "@shared/schema";
 import { SearchForm } from "@/components/SearchForm";
 import { FoodCard } from "@/components/FoodCard";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 interface HomePageProps {
   popularFoods: Food[];
+  categories?: string[];
+  currentPath?: string;
 }
 
-export function HomePage({ popularFoods }: HomePageProps) {
+export function HomePage({ popularFoods, categories, currentPath }: HomePageProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-green-50/30 to-white">
+    <div className="min-h-screen flex flex-col">
+      <Header categories={categories} currentPath={currentPath} />
+      <main className="flex-1 bg-gradient-to-br from-white via-green-50/30 to-white">
       {/* Hero Section with Gradient */}
       <section className="relative min-h-[600px] md:min-h-[700px] flex items-center justify-center overflow-hidden">
         {/* Gradient Background */}
@@ -112,6 +118,8 @@ export function HomePage({ popularFoods }: HomePageProps) {
           </div>
         </div>
       </section>
+      </main>
+      <Footer />
     </div>
   );
 }

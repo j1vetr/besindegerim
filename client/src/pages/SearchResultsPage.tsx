@@ -2,15 +2,21 @@ import React from "react";
 import { type Food } from "@shared/schema";
 import { SearchForm } from "@/components/SearchForm";
 import { FoodCard } from "@/components/FoodCard";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 interface SearchResultsPageProps {
   query: string;
   results: Food[];
+  categories?: string[];
+  currentPath?: string;
 }
 
-export function SearchResultsPage({ query, results }: SearchResultsPageProps) {
+export function SearchResultsPage({ query, results, categories, currentPath }: SearchResultsPageProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-green-50/20 to-white">
+    <div className="min-h-screen flex flex-col">
+      <Header categories={categories} currentPath={currentPath} />
+      <main className="flex-1 bg-gradient-to-br from-white via-green-50/20 to-white">
       {/* Search Section with Gradient Background */}
       <section className="py-16 md:py-20 px-4 bg-gradient-to-br from-[#22c55e]/10 to-[#16a34a]/10 border-b border-green-100">
         <div className="max-w-2xl mx-auto">
@@ -79,6 +85,8 @@ export function SearchResultsPage({ query, results }: SearchResultsPageProps) {
           )}
         </div>
       </section>
+      </main>
+      <Footer />
     </div>
   );
 }
