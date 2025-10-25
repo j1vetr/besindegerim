@@ -1,38 +1,89 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
-
-// modify the interface with any CRUD methods
-// you might need
+// Database storage implementation following javascript_database blueprint pattern
+import { foods, type Food, type InsertFood } from "@shared/schema";
+import { db } from "./db";
+import { eq, sql, desc } from "drizzle-orm";
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  // Food operations
+  getFoodBySlug(slug: string): Promise<Food | undefined>;
+  getFoodById(id: string): Promise<Food | undefined>;
+  getFoodByFdcId(fdcId: number): Promise<Food | undefined>;
+  createFood(food: InsertFood): Promise<Food>;
+  updateFood(id: string, food: Partial<InsertFood>): Promise<Food | undefined>;
+  getAllFoods(limit?: number): Promise<Food[]>;
+  getRandomFoods(count: number, excludeId?: string): Promise<Food[]>;
+  searchFoods(query: string, limit?: number): Promise<Food[]>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-
-  constructor() {
-    this.users = new Map();
+export class DatabaseStorage implements IStorage {
+  async getFoodBySlug(slug: string): Promise<Food | undefined> {
+    const [food] = await db.select().from(foods).where(eq(foods.slug, slug));
+    return food || undefined;
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+  async getFoodById(id: string): Promise<Food | undefined> {
+    const [food] = await db.select().from(foods).where(eq(foods.id, id));
+    return food || undefined;
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+  async getFoodByFdcId(fdcId: number): Promise<Food | undefined> {
+    const [food] = await db.select().from(foods).where(eq(foods.fdcId, fdcId));
+    return food || undefined;
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  async createFood(insertFood: InsertFood): Promise<Food> {
+    const [food] = await db
+      .insert(foods)
+      .values(insertFood)
+      .returning();
+    return food;
+  }
+
+  async updateFood(
+    id: string,
+    updateData: Partial<InsertFood>
+  ): Promise<Food | undefined> {
+    const [food] = await db
+      .update(foods)
+      .set({ ...updateData, updatedAt: new Date() })
+      .where(eq(foods.id, id))
+      .returning();
+    return food || undefined;
+  }
+
+  async getAllFoods(limit: number = 100): Promise<Food[]> {
+    return db
+      .select()
+      .from(foods)
+      .orderBy(desc(foods.cachedAt))
+      .limit(limit);
+  }
+
+  async getRandomFoods(count: number, excludeId?: string): Promise<Food[]> {
+    // PostgreSQL random selection
+    const query = db
+      .select()
+      .from(foods)
+      .orderBy(sql`RANDOM()`)
+      .limit(count);
+
+    if (excludeId) {
+      const results = await query;
+      return results.filter((food) => food.id !== excludeId);
+    }
+
+    return query;
+  }
+
+  async searchFoods(query: string, limit: number = 10): Promise<Food[]> {
+    // Case-insensitive search on name
+    const searchPattern = `%${query.toLowerCase()}%`;
+    return db
+      .select()
+      .from(foods)
+      .where(sql`LOWER(${foods.name}) LIKE ${searchPattern}`)
+      .limit(limit);
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
