@@ -1,6 +1,6 @@
 // USDA FoodData Central API Client
 import type { USDAFoodResponse, InsertFood, MicronutrientsData } from "@shared/schema";
-import { getFoodImage } from "./openfoodfacts-client";
+import { searchPexelsImage } from "./pexels-client";
 
 const USDA_API_BASE = "https://api.nal.usda.gov/fdc/v1";
 const API_KEY = process.env.FOODDATA_API_KEY;
@@ -162,30 +162,30 @@ export function normalizeFoodData(
 }
 
 /**
- * Normalize USDA food data with image fetching from OpenFoodFacts/Wikimedia
+ * Normalize USDA food data with image fetching from Pexels
  */
 export async function normalizeFoodDataWithImage(
   usdaFood: any,
-  turkishName?: string
+  turkishName?: string,
+  category?: string
 ): Promise<Omit<InsertFood, "slug">> {
   const baseData = normalizeFoodData(usdaFood, turkishName);
   
-  // Fetch image from OpenFoodFacts or Wikimedia Commons
+  // Fetch image from Pexels using Turkish name
   try {
-    const imageUrl = await getFoodImage(
-      baseData.nameEn || "food", 
-      turkishName || baseData.name
-    );
+    const imageUrl = await searchPexelsImage(turkishName || baseData.name);
     return {
       ...baseData,
-      imageUrl: imageUrl || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400", // Fallback to food placeholder
+      category: category || "Diğer",
+      imageUrl: imageUrl || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80", // Fallback
     };
   } catch (error) {
-    console.error("Error fetching food image:", error);
+    console.error("Error fetching Pexels image:", error);
     // Always provide a placeholder image
     return {
       ...baseData,
-      imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400", // Generic food image
+      category: category || "Diğer",
+      imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80", // Generic food image
     };
   }
 }

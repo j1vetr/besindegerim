@@ -14,6 +14,8 @@ export const foods = pgTable("foods", {
   name: text("name").notNull(),
   // English name from USDA (for API reference)
   nameEn: text("name_en"),
+  // Category (e.g., "Meyveler", "Sebzeler", "Et & Tavuk", etc.)
+  category: text("category").notNull().default("Diğer"),
   // Serving information from USDA API
   servingSize: decimal("serving_size", { precision: 10, scale: 2 }).notNull(), // in grams
   servingLabel: text("serving_label").notNull(), // e.g., "1 orta domates", "1 porsiyon"
@@ -27,7 +29,7 @@ export const foods = pgTable("foods", {
   // Micronutrients stored as JSON (flexible structure for available data)
   // Example: { "vitamin_c": { "amount": 10, "unit": "mg" }, "calcium": { "amount": 20, "unit": "mg" } }
   micronutrients: jsonb("micronutrients"),
-  // Image URL (from USDA or placeholder)
+  // Image URL (from Pexels)
   imageUrl: text("image_url"),
   // Cache metadata
   cachedAt: timestamp("cached_at", { withTimezone: true }).notNull().defaultNow(),
