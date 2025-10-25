@@ -125,7 +125,17 @@ async function seedDatabase() {
       // Check if already exists
       const existing = await storage.getFoodByFdcId(food.fdcId);
       if (existing) {
-        console.log(`⏭️  Skipping ${food.turkishName} (already exists)`);
+        // Update existing food with latest data (image + serving label)
+        console.log(`🔄 Updating ${food.turkishName}...`);
+        const usdaFood = await getFoodById(food.fdcId);
+        const normalizedData = await normalizeFoodDataWithImage(usdaFood, food.turkishName);
+        
+        // Always update - normalizeFoodDataWithImage guarantees imageUrl (with placeholder fallback)
+        await storage.updateFood(existing.id, {
+          imageUrl: normalizedData.imageUrl, // Guaranteed to have value (placeholder if needed)
+          servingLabel: normalizedData.servingLabel, // Guaranteed Turkish gram-based label
+        });
+        console.log(`✅ Updated: ${food.turkishName}\n`);
         skipped++;
         continue;
       }

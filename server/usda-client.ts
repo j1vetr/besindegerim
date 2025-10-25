@@ -52,16 +52,34 @@ export function normalizeFoodData(
 
   // Extract serving information from USDA data
   let servingSize = 100; // Default to 100g if no portion data
-  let servingLabel = "1 porsiyon";
+  let servingLabel = "1 porsiyon (100g)";
 
   // Check for food portions (preferred)
   if (usdaFood.foodPortions && usdaFood.foodPortions.length > 0) {
     const portion = usdaFood.foodPortions[0]; // Use first portion
-    servingSize = portion.gramWeight || 100;
-    servingLabel = portion.portionDescription || portion.modifier || "1 porsiyon";
+    
+    // Only use gramWeight if available, otherwise use 100g default
+    if (portion.gramWeight && portion.gramWeight > 0) {
+      servingSize = portion.gramWeight;
+      const grams = Math.round(servingSize);
+      servingLabel = `1 porsiyon (${grams}g)`;
+    } else {
+      // No gramWeight available, use 100g default
+      servingSize = 100;
+      servingLabel = "1 porsiyon (100g)";
+    }
   } else if (usdaFood.servingSize && usdaFood.servingSizeUnit) {
-    servingSize = usdaFood.servingSize;
-    servingLabel = `${usdaFood.servingSize} ${usdaFood.servingSizeUnit}`;
+    // Check if servingSizeUnit is already in grams
+    const unit = usdaFood.servingSizeUnit.toLowerCase();
+    if (unit === 'g' || unit === 'gram' || unit === 'grams') {
+      servingSize = usdaFood.servingSize;
+      const grams = Math.round(servingSize);
+      servingLabel = `1 porsiyon (${grams}g)`;
+    } else {
+      // Unknown unit, use 100g default
+      servingSize = 100;
+      servingLabel = "1 porsiyon (100g)";
+    }
   }
 
   // Extract nutrients and calculate per serving
@@ -160,11 +178,15 @@ export async function normalizeFoodDataWithImage(
     );
     return {
       ...baseData,
-      imageUrl,
+      imageUrl: imageUrl || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400", // Fallback to food placeholder
     };
   } catch (error) {
     console.error("Error fetching food image:", error);
-    return baseData;
+    // Always provide a placeholder image
+    return {
+      ...baseData,
+      imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400", // Generic food image
+    };
   }
 }
 
