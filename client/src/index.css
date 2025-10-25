@@ -223,6 +223,13 @@
   }
 }
 
+@layer components {
+  .shadcn-card {
+    border-radius: 0.75rem; /* 12px - rounded-xl */
+    box-shadow: var(--shadow-sm);
+  }
+}
+
 /**
  * Using the elevate system.
  * Automatic contrast adjustment.
