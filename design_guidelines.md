@@ -1,42 +1,53 @@
-# Design Guidelines for besindegerim.com
+# Design Guidelines for besindegerim.com - Futuristic Edition
 
 ## Design Approach
 
-**Selected Approach:** Modern health app aesthetic with vibrant visual design
-- Inspiration: MyFitnessPal's clarity + Duolingo's playful energy + modern gradient trends
-- Focus: Data legibility wrapped in engaging, contemporary visual design
-- Mobile-first with generous spacing and touch-friendly interactions
+**Selected Approach:** Apple Vision Pro meets health tech - ultra-modern futuristic design
+- Inspiration: Apple Vision Pro UI + Stripe's premium aesthetics + Duolingo's engagement
+- Focus: Glassmorphic depth, neon accents, 3D transforms, premium floating interfaces
+- Dark-mode first with high contrast and vibrant neon highlights
 
 ## Core Design Principles
 
-1. **Vibrant Clarity:** Nutrition data presented beautifully without sacrificing readability
-2. **Modern Turkish Health Resource:** Professional yet fun, localized experience
-3. **Serving Transparency:** Portion sizes prominently displayed with visual emphasis
-4. **Visual Hierarchy:** Bold gradients and shadows guide attention to key information
+1. **Futuristic Depth:** Multi-layered glassmorphism with floating UI elements
+2. **Neon Vitality:** Electric accents create energy while maintaining nutrition data clarity
+3. **Premium Interactivity:** Subtle 3D transforms and smooth animations on all interactions
+4. **Dark Sophistication:** Deep backgrounds with high-contrast neon text and glowing elements
 
 ---
 
 ## Color System
 
-**Primary Gradient:**
-- Green: #22c55e → #16a34a (use for buttons, hero overlays, accent cards)
-- Apply: bg-gradient-to-r from-[#22c55e] to-[#16a34a]
+**Background Layers:**
+- Base: #0a0e1a (deep navy-black)
+- Gradient overlay: radial-gradient from #0f172a to #020617
+- Section accents: #1a1f35 (slate-900)
 
-**Secondary Accents:**
-- Teal: #14b8a6 (badges, progress bars, icons)
-- Cyan: #06b6d4 (hover states, secondary highlights)
+**Neon Primary (Green):**
+- Bright: #10b981 (emerald-500)
+- Glow: #34d399 (emerald-400)
+- Application: Primary buttons, key metrics, gradient starts, neon glows
 
-**Base Colors:**
-- Background: Soft gradient from white to #f0fdf4 (green-50)
-- Cards: Pure white with shadow-xl and shadow-green-100/20
-- Text Primary: #1f2937 (gray-800)
-- Text Secondary: #6b7280 (gray-500)
+**Electric Accents:**
+- Cyan: #06b6d4 (cyan-500) - hover states, secondary highlights
+- Blue: #3b82f6 (blue-500) - interactive elements
+- Purple: #a855f7 (purple-500) - premium features, badges
 
-**Application:**
-- Hero background: gradient overlay on food imagery
-- Calorie cards: white with green gradient border-l-4
-- Hover states: transition to teal/cyan accents
-- Glassmorphism: white backgrounds with backdrop-blur-lg and bg-white/80
+**Glassmorphism:**
+- Card backgrounds: bg-white/5 to bg-white/10
+- Backdrop blur: backdrop-blur-xl
+- Borders: border border-white/10 with subtle neon glow
+- Shadows: Multi-layer with neon tints (shadow-2xl shadow-emerald-500/20)
+
+**Text:**
+- Primary: #f8fafc (slate-50) - headings, key data
+- Secondary: #cbd5e1 (slate-300) - body text
+- Accent: Neon gradient text for major headings
+
+**Neon Glow Effects:**
+- box-shadow: 0 0 20px rgba(16, 185, 129, 0.4) for green elements
+- box-shadow: 0 0 15px rgba(6, 182, 212, 0.3) for cyan accents
+- Animate glow intensity on hover
 
 ---
 
@@ -45,35 +56,36 @@
 **Fonts:** Inter (via Google Fonts CDN)
 
 **Scale & Hierarchy:**
-- H1: text-4xl md:text-6xl font-bold (hero, page titles)
-- H2: text-3xl md:text-4xl font-bold (section headers)
-- H3: text-2xl font-semibold (subsections)
-- Body: text-base md:text-lg (general content)
-- Data Labels: text-sm font-medium uppercase tracking-wide (nutrient names)
-- Calorie Numbers: text-6xl md:text-7xl font-black (hero calorie display)
-- Small Text: text-xs (metadata, units)
+- H1: text-5xl md:text-7xl font-black tracking-tight (neon gradient text)
+- H2: text-3xl md:text-5xl font-bold (section headers with glow)
+- H3: text-2xl md:text-3xl font-semibold (subsections)
+- Body: text-base md:text-lg font-light (slate-300)
+- Data Labels: text-xs md:text-sm font-medium uppercase tracking-widest (slate-400)
+- Calorie Numbers: text-7xl md:text-8xl font-black (neon green with glow)
+- Micro Text: text-xs font-light (metadata)
 
 **Treatment:**
-- Headlines: Use gradient text with bg-clip-text for major headings
-- Bold weights (600-900) for emphasis
-- Generous letter-spacing on labels for modern feel
+- Headlines: bg-gradient-to-r from-emerald-400 via-cyan-400 to-purple-400 with bg-clip-text
+- Neon text-shadow on key numbers: 0 0 30px currentColor
+- Ultra-wide tracking on labels (tracking-[0.2em])
+- Thin to black weight range for hierarchy
 
 ---
 
 ## Layout & Spacing
 
-**Spacing System:** Tailwind units of 4, 6, 8, 12, 16, 20, 24
-- Section padding: py-16 md:py-24 lg:py-32
-- Card padding: p-6 md:p-8
-- Component gaps: gap-6 md:gap-8
-- Container: max-w-7xl mx-auto px-6 md:px-8
+**Spacing System:** Tailwind units of 4, 6, 8, 12, 16, 20, 24, 32
+- Section padding: py-20 md:py-32 lg:py-40
+- Card padding: p-8 md:p-10
+- Floating element gaps: gap-8 md:gap-12
+- Container: max-w-7xl mx-auto px-6 md:px-12
 
 **Grid Strategy:**
 - Mobile: grid-cols-1
 - Tablet: grid-cols-2 (md:)
-- Desktop: grid-cols-3 lg:grid-cols-4 (popular foods, alternatives)
+- Desktop: grid-cols-3 lg:grid-cols-4
 
-**Breathing Room:** Generous whitespace between sections (mb-16 to mb-24)
+**Depth Layers:** z-index hierarchy for floating elements (10, 20, 30, 40, 50)
 
 ---
 
@@ -81,133 +93,133 @@
 
 ### Homepage Hero
 
-**Visual Treatment:**
-- Full-width section with large food photography background (hero image: 1920x800px vibrant food composition)
-- Gradient overlay: bg-gradient-to-br from-[#22c55e]/90 to-[#16a34a]/80
-- Content: Centered, max-w-4xl
-- H1: "Türkiye'nin En Kapsamlı Gıda Besin Değerleri Rehberi" (white text with text-shadow)
-- Subtitle: Light text explaining serving-based approach
-- Search Bar: Large (h-16), white background with shadow-2xl, rounded-2xl, integrated green gradient search button
-- Glassmorphism effect on search container: backdrop-blur-md bg-white/90
-- Height: min-h-[600px] md:min-h-[700px]
-- Button on image: backdrop-blur-md with bg-white/20 treatment
+**Structure:**
+- Full-width section with futuristic food photography (1920x1080px vibrant macro shot with dramatic lighting)
+- Multi-layer gradient overlay: from-emerald-900/60 via-cyan-900/40 to-purple-900/50
+- Glassmorphic content container: backdrop-blur-2xl bg-white/5 border border-white/10, max-w-4xl centered
+- Height: min-h-screen
+- 3D Transform: Subtle perspective transform on scroll
 
-**Popular Foods Section:**
-- py-20, light gradient background
-- H2: "Popüler Gıdalar" with green gradient underline decoration
-- Grid: grid-cols-2 md:grid-cols-3 lg:grid-cols-4, gap-6
-- Cards: White, rounded-xl, shadow-lg hover:shadow-2xl, transform hover:scale-105, transition-all duration-300
-- Each card: Food image (250x250px, rounded-t-xl), name (font-semibold), calorie badge with teal background
+**Content:**
+- H1: Neon gradient text "Türkiye'nin Geleceği: Besin Değerleri Platformu"
+- Subtitle: text-lg md:text-xl text-slate-300 with subtle glow
+- Search Bar: h-20, glassmorphic (backdrop-blur-xl bg-white/10), rounded-3xl, border-2 border-emerald-500/30, neon glow shadow
+- Search button: Integrated gradient button with pulsing glow animation
+- CTA button on hero: backdrop-blur-xl bg-white/10 treatment, no hover states defined
 
-### Food Detail Page (/:slug)
+**Popular Foods Grid:**
+- py-24, deep background with subtle grid pattern overlay
+- H2: "Popüler Gıdalar" with animated neon underline
+- Cards: Glassmorphic (bg-white/5 backdrop-blur-xl), rounded-2xl, border border-white/10, floating effect (translateY on hover), neon border-l-4 border-emerald-500
+- Food images: 300x300px, rounded-xl, subtle 3D tilt on hover
+- Calorie badge: Floating pill with neon gradient background, pulsing glow
+
+### Food Detail Page
 
 **Hero Section:**
-- Large food image: 600x400px (or larger), rounded-2xl, shadow-2xl
-- Desktop layout: Two-column (md:grid-cols-2), gap-12
-- Left: Image with subtle gradient border
-- Right: Food name (H1), serving info badge (teal background, rounded-full, px-4 py-2)
+- Large food image: 800x500px dramatic macro shot with bokeh, rounded-3xl, multi-layer shadow with neon tints
+- Layout: Two-column (md:grid-cols-2), gap-16
+- Left: Image with animated neon border gradient
+- Right: Glassmorphic info card with 3D depth
 
-**Calorie Showcase Card:**
-- Prominent card with green gradient border-l-8, shadow-xl
-- Glassmorphism: backdrop-blur-sm with subtle white/95 background
-- Layout: Flex with icon (large calorie flame icon from Heroicons)
-- Serving size: text-lg text-gray-600 with portion emoji
-- Calorie number: text-7xl font-black with gradient text effect
-- Label: "kalori" in text-2xl
-- Padding: p-8 md:p-10, rounded-2xl
+**Mega Calorie Display Card:**
+- Floating glassmorphic card: backdrop-blur-2xl bg-gradient-to-br from-white/10 to-white/5
+- Neon gradient border-l-8: from-emerald-500 to-cyan-500
+- Layout: Centered with large flame icon (w-16 h-16) in neon gradient
+- Serving size: Floating badge above with backdrop-blur-md
+- Calorie number: text-8xl md:text-9xl font-black with multi-color neon glow
+- 3D transform on hover: scale-105 with rotateX subtle tilt
 
 **Macronutrient Cards:**
-- Three-column grid (grid-cols-3 gap-4)
-- Each: White card, rounded-xl, p-6, shadow-md
-- Icon at top (Protein/Fat/Carb icons from Heroicons in teal)
-- Large number (text-3xl font-bold)
-- Progress bar: h-2 rounded-full bg-gray-200 with teal fill showing percentage
-- Label below bar
+- Grid: grid-cols-3 gap-6
+- Each card: Glassmorphic with neon accent (protein=emerald, fat=cyan, carbs=purple)
+- Icon: w-12 h-12 with matching neon glow
+- Animated progress bar: h-3 rounded-full with gradient fill and glow effect
+- Numbers: text-4xl font-bold with neon text-shadow
+- 3D hover: translateY(-4px) with increased glow
 
 **Detailed Nutrition Table:**
-- Modern table with alternating row backgrounds (even:bg-green-50/30)
-- Header: bg-gradient-to-r from-green-500 to-green-600, text-white, rounded-t-xl
-- Rows: py-4 px-6, hover:bg-green-50 transition
-- Borders: border-b border-gray-100
-- Values: font-medium for emphasis
-- Include nutrient icons from Heroicons inline
+- Glassmorphic container with backdrop-blur-xl
+- Header: Gradient background (emerald to cyan) with glow shadow
+- Rows: hover:bg-white/5 transition with border-b border-white/5
+- Alternating subtle neon accents on nutrient categories
+- Icons inline with neon tint matching nutrient type
 
-**Alternatives Section:**
-- H2: "Benzer Gıdalar" with gradient accent
-- Grid: grid-cols-2 md:grid-cols-3, gap-6
-- Cards: Image (200x200px), overlay with gradient on hover, name, calorie badge
-- Shadow-lg, rounded-xl, overflow-hidden for image containment
+**Similar Foods Section:**
+- H2: Animated neon gradient text
+- Grid: grid-cols-2 md:grid-cols-4, gap-8
+- Cards: Floating glassmorphic with 3D tilt on hover
+- Images: 250x250px with neon gradient overlay on hover
+- Neon calorie badges with pulsing animation
 
 ---
 
-## Images & Visual Elements
+## Images
 
-**Food Photography:**
-- Hero: 1920x800px vibrant, high-quality food compositions
-- Detail page: 600x400px professional food shots
-- Grid cards: 250x250px square thumbnails
-- All: rounded corners, subtle shadows, object-cover
-- Placeholder: Gradient green pattern with food icon from Heroicons
+**Hero Section:** 
+- Main hero: 1920x1080px vibrant macro food photography with dramatic studio lighting, shallow depth of field, dark moody background
 
-**Icons:** Heroicons (via CDN)
-- Nutrient types: protein (beaker), fat (droplet), carbs (lightning)
-- UI elements: search, fire (calories), chart
-- Size: w-6 h-6 for inline, w-12 h-12 for feature icons
-- Color: Teal (#14b8a6) for consistency
+**Food Detail Pages:**
+- Feature image: 800x500px professional macro shots with bokeh effects, high contrast lighting
 
-**Badges & Labels:**
-- Rounded-full for tags
-- Gradient backgrounds for calorie indicators
-- Shadow-sm for depth
+**Grid Cards:**
+- Thumbnails: 300x300px square, professional food photography with dark backgrounds
+- All images: Sharp focus, vibrant colors that pop against dark UI
+
+**Placeholder:** Dark gradient from slate-900 to slate-800 with glowing food icon
 
 ---
 
 ## Effects & Animations
 
 **Glassmorphism:**
-- Search bar, overlay elements: backdrop-blur-lg bg-white/80
-- Borders: border border-white/20
-- Shadow: shadow-2xl with colored shadow tints
+- All cards: backdrop-blur-xl with bg-white/5 to bg-white/10
+- Layered borders: border border-white/10 with neon accent borders
+- Multi-layer shadows with neon color tints
 
-**Hover Effects:**
-- Cards: transform scale-105, shadow-lg → shadow-2xl
-- Buttons: brightness-110
-- Images: subtle zoom (scale-105) with overflow-hidden container
-- Duration: transition-all duration-300
+**3D Transforms:**
+- Cards: hover:scale-105 hover:-translateY-2 with perspective
+- Buttons: Active state with subtle rotateX
+- Images: Tilt effect on hover (rotateY/rotateX subtle)
 
-**Shadows:**
-- Cards: shadow-lg default, shadow-2xl on hover
-- Hero elements: shadow-2xl
-- Calorie card: shadow-xl with green tint (shadow-green-500/10)
+**Neon Glow Animations:**
+- Pulsing glow on CTAs: animate-pulse with glow intensity
+- Border gradients: animated gradient position shift
+- Text shadows: Breathing glow effect on key metrics
 
-**Gradients:**
-- Backgrounds: subtle radial-gradient or linear
-- Borders: gradient-to-r for accent lines
-- Text: bg-clip-text for headlines
+**Hover States:**
+- Duration: transition-all duration-500 for smoothness
+- Cards: Increased glow + 3D lift + border brightness
+- Images: Scale-110 with overflow-hidden
+- Buttons: Brightness-110 + intensified glow
+
+**Scroll Animations:**
+- Parallax on hero image
+- Fade-in with translateY for section reveals
+- Stagger animations for grid items
 
 ---
 
 ## Mobile Optimization
 
-**Touch Targets:** Minimum 48px height for all interactive elements
-**Responsive Images:** srcset for different densities
-**Stack Behavior:** 
-- Food detail: Image above content on mobile
-- Macro cards: Full width stack on mobile, row on tablet+
-- Tables: Horizontal scroll with sticky first column
-**Spacing Scale Down:** py-16 on mobile → py-24 on desktop
+- Touch targets: 56px minimum height
+- Reduce 3D effects on mobile for performance
+- Stack all grids to single column on mobile
+- Simplified animations, maintain glassmorphism
+- Neon glows reduced intensity on mobile to preserve battery
 
 ---
 
-## Accessibility & Quality
+## Accessibility
 
-- High contrast maintained despite vibrant colors (WCAG AA)
-- Semantic HTML with proper heading hierarchy
-- ARIA labels for icons and interactive elements
-- Alt text for all food images describing the food
-- Keyboard navigation with visible focus states (green ring)
-- Turkish decimal formatting (virgül for decimals)
+- WCAG AAA contrast with neon text on dark backgrounds
+- High contrast mode support
+- Focus states: Neon ring-2 ring-emerald-400 with glow
+- Reduced motion support: Disable 3D transforms and animations
+- Turkish locale: Proper decimal/thousand separators
+- Semantic HTML with ARIA labels for all glassmorphic elements
+- Keyboard navigation with visible neon focus indicators
 
 ---
 
-This modern, vibrant design creates an engaging Turkish nutrition resource that makes data exploration delightful while maintaining professional health app credibility through clear information hierarchy and serving-based transparency.
+This futuristic design creates an immersive Turkish nutrition platform that feels like stepping into the future of health tech while maintaining data clarity through sophisticated glassmorphism and strategic neon highlighting.
