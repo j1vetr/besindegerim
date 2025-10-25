@@ -1,0 +1,631 @@
+🌾 Tahıllar & Ürünleri
+
+Buğday
+
+Beyaz pirinç
+
+Esmer pirinç
+
+Yulaf
+
+Arpa
+
+Çavdar
+
+Mısır tanesi
+
+Mısır unu
+
+Kinoa
+
+Karabuğday (greçka)
+
+Darı (millet)
+
+Bulgur
+
+İrmik
+
+Kuskus (couscous)
+
+Amarant
+
+Teff
+
+Sorgum
+
+Basmati pirinç
+
+Jasmine pirinç
+
+Ekmek (beyaz)
+
+Ekmek (tam buğday)
+
+Tortilla (mısır)
+
+Tortilla (buğday)
+
+Makarna (kuru)
+
+Noodle (kuru)
+
+🫘 Bakliyat & Soya Ürünleri
+
+Nohut (kuru)
+
+Beyaz fasulye
+
+Barbunya
+
+Siyah fasulye (black bean)
+
+Pinto fasulye
+
+Kırmızı fasulye (kidney bean)
+
+Yeşil mercimek
+
+Kırmızı mercimek
+
+Bakla (kuru)
+
+Bezelye (kuru, sarı/yeşil)
+
+Soya fasulyesi
+
+Edamame (taze soya)
+
+Tofu (soya peyniri)
+
+Tempeh
+
+Lupin fasulyesi
+
+Mungo fasulyesi
+
+Lima fasulyesi
+
+Yer fıstığı (baklagil olarak)
+
+Nohut unu
+
+Soya unu
+
+🥦 Sebzeler
+
+Domates
+
+Salatalık
+
+Havuç
+
+Patates
+
+Soğan (kuru)
+
+Sarımsak
+
+Yeşil biber (tatlı)
+
+Kırmızı biber (tatlı)
+
+Acı biber (chili)
+
+Kabak (sakız)
+
+Patlıcan
+
+Brokoli
+
+Karnabahar
+
+Ispanak
+
+Marul (kıvırcık/iceberg)
+
+Roka (arugula)
+
+Beyaz lahana
+
+Kırmızı lahana
+
+Brüksel lahanası
+
+Pırasa
+
+Kereviz sapı
+
+Kereviz kökü (celeriac)
+
+Turp (kırmızı)
+
+Şalgam (turnip)
+
+Pancar (kırmızı)
+
+Enginar
+
+Kuşkonmaz
+
+Taze mısır (koçan)
+
+Bezelye (taze)
+
+Taze fasulye (yeşil)
+
+Bamya
+
+Tatlı patates
+
+Zencefil (taze kök)
+
+Zerdeçal (taze kök)
+
+Kale (kara lahana)
+
+Çin lahanası (bok choy)
+
+Bambu filizi
+
+Su teresi
+
+Deniz yosunu – nori
+
+Deniz yosunu – wakame
+
+🍎 Meyveler
+
+Elma
+
+Armut
+
+Muz
+
+Portakal
+
+Mandalina
+
+Limon
+
+Greyfurt
+
+Üzüm (beyaz/kırmızı)
+
+Çilek
+
+Ahududu
+
+Böğürtlen
+
+Yaban mersini (blueberry)
+
+Kiraz
+
+Vişne
+
+Karpuz
+
+Kavun
+
+Şeftali
+
+Nektarin
+
+Kayısı
+
+Erik
+
+Nar
+
+Ananas
+
+Mango
+
+Papaya
+
+Kivi
+
+Avokado
+
+Guava
+
+Trabzon hurması (persimmon)
+
+İncir
+
+Hurma (date)
+
+Hindistan cevizi
+
+Lichi
+
+Pomelo
+
+Passion fruit
+
+Kızılcık (cranberry)
+
+🍄 Mantarlar
+
+Kültür mantarı (beyaz)
+
+Şitake
+
+İstiridye mantarı
+
+Portobello
+
+Kestane mantarı
+
+🥜 Kuruyemiş & Yağlı Tohumlar
+
+Badem
+
+Fındık
+
+Ceviz
+
+Antep fıstığı (pistachio)
+
+Kaju
+
+Yer fıstığı (kuruyemiş olarak)
+
+Makadamya fındığı
+
+Brezilya fındığı
+
+Çam fıstığı (pine nut)
+
+Pecannut
+
+Ay çekirdeği
+
+Kabak çekirdeği
+
+Susam
+
+Chia tohumu
+
+Keten tohumu (flax)
+
+Kenevir tohumu (hemp)
+
+Haşhaş tohumu
+
+Çörek otu (nigella)
+
+Karpuz çekirdeği (kavrulmuş)
+
+🥩 Kırmızı Et & Sakatatlar
+
+Sığır eti (yağsız)
+
+Sığır kıyma
+
+Sığır bonfile
+
+Dana eti (genel)
+
+Kuzu eti (genel)
+
+Kuzu pirzola
+
+Koyun eti (mutton)
+
+Keçi eti
+
+Sığır karaciğer
+
+Sığır böbrek
+
+Sığır dili
+
+Dana ciğer
+
+Kuzu ciğer
+
+Dana ilik (kemik iliği)
+
+Dana kuşbaşı
+
+🍗 Kümes Hayvanları & Yumurta
+
+Tavuk göğsü (derisiz)
+
+Tavuk but
+
+Tavuk kanat
+
+Hindi eti (göğüs)
+
+Hindi but
+
+Ördek eti
+
+Kaz eti
+
+Bıldırcın eti
+
+Tavuk ciğer
+
+Yumurta (tavuk, tam)
+
+Yumurta beyazı
+
+Yumurta sarısı
+
+Bıldırcın yumurtası
+
+Hindi jambon (dilimlenmiş)
+
+Tavuk jambon (dilimlenmiş)
+
+🐟 Deniz Ürünleri
+
+Somon (Atlantik)
+
+Ton balığı (taze)
+
+Ton balığı (konserve)
+
+Sardalya
+
+Hamsi
+
+Uskumru (mackerel)
+
+Morina (cod)
+
+Mezgit (whiting)
+
+Levrek (sea bass)
+
+Çipura (gilt-head bream)
+
+Alabalık (trout)
+
+Halibut
+
+Tilapia
+
+Pollock
+
+Ringabalığı (herring)
+
+Kılıç balığı (swordfish)
+
+Karides
+
+Istakoz
+
+Yengeç
+
+Midye
+
+İstiridye (oyster)
+
+Kalamar
+
+Ahtapot
+
+Deniztarağı (scallop)
+
+Balık yumurtası (roe)
+
+🧀 Süt & Süt Ürünleri
+
+Süt (tam yağlı, inek)
+
+Süt (yarım yağlı)
+
+Süt (yağsız)
+
+Laktozsuz süt
+
+Yoğurt (tam yağlı)
+
+Yoğurt (light)
+
+Süzme yoğurt (Greek)
+
+Kefir
+
+Ayran
+
+Beyaz peynir (feta tipi)
+
+Kaşar peynir (semi-hard)
+
+Mozzarella
+
+Cheddar
+
+Gouda
+
+Parmesan
+
+Tulum peyniri
+
+Ricotta
+
+Cottage cheese
+
+Labne
+
+Krem peynir
+
+Tereyağı
+
+Kaymak (clotted cream)
+
+Krema (heavy cream)
+
+Dondurma (vanilya)
+
+Peynir altı suyu proteini (whey powder)
+
+🧴 Yağlar & Katı Yağlar
+
+Zeytinyağı
+
+Ayçiçek yağı
+
+Kanola yağı
+
+Mısır yağı
+
+Soya yağı
+
+Yer fıstığı yağı
+
+Susam yağı
+
+Hindistan cevizi yağı
+
+Avokado yağı
+
+Üzüm çekirdeği yağı
+
+Ghee (sade yağ)
+
+Margarin
+
+Domuz yağı (lard)
+
+Sığır yağı (tallow)
+
+Palm yağı
+
+🍯 Şeker & Tatlandırıcılar
+
+Beyaz şeker
+
+Esmer şeker
+
+Bal
+
+Pekmez (molasses)
+
+Akçaağaç şurubu (maple)
+
+Agave şurubu
+
+Glukoz şurubu
+
+Fruktoz şurubu
+
+Aspartam (tatlandırıcı)
+
+Stevia
+
+🥤 Alkolsüz İçecekler
+
+Su
+
+Maden suyu
+
+Soda (soda water)
+
+Siyah çay
+
+Yeşil çay
+
+Bitki çayı (papatya)
+
+Filtre kahve
+
+Espresso
+
+Latte
+
+Sıcak kakao içeceği
+
+Limonata
+
+Portakal suyu
+
+Elma suyu
+
+Üzüm suyu
+
+Domates suyu
+
+Sebze suyu karışımı
+
+Spor içeceği (isotonik)
+
+Enerji içeceği
+
+Hindistan cevizi suyu
+
+🧂 Soslar, Çeşniler & Fermente Ürünler
+
+Domates sosu
+
+Ketçap
+
+Mayonez
+
+Hardal
+
+Barbekü sosu
+
+Soya sosu
+
+Sirke (beyaz damıtık)
+
+Elma sirkesi
+
+Balzamik sirke
+
+Acı sos (chili sauce)
+
+Salsa
+
+Humus (nohut ezmesi)
+
+Tahin (susam ezmesi)
+
+Yer fıstığı ezmesi (peanut butter)
+
+Pesto sosu
+
+Turşu (salatalık)
+
+Kimchi (fermente lahana)
+
+🥣 Kahvaltılık Gevrekler & Barlar
+
+Mısır gevreği (corn flakes)
+
+Yulaf ezmesi (instant)
+
+Granola
+
+Müsli
+
+Protein bar (genel)
+
+🍜 Çorbalar & Temel Hazır Ürünler
+
+Sebze çorbası (konserve)
+
+Tavuk suyu çorbası (konserve)
+
+Domates çorbası (konserve)
+
+Et suyu/bulyon (küp)
+
+Noodle çorbası (instant)
+
+Domates püresi (konserve)
+
+Fasulye konservesi (doğal su)
+
+Ton balığı konservesi (suda)
+
+Mısır konservesi
+
+Bezelye konservesi

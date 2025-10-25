@@ -37,10 +37,15 @@ besindegerim.com, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tama
      - BreadcrumbList
      - Organization
 
-6. **Mobil Öncelikli Tasarım**
-   - Açık ton + yeşil vurgu
-   - Profesyonel, "AI kokusu" olmayan tasarım
-   - Responsive grid layout
+6. **Modern, Göze Çarpan Tasarım**
+   - Yeni hero section: "Besin Değeri Anında" kısa başlık
+   - Gradient hero arka plan + CSS-only animasyonlar
+   - Glassmorphic arama çubuğu
+   - Stats pills (14+ Gıda, Gerçek Porsiyon, USDA Verisi)
+   - Shadcn Card components ile modern value props
+   - Alternating layout "Neden Besin Değerim?" bölümü
+   - Mobil öncelikli, responsive tasarım
+   - Yeşil gradient tema (from-[#22c55e] to-[#16a34a])
    - Touch-friendly controls
 
 ## Proje Yapısı
@@ -204,11 +209,16 @@ npx tsx server/debug-usda.ts
 
 ## Tasarım Sistemi
 
-- **Renkler**: Açık ton arka plan + yeşil vurgu (primary)
-- **Tipografi**: Inter font (400, 500, 600, 700)
-- **Spacing**: 4, 6, 8, 12, 16 units
-- **Responsive**: Mobile-first, grid 2-3-4 columns
-- **Cards**: shadow-sm, rounded-lg, hover-elevate
+- **Renkler**: 
+  - Primary gradient: from-[#22c55e] to-[#16a34a] (yeşil)
+  - Secondary: Teal-500 to Cyan-500
+  - Background: White to emerald-50/30
+  - Text: Gray-900 (headings), Gray-600 (body)
+- **Tipografi**: Inter font (400 body, 600 semibold, 700 bold, 900 black for hero)
+- **Spacing**: 4, 6, 8, 12, 16, 20 units (modern rhythm)
+- **Components**: Shadcn Card, CardContent with hover-elevate
+- **Responsive**: Mobile-first, grid 1-2-3-4 columns
+- **Effects**: Glassmorphism, CSS animations, gradient overlays
 
 ## Deployment
 
