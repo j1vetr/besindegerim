@@ -19,7 +19,13 @@ export function SearchAutocomplete({
   const [results, setResults] = useState<Food[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  // SSR-safe client check
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -67,7 +73,7 @@ export function SearchAutocomplete({
   };
 
   return (
-    <div ref={wrapperRef} className="relative w-full">
+    <div ref={wrapperRef} className="relative w-full" data-client={isClient ? "yes" : "no"}>
       <form onSubmit={handleSubmit} className="w-full" data-testid="form-search">
         <div className="flex gap-3">
           {/* Search Input */}
@@ -108,8 +114,8 @@ export function SearchAutocomplete({
         </div>
       </form>
 
-      {/* Autocomplete Results - Resimli Liste */}
-      {showResults && results.length > 0 && (
+      {/* Autocomplete Results - Resimli Liste (Client-side only) */}
+      {isClient && showResults && results.length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-green-200/50 rounded-2xl shadow-2xl shadow-green-500/20 overflow-hidden z-50 max-h-[400px] overflow-y-auto">
           {results.map((food) => (
             <a
@@ -153,8 +159,8 @@ export function SearchAutocomplete({
         </div>
       )}
 
-      {/* No Results Message */}
-      {showResults && results.length === 0 && query.length >= 3 && !isLoading && (
+      {/* No Results Message (Client-side only) */}
+      {isClient && showResults && results.length === 0 && query.length >= 3 && !isLoading && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-green-200/50 rounded-2xl shadow-2xl shadow-green-500/20 p-6 text-center z-50">
           <p className="text-sm text-slate-600">
             "{query}" için sonuç bulunamadı.

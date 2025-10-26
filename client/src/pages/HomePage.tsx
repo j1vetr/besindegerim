@@ -98,9 +98,7 @@ export default function HomePage({
             {/* Glassmorphic Search Form with AJAX Autocomplete */}
             <div className="max-w-2xl mx-auto mb-16">
               <div className="backdrop-blur-2xl bg-white/70 rounded-3xl p-2 border-2 border-green-200/50 shadow-2xl shadow-green-500/20 hover:shadow-green-500/40 transition-all duration-500">
-                <ClientOnly fallback={<SearchForm />}>
-                  <SearchAutocomplete />
-                </ClientOnly>
+                <SearchAutocomplete />
               </div>
             </div>
 
