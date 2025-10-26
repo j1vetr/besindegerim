@@ -30,9 +30,10 @@ export function buildMetaForFood(data: FoodMetaData): MetaTags {
   const baseUrl = process.env.BASE_URL || "https://besindegerim.com";
   const canonical = `${baseUrl}/${slug}`;
 
-  const title = `${name} Besin Değerleri - ${kcalPerServing} kcal | besindegerim.com`;
-  const description = `${name} gıdasının gerçek porsiyon bazlı besin değerleri: ${servingLabel} başına ${kcalPerServing} kalori. Protein, karbonhidrat, yağ ve vitamin bilgileri.`;
-  const keywords = `${name}, kalori, besin değeri, ${name} kalorisi, gıda, beslenme, sağlıklı yaşam, diyet`;
+  // Long-tail keyword optimized title
+  const title = `${name} Kaç Kalori? ${name} Besin Değerleri (Porsiyon Bazlı) | besindegerim.com`;
+  const description = `${name} kaç kalori? ${servingLabel} başına ${kcalPerServing} kalori içerir. ✓ ${name} besin değerleri: protein, karbonhidrat, yağ, vitamin ve mineral bilgileri. ✓ Gerçek porsiyon bazlı USDA verisi.`;
+  const keywords = `${name} kaç kalori, ${name} besin değerleri, ${name} kalorisi, ${name} protein, ${name} karbonhidrat, ${name} sağlıklı mı, besin tablosu, kalori hesaplama, diyet`;
 
   return {
     title,
@@ -151,6 +152,103 @@ export function buildOrganizationJsonLd(): object {
     logo: `${baseUrl}/logo.png`,
     description:
       "Türkiye'nin en kapsamlı besin değerleri platformu - Gerçek porsiyon bazlı kalori ve besin bilgileri",
+  };
+}
+
+/**
+ * Generate FAQ JSON-LD for Google Featured Snippets
+ */
+export function buildFAQJsonLd(data: {
+  name: string;
+  servingLabel: string;
+  calories: number;
+  protein?: number;
+  carbs?: number;
+  fat?: number;
+  fiber?: number;
+}): object {
+  const proteinText = data.protein ? `${data.protein.toFixed(1)}g protein` : "protein bilgisi mevcut";
+  const carbsText = data.carbs ? `${data.carbs.toFixed(1)}g karbonhidrat` : "karbonhidrat bilgisi mevcut";
+  const fatText = data.fat ? `${data.fat.toFixed(1)}g yağ` : "yağ bilgisi mevcut";
+  const fiberText = data.fiber ? ` ${data.fiber.toFixed(1)}g lif,` : "";
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: `${data.name} kaç kalori?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `${data.name}, ${data.servingLabel} başına ${data.calories} kalori içerir. Bu değer gerçek porsiyon bazlı USDA verilerine göre hesaplanmıştır.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: `${data.name} besin değerleri nedir?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `${data.name} besin değerleri (${data.servingLabel} başına): ${data.calories} kalori, ${proteinText}, ${carbsText}, ${fatText}${fiberText} içerir.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: `${data.name} sağlıklı mı?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `${data.name}, dengeli beslenme programının bir parçası olarak tüketilebilir. ${data.servingLabel} başına ${data.calories} kalori içerir ve besin değerleri açısından ${proteinText}, ${carbsText} ve ${fatText} sağlar.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: `${data.name} porsiyon miktarı ne kadar?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `${data.name} için standart porsiyon miktarı ${data.servingLabel} olarak tanımlanmıştır. Bu porsiyon ${data.calories} kalori içerir.`,
+        },
+      },
+    ],
+  };
+}
+
+/**
+ * Generate Article JSON-LD for better content recognition
+ */
+export function buildArticleJsonLd(data: {
+  name: string;
+  slug: string;
+  calories: number;
+  servingLabel: string;
+}): object {
+  const baseUrl = process.env.BASE_URL || "https://besindegerim.com";
+  const currentDate = new Date().toISOString();
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: `${data.name} Kaç Kalori? ${data.name} Besin Değerleri`,
+    description: `${data.name} ${data.servingLabel} başına ${data.calories} kalori içerir. Detaylı besin değerleri, protein, karbonhidrat, yağ, vitamin ve mineral bilgileri.`,
+    author: {
+      "@type": "Organization",
+      name: "Besin Değerim",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Besin Değerim",
+      logo: {
+        "@type": "ImageObject",
+        url: `${baseUrl}/logo.png`,
+      },
+    },
+    datePublished: currentDate,
+    dateModified: currentDate,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${baseUrl}/${data.slug}`,
+    },
+    image: `${baseUrl}/og-image.png`,
+    url: `${baseUrl}/${data.slug}`,
   };
 }
 

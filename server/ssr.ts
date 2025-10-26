@@ -13,6 +13,8 @@ import {
   buildFoodJsonLd,
   buildBreadcrumbJsonLd,
   buildOrganizationJsonLd,
+  buildFAQJsonLd,
+  buildArticleJsonLd,
   injectHead,
 } from "./seo/meta-inject";
 import { storage } from "./storage";
@@ -227,7 +229,7 @@ export function registerSSRRoutes(app: Express): void {
         slug: food.slug,
       });
 
-      // Build JSON-LD schemas
+      // Build JSON-LD schemas (NutritionInformation, FAQ, Article, Breadcrumb, Organization)
       const jsonLd = [
         buildFoodJsonLd({
           name: food.name,
@@ -240,6 +242,21 @@ export function registerSSRRoutes(app: Express): void {
           fat: food.fat ? Number(food.fat) : undefined,
           fiber: food.fiber ? Number(food.fiber) : undefined,
           sugar: food.sugar ? Number(food.sugar) : undefined,
+        }),
+        buildFAQJsonLd({
+          name: food.name,
+          servingLabel: food.servingLabel,
+          calories: Number(food.calories),
+          protein: food.protein ? Number(food.protein) : undefined,
+          carbs: food.carbs ? Number(food.carbs) : undefined,
+          fat: food.fat ? Number(food.fat) : undefined,
+          fiber: food.fiber ? Number(food.fiber) : undefined,
+        }),
+        buildArticleJsonLd({
+          name: food.name,
+          slug: food.slug,
+          calories: Number(food.calories),
+          servingLabel: food.servingLabel,
         }),
         buildBreadcrumbJsonLd(food.name, food.slug),
         buildOrganizationJsonLd(),

@@ -138,6 +138,25 @@ export function FoodDetailPage({ food, alternatives, categories, currentPath }: 
         {/* Detailed Nutrition Section */}
         <section className="py-20 px-4 bg-gradient-to-b from-white via-emerald-50/30 to-white">
           <div className="max-w-7xl mx-auto">
+            {/* Quick Answer Box - Featured Snippet Optimized */}
+            <div className="mb-16 max-w-4xl mx-auto">
+              <div className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-500 rounded-2xl p-8 shadow-xl">
+                <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-4" data-testid="heading-quick-answer">
+                  {food.name} Kaç Kalori?
+                </h2>
+                <div className="flex items-baseline gap-3 mb-6">
+                  <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent" data-testid="text-quick-answer-calories">
+                    {Number(food.calories).toFixed(0)}
+                  </div>
+                  <div className="text-2xl font-bold text-gray-600">kalori</div>
+                </div>
+                <p className="text-lg text-gray-700 leading-relaxed" data-testid="text-quick-answer-description">
+                  <strong>{food.name}</strong>, {food.servingLabel} başına <strong>{Number(food.calories).toFixed(0)} kalori</strong> içerir. 
+                  Bu değer gerçek porsiyon bazlı USDA verilerine göre hesaplanmıştır.
+                </p>
+              </div>
+            </div>
+
             {/* Section Header */}
             <div className="text-center mb-16">
               <div className="inline-flex items-center gap-3 mb-4">
@@ -296,12 +315,143 @@ export function FoodDetailPage({ food, alternatives, categories, currentPath }: 
               )}
             </div>
 
+            {/* Nutrition Summary Table - SEO Optimized */}
+            <div className="mb-16 max-w-4xl mx-auto">
+              <h3 className="text-3xl font-bold text-gray-900 mb-8 text-center" data-testid="heading-nutrition-table">
+                {food.name} Besin Değerleri Tablosu
+              </h3>
+              <div className="bg-white rounded-2xl shadow-xl overflow-hidden border-2 border-green-200/50">
+                <table className="w-full" data-testid="table-nutrition-summary">
+                  <caption className="sr-only">{food.name} Besin Değerleri Tablosu - {food.servingLabel} başına</caption>
+                  <thead className="bg-gradient-to-r from-green-500 to-emerald-500">
+                    <tr>
+                      <th className="text-left py-4 px-6 text-white font-bold">Besin Öğesi</th>
+                      <th className="text-right py-4 px-6 text-white font-bold">Miktar</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    <tr className="hover-elevate">
+                      <td className="py-4 px-6 font-semibold text-gray-900">Kalori</td>
+                      <td className="py-4 px-6 text-right font-bold text-green-600" data-testid="text-table-calories">{Number(food.calories).toFixed(0)} kcal</td>
+                    </tr>
+                    <tr className="hover-elevate bg-gray-50/50">
+                      <td className="py-4 px-6 font-semibold text-gray-900">Protein</td>
+                      <td className="py-4 px-6 text-right font-bold text-teal-600" data-testid="text-table-protein">{Number(food.protein || 0).toFixed(1)} g</td>
+                    </tr>
+                    <tr className="hover-elevate">
+                      <td className="py-4 px-6 font-semibold text-gray-900">Karbonhidrat</td>
+                      <td className="py-4 px-6 text-right font-bold text-orange-600" data-testid="text-table-carbs">{Number(food.carbs || 0).toFixed(1)} g</td>
+                    </tr>
+                    {food.fiber && Number(food.fiber) > 0 && (
+                      <tr className="hover-elevate bg-gray-50/50">
+                        <td className="py-4 px-6 pl-12 text-gray-700">• Lif</td>
+                        <td className="py-4 px-6 text-right text-gray-700" data-testid="text-table-fiber">{Number(food.fiber).toFixed(1)} g</td>
+                      </tr>
+                    )}
+                    {food.sugar && Number(food.sugar) > 0 && (
+                      <tr className="hover-elevate">
+                        <td className="py-4 px-6 pl-12 text-gray-700">• Şeker</td>
+                        <td className="py-4 px-6 text-right text-gray-700" data-testid="text-table-sugar">{Number(food.sugar).toFixed(1)} g</td>
+                      </tr>
+                    )}
+                    <tr className="hover-elevate bg-gray-50/50">
+                      <td className="py-4 px-6 font-semibold text-gray-900">Yağ</td>
+                      <td className="py-4 px-6 text-right font-bold text-yellow-600" data-testid="text-table-fat">{Number(food.fat || 0).toFixed(1)} g</td>
+                    </tr>
+                    {food.saturatedFat && Number(food.saturatedFat) > 0 && (
+                      <tr className="hover-elevate">
+                        <td className="py-4 px-6 pl-12 text-gray-700">• Doymuş Yağ</td>
+                        <td className="py-4 px-6 text-right text-gray-700" data-testid="text-table-saturated-fat">{Number(food.saturatedFat).toFixed(1)} g</td>
+                      </tr>
+                    )}
+                    {food.cholesterol && Number(food.cholesterol) > 0 && (
+                      <tr className="hover-elevate bg-gray-50/50">
+                        <td className="py-4 px-6 font-semibold text-gray-900">Kolesterol</td>
+                        <td className="py-4 px-6 text-right font-bold text-red-600" data-testid="text-table-cholesterol">{Number(food.cholesterol).toFixed(0)} mg</td>
+                      </tr>
+                    )}
+                    {food.sodium && Number(food.sodium) > 0 && (
+                      <tr className="hover-elevate">
+                        <td className="py-4 px-6 font-semibold text-gray-900">Sodyum</td>
+                        <td className="py-4 px-6 text-right font-bold text-blue-600" data-testid="text-table-sodium">{Number(food.sodium).toFixed(0)} mg</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
             {/* Complete Nutrition Table */}
             <div className="mb-16">
               <h3 className="text-3xl font-bold text-gray-900 mb-8 text-center">
                 Vitamin ve Mineral İçeriği
               </h3>
               <NutritionTable food={food} />
+            </div>
+
+            {/* FAQ Section - Google Featured Snippets */}
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-10 text-center">
+                Sık Sorulan Sorular
+              </h2>
+              <div className="space-y-6">
+                {/* Question 1 */}
+                <div className="bg-white rounded-2xl shadow-lg border-2 border-green-200/50 overflow-hidden hover-elevate">
+                  <div className="p-6 bg-gradient-to-r from-green-50 to-emerald-50">
+                    <h3 className="text-xl font-bold text-gray-900">{food.name} kaç kalori?</h3>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-gray-700 leading-relaxed">
+                      {food.name}, {food.servingLabel} başına <strong>{Number(food.calories).toFixed(0)} kalori</strong> içerir. 
+                      Bu değer gerçek porsiyon bazlı USDA verilerine göre hesaplanmıştır.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Question 2 */}
+                <div className="bg-white rounded-2xl shadow-lg border-2 border-green-200/50 overflow-hidden hover-elevate">
+                  <div className="p-6 bg-gradient-to-r from-green-50 to-emerald-50">
+                    <h3 className="text-xl font-bold text-gray-900">{food.name} besin değerleri nedir?</h3>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-gray-700 leading-relaxed">
+                      {food.name} besin değerleri ({food.servingLabel} başına): <strong>{Number(food.calories).toFixed(0)} kalori</strong>, 
+                      {food.protein && <> <strong>{Number(food.protein).toFixed(1)}g protein</strong>,</>}
+                      {food.carbs && <> <strong>{Number(food.carbs).toFixed(1)}g karbonhidrat</strong>,</>}
+                      {food.fat && <> <strong>{Number(food.fat).toFixed(1)}g yağ</strong></>}
+                      {food.fiber && <>, <strong>{Number(food.fiber).toFixed(1)}g lif</strong></>} içerir.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Question 3 */}
+                <div className="bg-white rounded-2xl shadow-lg border-2 border-green-200/50 overflow-hidden hover-elevate">
+                  <div className="p-6 bg-gradient-to-r from-green-50 to-emerald-50">
+                    <h3 className="text-xl font-bold text-gray-900">{food.name} sağlıklı mı?</h3>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-gray-700 leading-relaxed">
+                      {food.name}, dengeli beslenme programının bir parçası olarak tüketilebilir. {food.servingLabel} başına {Number(food.calories).toFixed(0)} kalori içerir ve besin değerleri açısından
+                      {food.protein && <> {Number(food.protein).toFixed(1)}g protein</>}
+                      {food.carbs && <>, {Number(food.carbs).toFixed(1)}g karbonhidrat</>}
+                      {food.fat && <> ve {Number(food.fat).toFixed(1)}g yağ</>} sağlar.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Question 4 */}
+                <div className="bg-white rounded-2xl shadow-lg border-2 border-green-200/50 overflow-hidden hover-elevate">
+                  <div className="p-6 bg-gradient-to-r from-green-50 to-emerald-50">
+                    <h3 className="text-xl font-bold text-gray-900">{food.name} porsiyon miktarı ne kadar?</h3>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-gray-700 leading-relaxed">
+                      {food.name} için standart porsiyon miktarı <strong>{food.servingLabel}</strong> olarak tanımlanmıştır. 
+                      Bu porsiyon <strong>{Number(food.calories).toFixed(0)} kalori</strong> içerir.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
