@@ -1,6 +1,6 @@
 // Enhanced USDA FoodData Central API Client with full nutrition + Branded Foods support
 import type { USDAFoodResponse, InsertFood, MicronutrientsData } from "@shared/schema";
-import { searchOpenFoodFactsImage } from "./openfoodfacts-client";
+import { getWikimediaImage } from "./wikipedia-client";
 
 const USDA_API_BASE = "https://api.nal.usda.gov/fdc/v1";
 const API_KEY = process.env.FOODDATA_API_KEY;
@@ -221,7 +221,7 @@ export function normalizeFoodData(
 }
 
 /**
- * Normalize USDA food data with image fetching from Open Food Facts
+ * Normalize USDA food data with image fetching from Wikipedia/Wikimedia Commons
  */
 export async function normalizeFoodDataWithImage(
   usdaFood: any,
@@ -230,12 +230,12 @@ export async function normalizeFoodDataWithImage(
 ): Promise<Omit<InsertFood, "slug">> {
   const baseData = normalizeFoodData(usdaFood, turkishName);
   
-  // Fetch image from Open Food Facts (translates Turkish to English internally)
+  // Fetch image from Wikipedia/Wikimedia Commons (translates Turkish to English internally)
   try {
     const searchQuery = turkishName || baseData.name;
     
-    // Get image from Open Food Facts
-    let imageUrl = await searchOpenFoodFactsImage(searchQuery);
+    // Get image from Wikipedia/Wikimedia Commons
+    let imageUrl = await getWikimediaImage(searchQuery);
     
     // Fallback to placeholder if not found
     if (!imageUrl) {

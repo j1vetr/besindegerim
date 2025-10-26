@@ -1,9 +1,9 @@
-// Refresh images for existing foods using Open Food Facts API
+// Refresh images for existing foods using Wikipedia/Wikimedia Commons
 import { storage } from "./storage";
-import { searchOpenFoodFactsImage } from "./openfoodfacts-client";
+import { getWikimediaImage } from "./wikipedia-client";
 
 async function refreshImages() {
-  console.log("🖼️  Refreshing images from Open Food Facts...\n");
+  console.log("🖼️  Refreshing images from Wikipedia/Wikimedia Commons...\n");
 
   try {
     // Get all foods from database
@@ -18,8 +18,8 @@ async function refreshImages() {
       try {
         console.log(`🔄 Updating image for: ${food.name}`);
         
-        // Get image from Open Food Facts (auto-translates Turkish to English)
-        const imageUrl = await searchOpenFoodFactsImage(food.name);
+        // Get image from Wikipedia/Wikimedia Commons (auto-translates Turkish to English)
+        const imageUrl = await getWikimediaImage(food.name);
         
         if (imageUrl) {
           // Update food with new image URL
@@ -31,8 +31,8 @@ async function refreshImages() {
           noImageCount++;
         }
 
-        // Rate limiting: wait 600ms between requests
-        await new Promise(resolve => setTimeout(resolve, 600));
+        // Rate limiting: wait 1000ms between requests (be nice to Wikipedia)
+        await new Promise(resolve => setTimeout(resolve, 1000));
       } catch (error) {
         console.error(`❌ Error updating ${food.name}:`, error);
         errorCount++;
