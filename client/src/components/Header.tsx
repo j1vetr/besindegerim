@@ -28,9 +28,12 @@ export function Header({ categories = [], currentPath = "/" }: HeaderProps = {})
         <div className="flex items-center gap-4 mb-3">
           {/* Logo */}
           <a href="/" data-testid="link-home" className="flex-shrink-0 hover:scale-105 transition-transform">
-            <div className="text-3xl font-black bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-              🥗 Besin Değerim
-            </div>
+            <img 
+              src="/logo.png" 
+              alt="Besin Değerim" 
+              className="h-12 w-auto"
+              data-testid="img-header-logo"
+            />
           </a>
 
           {/* Search Bar with Autocomplete (Progressive Enhancement) */}
