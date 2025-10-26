@@ -36,14 +36,14 @@ export function Header({ categories = [], currentPath = "/" }: HeaderProps = {})
             />
           </a>
 
-          {/* Search Bar with Autocomplete (Progressive Enhancement) */}
+          {/* Search Bar with Autocomplete */}
           <div className="flex-1">
             <ClientOnly fallback={
               <form action="/ara" method="GET" data-testid="form-search">
                 <div className="relative">
                   <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
                   <input
-                    type="text"
+                    type="search"
                     name="q"
                     placeholder="Gıda ara... (ör: domates, tavuk, elma)"
                     className="h-11 w-full rounded-2xl border-2 border-green-200/50 bg-white pl-12 pr-6 text-sm text-slate-900 placeholder:text-slate-500 outline-none transition-all duration-300 focus:border-green-500"
