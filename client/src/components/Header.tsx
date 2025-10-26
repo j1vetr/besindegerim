@@ -1,24 +1,19 @@
 import React from "react";
-import { Search } from "lucide-react";
+import { Search, ChevronDown } from "lucide-react";
 import { SearchAutocomplete } from "./SearchAutocomplete";
 import { ClientOnly } from "./ClientOnly";
 
+interface CategoryGroup {
+  mainCategory: string;
+  subcategories: string[];
+}
+
 interface HeaderProps {
-  categories?: string[];
+  categoryGroups?: CategoryGroup[];
   currentPath?: string;
 }
 
-export function Header({ categories = [], currentPath = "/" }: HeaderProps = {}) {
-  // Check if a category is active based on current path
-  const isCategoryActive = (category: string) => {
-    const encodedPath = `/kategori/${encodeURIComponent(category)}`;
-    try {
-      return currentPath === decodeURIComponent(encodedPath);
-    } catch {
-      return currentPath === encodedPath;
-    }
-  };
-
+export function Header({ categoryGroups = [], currentPath = "/" }: HeaderProps) {
   const isHomeActive = currentPath === "/" || currentPath.startsWith("/?");
 
   return (
@@ -60,7 +55,7 @@ export function Header({ categories = [], currentPath = "/" }: HeaderProps = {})
           </div>
         </div>
 
-        {/* Categories - Horizontal Scroll */}
+        {/* Categories - Horizontal Scroll with Dropdowns */}
         <div className="relative -mx-4 px-4">
           <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory">
             <a 
@@ -74,19 +69,32 @@ export function Header({ categories = [], currentPath = "/" }: HeaderProps = {})
             >
               Tümü
             </a>
-            {categories.map((category) => (
-              <a 
-                key={category} 
-                href={`/kategori/${encodeURIComponent(category)}`}
-                data-testid={`link-category-${category}`}
-                className={`flex-shrink-0 snap-start whitespace-nowrap rounded-full px-5 py-2 text-sm font-semibold transition-all duration-300 ${
-                  isCategoryActive(category)
-                    ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/30"
-                    : "bg-green-100 text-green-700 hover:bg-green-200 border-2 border-green-200/50"
-                }`}
-              >
-                {category}
-              </a>
+            
+            {categoryGroups.map((group) => (
+              <div key={group.mainCategory} className="relative group flex-shrink-0 snap-start">
+                {/* Main Category Button */}
+                <button 
+                  className="whitespace-nowrap rounded-full px-5 py-2 text-sm font-semibold transition-all duration-300 bg-green-100 text-green-700 hover:bg-green-200 border-2 border-green-200/50 flex items-center gap-1"
+                  data-testid={`button-category-${group.mainCategory}`}
+                >
+                  {group.mainCategory}
+                  <ChevronDown className="w-3 h-3" />
+                </button>
+                
+                {/* Dropdown Menu */}
+                <div className="absolute left-0 top-full mt-2 hidden group-hover:block z-50 min-w-[200px] bg-white rounded-2xl shadow-xl border-2 border-green-200/50 overflow-hidden">
+                  {group.subcategories.map((subcategory) => (
+                    <a
+                      key={subcategory}
+                      href={`/kategori/${encodeURIComponent(subcategory)}`}
+                      className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-green-50 hover:text-green-700 transition-colors"
+                      data-testid={`link-subcategory-${subcategory}`}
+                    >
+                      {subcategory}
+                    </a>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>

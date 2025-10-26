@@ -3,6 +3,11 @@ import { foods, type Food, type InsertFood } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc } from "drizzle-orm";
 
+export interface CategoryGroup {
+  mainCategory: string;
+  subcategories: string[];
+}
+
 export interface IStorage {
   // Food operations
   getFoodBySlug(slug: string): Promise<Food | undefined>;
@@ -14,7 +19,9 @@ export interface IStorage {
   getRandomFoods(count: number, excludeId?: string): Promise<Food[]>;
   searchFoods(query: string, limit?: number): Promise<Food[]>;
   getFoodsByCategory(category: string, limit?: number): Promise<Food[]>;
+  getFoodsBySubcategory(subcategory: string, limit?: number): Promise<Food[]>;
   getAllCategories(): Promise<string[]>;
+  getCategoryGroups(): Promise<CategoryGroup[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -102,6 +109,57 @@ export class DatabaseStorage implements IStorage {
       .from(foods)
       .orderBy(foods.category);
     return results.map((r) => r.category).filter(Boolean);
+  }
+
+  async getFoodsBySubcategory(subcategory: string, limit: number = 50): Promise<Food[]> {
+    return db
+      .select()
+      .from(foods)
+      .where(eq(foods.subcategory, subcategory))
+      .orderBy(desc(foods.calories))
+      .limit(limit);
+  }
+
+  async getCategoryGroups(): Promise<CategoryGroup[]> {
+    // Get all unique category/subcategory combinations
+    const results = await db
+      .selectDistinct({ 
+        category: foods.category, 
+        subcategory: foods.subcategory 
+      })
+      .from(foods)
+      .orderBy(foods.category, foods.subcategory);
+    
+    // Group by main category
+    const grouped = new Map<string, string[]>();
+    for (const row of results) {
+      if (!row.category) continue;
+      
+      if (!grouped.has(row.category)) {
+        grouped.set(row.category, []);
+      }
+      
+      if (row.subcategory) {
+        grouped.get(row.category)!.push(row.subcategory);
+      }
+    }
+    
+    // Convert to CategoryGroup array with ordered categories
+    const categoryOrder = [
+      "Hayvansal Ürünler",
+      "Bitkisel Ürünler", 
+      "Tahıllar ve Baklagiller",
+      "Yağlar ve Soslar",
+      "Tatlılar ve Atıştırmalıklar",
+      "İçecekler"
+    ];
+    
+    return categoryOrder
+      .filter(cat => grouped.has(cat))
+      .map(cat => ({
+        mainCategory: cat,
+        subcategories: grouped.get(cat)!
+      }));
   }
 }
 

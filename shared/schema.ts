@@ -14,8 +14,9 @@ export const foods = pgTable("foods", {
   name: text("name").notNull(),
   // English name from USDA (for API reference)
   nameEn: text("name_en"),
-  // Category (e.g., "Meyveler", "Sebzeler", "Et & Tavuk", etc.)
-  category: text("category").notNull().default("Diğer"),
+  // Category hierarchy
+  category: text("category").notNull().default("Diğer"), // Main category (e.g., "Hayvansal Ürünler")
+  subcategory: text("subcategory"), // Subcategory (e.g., "Et ve Tavuk")
   // Serving information from USDA API
   servingSize: decimal("serving_size", { precision: 10, scale: 2 }).notNull(), // in grams
   servingLabel: text("serving_label").notNull(), // e.g., "1 orta domates", "1 porsiyon"
