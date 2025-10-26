@@ -83,10 +83,20 @@ export function Header({ categoryGroups = [], currentPath = "/" }: HeaderProps) 
                 
                 {/* Dropdown Menu */}
                 <div className="absolute left-0 top-full mt-2 hidden group-hover:block z-50 min-w-[200px] bg-white rounded-2xl shadow-xl border-2 border-green-200/50 overflow-hidden">
+                  {/* Main Category Link */}
+                  <a
+                    href={`/kategori/${encodeURIComponent(group.mainCategory)}`}
+                    className="block px-4 py-2.5 text-sm font-semibold text-green-700 hover:bg-green-50 transition-colors border-b border-green-100"
+                    data-testid={`link-category-${group.mainCategory}`}
+                  >
+                    Tümü ({group.mainCategory})
+                  </a>
+                  
+                  {/* Subcategory Links */}
                   {group.subcategories.map((subcategory) => (
                     <a
                       key={subcategory}
-                      href={`/kategori/${encodeURIComponent(subcategory)}`}
+                      href={`/kategori/${encodeURIComponent(group.mainCategory)}/${encodeURIComponent(subcategory)}`}
                       className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-green-50 hover:text-green-700 transition-colors"
                       data-testid={`link-subcategory-${subcategory}`}
                     >

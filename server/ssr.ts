@@ -25,6 +25,88 @@ import type { Food } from "@shared/schema";
  * Register SSR routes
  */
 export function registerSSRRoutes(app: Express): void {
+  // Category routes - MUST come before /:slug catch-all route
+  app.get("/kategori/:category/:subcategory?", async (req: Request, res: Response) => {
+    try {
+      const { category, subcategory } = req.params;
+
+      // Get categories from cache
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
+      }
+
+      // Get foods based on category or subcategory
+      let foods: Food[];
+      let displayCategory: string;
+      
+      if (subcategory) {
+        // Get by subcategory
+        const cacheKey = `subcategory_${subcategory}`;
+        let cachedFoods = cache.get<Food[]>(cacheKey);
+        if (!cachedFoods) {
+          cachedFoods = await storage.getFoodsBySubcategory(subcategory, 100);
+          cache.set(cacheKey, cachedFoods, 3600000);
+        }
+        foods = cachedFoods;
+        displayCategory = subcategory;
+      } else {
+        // Get by main category
+        const cacheKey = `category_${category}`;
+        let cachedFoods = cache.get<Food[]>(cacheKey);
+        if (!cachedFoods) {
+          cachedFoods = await storage.getFoodsByCategory(category, 100);
+          cache.set(cacheKey, cachedFoods, 3600000);
+        }
+        foods = cachedFoods;
+        displayCategory = category;
+      }
+
+      // If no foods found, show 404
+      if (!foods || foods.length === 0) {
+        const htmlBody = renderComponentToHTML(NotFoundPage({ categoryGroups, currentPath: req.path }));
+        const meta = {
+          title: "Kategori Bulunamadı - besindegerim.com",
+          description: "Bu kategoride henüz gıda bulunmamaktadır.",
+          keywords: "kategori, besin değerleri",
+          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/kategori/${category}${subcategory ? `/${subcategory}` : ""}`,
+        };
+        const fullHTML = injectHead(htmlBody, meta);
+        return res.status(404).send(fullHTML);
+      }
+
+      // Render category page
+      const htmlBody = renderComponentToHTML(
+        CategoryPage({ 
+          category: displayCategory, 
+          foods, 
+          categoryGroups, 
+          currentPath: req.path 
+        })
+      );
+
+      // Build meta tags
+      const meta = {
+        title: `${displayCategory} Besin Değerleri - besindegerim.com`,
+        description: `${displayCategory} kategorisindeki gıdaların detaylı besin değerleri, kalori, protein, karbonhidrat ve yağ oranları.`,
+        keywords: `${displayCategory}, besin değeri, kalori, protein, karbonhidrat`,
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/kategori/${category}${subcategory ? `/${subcategory}` : ""}`,
+      };
+
+      const jsonLd = [buildOrganizationJsonLd()];
+
+      // Inject head and send response
+      const fullHTML = injectHead(htmlBody, meta, jsonLd);
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.send(fullHTML);
+    } catch (error) {
+      console.error("SSR Error (category):", error);
+      res.status(500).send("Server Error");
+    }
+  });
+
   // Legal pages routes - MUST come before /:slug catch-all route
   const legalPages = [
     "gizlilik-politikasi",
