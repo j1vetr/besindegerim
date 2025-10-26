@@ -101,15 +101,12 @@ export default function HomePage({
                 <ClientOnly fallback={
                   <form action="/ara" method="GET">
                     <div className="flex gap-3">
-                      <div className="relative flex-1">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                        <input
-                          type="search"
-                          name="q"
-                          placeholder="Gıda ara... (ör: domates, tavuk, elma)"
-                          className="w-full h-14 pl-12 pr-4 bg-white border-2 border-green-200/50 rounded-2xl text-base text-slate-900 placeholder:text-slate-500 outline-none"
-                        />
-                      </div>
+                      <input
+                        type="search"
+                        name="q"
+                        placeholder="Gıda ara... (ör: domates, tavuk, elma)"
+                        className="flex-1 h-14 px-6 bg-white border-2 border-green-200/50 rounded-2xl text-base text-slate-900 placeholder:text-slate-500 outline-none"
+                      />
                       <button
                         type="submit"
                         className="h-14 px-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl font-bold text-white"
