@@ -31,7 +31,7 @@ export function Header({ categories = [], currentPath = "/" }: HeaderProps = {})
             <img 
               src="/logo.png" 
               alt="Besin Değerim" 
-              className="h-12 w-auto"
+              className="h-24 w-auto"
               data-testid="img-header-logo"
             />
           </a>
