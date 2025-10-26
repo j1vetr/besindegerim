@@ -20,26 +20,29 @@ export function Header({ categories = [], currentPath = "/" }: HeaderProps = {})
   const isHomeActive = currentPath === "/" || currentPath.startsWith("/?");
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-black border-b border-white/10">
+    <header className="sticky top-0 z-50 backdrop-blur-2xl bg-white/80 border-b-2 border-green-200/50 shadow-lg shadow-green-500/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         {/* Top bar - Logo & Categories */}
         <div className="flex items-center gap-6 mb-4">
-          {/* Logo */}
-          <a href="/" data-testid="link-home" className="flex-shrink-0">
-            <span className="text-2xl font-bold text-white">
-              Besin<span className="text-[#1f8a4d]">Değerim</span>
-            </span>
+          {/* Logo - Restored! */}
+          <a href="/" data-testid="link-home" className="flex-shrink-0 hover:scale-105 transition-transform">
+            <img 
+              src="/logo.png" 
+              alt="Besin Değerim" 
+              className="h-16 w-auto"
+              data-testid="img-logo"
+            />
           </a>
 
-          {/* Categories - Horizontal pills */}
+          {/* Categories - Green Pills */}
           <div className="flex flex-1 items-center gap-2 overflow-x-auto scrollbar-hide min-w-0">
             <a 
               href="/" 
               data-testid="link-category-all"
-              className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+              className={`whitespace-nowrap rounded-full px-6 py-2.5 text-sm font-semibold transition-all duration-300 ${
                 isHomeActive
-                  ? "bg-[#1f8a4d] text-white"
-                  : "bg-white/5 text-white/80 hover:bg-white/10 border border-white/10"
+                  ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/30"
+                  : "bg-green-100 text-green-700 hover:bg-green-200 border-2 border-green-200/50"
               }`}
             >
               Tümü
@@ -49,10 +52,10 @@ export function Header({ categories = [], currentPath = "/" }: HeaderProps = {})
                 key={category} 
                 href={`/kategori/${encodeURIComponent(category)}`}
                 data-testid={`link-category-${category}`}
-                className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                className={`whitespace-nowrap rounded-full px-6 py-2.5 text-sm font-semibold transition-all duration-300 ${
                   isCategoryActive(category)
-                    ? "bg-[#1f8a4d] text-white"
-                    : "bg-white/5 text-white/80 hover:bg-white/10 border border-white/10"
+                    ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/30"
+                    : "bg-green-100 text-green-700 hover:bg-green-200 border-2 border-green-200/50"
                 }`}
               >
                 {category}
@@ -61,19 +64,19 @@ export function Header({ categories = [], currentPath = "/" }: HeaderProps = {})
           </div>
         </div>
 
-        {/* Search Bar - Full width below */}
+        {/* Search Bar - Light Glassmorphic */}
         <form 
           action="/ara"
           method="GET"
           data-testid="form-search"
         >
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-white/40" />
+            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
               name="q"
               placeholder="Hangi gıdanın besin değerlerini öğrenmek istersiniz?"
-              className="h-12 w-full rounded-md border border-white/20 bg-black/50 pl-12 pr-6 text-base text-white placeholder:text-white/50 outline-none transition-colors focus:border-[#1f8a4d]"
+              className="h-14 w-full rounded-2xl border-2 border-green-200/50 bg-white/70 backdrop-blur-md pl-12 pr-6 text-base text-slate-900 placeholder:text-slate-500 outline-none transition-all duration-300 focus:border-green-500 focus:shadow-lg focus:shadow-green-500/20"
               data-testid="input-search"
             />
           </div>

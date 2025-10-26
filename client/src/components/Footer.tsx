@@ -1,113 +1,39 @@
 import React from "react";
-import { Heart } from "lucide-react";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="mt-auto border-t bg-muted/50">
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
-          {/* About */}
-          <div className="space-y-3">
+    <footer className="bg-gradient-to-br from-green-50 to-emerald-50 border-t-2 border-green-200/50 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          {/* Logo */}
+          <a href="/" className="inline-block mb-6 hover:scale-105 transition-transform">
             <img 
               src="/logo.png" 
-              alt="Besin Değerim Logo" 
-              className="h-10 w-auto"
+              alt="Besin Değerim" 
+              className="h-20 mx-auto"
               data-testid="img-footer-logo"
             />
-            <p className="text-sm text-muted-foreground">
-              Türkiye'nin en kapsamlı besin değerleri platformu. 
-              Sağlıklı yaşam için güvenilir bilgi kaynağınız.
-            </p>
-          </div>
-
-          {/* Links */}
-          <div className="space-y-3">
-            <h3 className="text-sm font-semibold text-foreground">Kurumsal</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a href="/hakkimizda" data-testid="link-about" className="text-muted-foreground hover:text-foreground transition-colors hover-elevate rounded px-1">
-                  Hakkımızda
-                </a>
-              </li>
-              <li>
-                <a href="/iletisim" data-testid="link-contact" className="text-muted-foreground hover:text-foreground transition-colors hover-elevate rounded px-1">
-                  İletişim
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Legal */}
-          <div className="space-y-3">
-            <h3 className="text-sm font-semibold text-foreground">Yasal</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a href="/gizlilik-politikasi" data-testid="link-privacy" className="text-muted-foreground hover:text-foreground transition-colors hover-elevate rounded px-1">
-                  Gizlilik Politikası
-                </a>
-              </li>
-              <li>
-                <a href="/kullanim-kosullari" data-testid="link-terms" className="text-muted-foreground hover:text-foreground transition-colors hover-elevate rounded px-1">
-                  Kullanım Koşulları
-                </a>
-              </li>
-              <li>
-                <a href="/kvkk" data-testid="link-kvkk" className="text-muted-foreground hover:text-foreground transition-colors hover-elevate rounded px-1">
-                  KVKK
-                </a>
-              </li>
-              <li>
-                <a href="/cerez-politikasi" data-testid="link-cookie" className="text-muted-foreground hover:text-foreground transition-colors hover-elevate rounded px-1">
-                  Çerez Politikası
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Social */}
-          <div className="space-y-3">
-            <h3 className="text-sm font-semibold text-foreground">Sosyal Medya</h3>
-            <p className="text-sm text-muted-foreground">
-              Bizi sosyal medyada takip edin.
-            </p>
-          </div>
-        </div>
-
-        {/* Bottom bar */}
-        <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t pt-8 text-sm text-muted-foreground md:flex-row">
-          <p data-testid="text-copyright">
-            © {currentYear} Besin Değerim. Tüm hakları saklıdır.
+          </a>
+          
+          {/* Description */}
+          <p className="text-lg text-slate-700 font-medium mb-2">
+            Gerçek porsiyon bazlı kalori ve besin değerleri
           </p>
-          <div className="flex items-center gap-1">
-            <span>Sağlıklı yaşam için</span>
-            <Heart className="h-4 w-4 fill-red-500 text-red-500" />
-            <a 
-              href="https://toov.com.tr" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="font-semibold text-foreground hover:text-primary transition-colors"
-              data-testid="link-toov"
-            >
-              TOOV
-            </a>
-            <span>tarafından yapıldı</span>
-          </div>
-        </div>
-
-        {/* Disclaimer */}
-        <div className="mt-6 rounded-lg bg-muted p-4 text-xs text-muted-foreground">
-          <p className="font-semibold text-foreground mb-2" data-testid="text-disclaimer-title">
-            ⚠️ Önemli Uyarı - Sadece Bilgilendirme Amaçlıdır
+          
+          {/* Credits */}
+          <p className="text-sm text-slate-600 mb-6">
+            USDA FoodData Central ile destekleniyor
           </p>
-          <p data-testid="text-disclaimer">
-            Bu sitede yer alan besin değerleri bilgileri sadece bilgilendirme amaçlıdır. 
-            Tıbbi tavsiye, teşhis veya tedavi yerine geçmez. Sağlık durumunuz hakkında 
-            karar vermeden önce mutlaka bir sağlık profesyoneline danışınız. Besin değerleri 
-            kaynaklardan alınmıştır ve yaklaşık değerler içerebilir. Herhangi bir diyet veya 
-            beslenme programına başlamadan önce doktorunuza danışmanız önerilir.
+          
+          {/* Copyright */}
+          <p className="text-xs text-slate-500 mb-6" data-testid="text-copyright">
+            © {currentYear} besindegerim.com - Tüm hakları saklıdır
           </p>
+          
+          {/* Green Accent Line */}
+          <div className="mx-auto w-32 h-1 bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 rounded-full shadow-lg shadow-green-500/30"></div>
         </div>
       </div>
     </footer>
