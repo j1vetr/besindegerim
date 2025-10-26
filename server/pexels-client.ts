@@ -34,7 +34,36 @@ interface PexelsResponse {
   next_page?: string;
 }
 
-export async function searchPexelsImage(query: string): Promise<string | null> {
+/**
+ * Filter Pexels photos by relevance using alt text
+ */
+function isPhotoRelevant(photo: PexelsPhoto, foodName: string, searchQuery: string): boolean {
+  const alt = photo.alt.toLowerCase();
+  const searchLower = searchQuery.toLowerCase();
+  const foodLower = foodName.toLowerCase();
+  
+  // Blacklisted words that indicate prepared/cooked food (we want raw ingredients)
+  const blacklist = ['cooked', 'meal', 'salad', 'plate', 'served', 'dish', 'recipe', 'dinner', 'lunch', 'breakfast'];
+  
+  // Check if alt text contains blacklisted words
+  for (const word of blacklist) {
+    if (alt.includes(word)) {
+      return false;
+    }
+  }
+  
+  // Extract key words from search query (remove "fresh", "raw", etc.)
+  const keywords = searchQuery.split(' ').filter(w => 
+    !['fresh', 'raw', 'natural', 'organic'].includes(w.toLowerCase())
+  );
+  
+  // Alt text should contain at least one keyword
+  const hasKeyword = keywords.some(keyword => alt.includes(keyword.toLowerCase()));
+  
+  return hasKeyword;
+}
+
+export async function searchPexelsImage(query: string, originalName?: string): Promise<string | null> {
   if (!PEXELS_API_KEY) {
     console.warn('⚠️  PEXELS_API_KEY not found, cannot fetch images');
     return null;
@@ -143,8 +172,9 @@ export async function searchPexelsImage(query: string): Promise<string | null> {
     // Convert Turkish query to English for better Pexels results
     const searchQuery = turkishToEnglish[query.toLowerCase()] || query;
 
+    // Get more results for filtering
     const response = await fetch(
-      `${PEXELS_API_URL}?query=${encodeURIComponent(searchQuery)}&per_page=1&orientation=landscape`,
+      `${PEXELS_API_URL}?query=${encodeURIComponent(searchQuery)}&per_page=10&orientation=landscape`,
       {
         headers: {
           'Authorization': PEXELS_API_KEY,
@@ -160,8 +190,19 @@ export async function searchPexelsImage(query: string): Promise<string | null> {
     const data = await response.json() as PexelsResponse;
 
     if (data.photos && data.photos.length > 0) {
-      // Use large size for better quality
-      return data.photos[0].src.large;
+      // Filter photos by relevance using alt text
+      const relevantPhotos = data.photos.filter(photo => 
+        isPhotoRelevant(photo, originalName || query, searchQuery)
+      );
+      
+      if (relevantPhotos.length > 0) {
+        // Return the first relevant photo (large size for quality)
+        return relevantPhotos[0].src.large;
+      }
+      
+      // If no relevant photos found, log warning and return null
+      console.warn(`⚠️  No relevant Pexels images for "${query}" (searched: "${searchQuery}")`);
+      return null;
     }
 
     return null;

@@ -1,6 +1,7 @@
 // Enhanced USDA FoodData Central API Client with full nutrition + Branded Foods support
 import type { USDAFoodResponse, InsertFood, MicronutrientsData } from "@shared/schema";
 import { searchPexelsImage } from "./pexels-client";
+import { getWikipediaImage } from "./wikipedia-client";
 
 const USDA_API_BASE = "https://api.nal.usda.gov/fdc/v1";
 const API_KEY = process.env.FOODDATA_API_KEY;
@@ -221,7 +222,7 @@ export function normalizeFoodData(
 }
 
 /**
- * Normalize USDA food data with image fetching from Pexels
+ * Normalize USDA food data with image fetching (Pexels + Wikipedia fallback)
  */
 export async function normalizeFoodDataWithImage(
   usdaFood: any,
@@ -230,17 +231,32 @@ export async function normalizeFoodDataWithImage(
 ): Promise<Omit<InsertFood, "slug">> {
   const baseData = normalizeFoodData(usdaFood, turkishName);
   
-  // Fetch image from Pexels using Turkish name or English name
+  // Fetch image using cascade strategy: Pexels (filtered) → Wikipedia → Placeholder
   try {
     const searchQuery = turkishName || baseData.name;
-    const imageUrl = await searchPexelsImage(searchQuery);
+    
+    // Try Pexels first (with relevance filtering)
+    let imageUrl = await searchPexelsImage(searchQuery, turkishName);
+    
+    // If Pexels fails, try Wikipedia/Wikidata
+    if (!imageUrl) {
+      console.log(`📚 Trying Wikipedia for: ${searchQuery}`);
+      imageUrl = await getWikipediaImage(baseData.nameEn || searchQuery);
+    }
+    
+    // Fallback to placeholder if both fail
+    if (!imageUrl) {
+      console.warn(`⚠️  No images found for "${searchQuery}", using placeholder`);
+      imageUrl = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80";
+    }
+    
     return {
       ...baseData,
       category: category || "Diğer",
-      imageUrl: imageUrl || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80", // Fallback
+      imageUrl,
     };
   } catch (error) {
-    console.error("Error fetching Pexels image:", error);
+    console.error("Error fetching images:", error);
     // Always provide a placeholder image
     return {
       ...baseData,
