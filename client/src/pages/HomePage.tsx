@@ -25,7 +25,7 @@ export default function HomePage({
       
       <main>
         {/* Hero Section - Light Futuristic with Green */}
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-white via-green-50 to-emerald-50">
+        <section className="relative py-20 md:py-32 flex items-center justify-center overflow-hidden bg-gradient-to-br from-white via-green-50 to-emerald-50">
           {/* Animated Background Orbs */}
           <div className="absolute top-20 left-20 w-96 h-96 bg-green-400/20 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute bottom-20 right-20 w-96 h-96 bg-emerald-400/20 rounded-full blur-3xl animate-pulse delay-700"></div>
@@ -85,7 +85,7 @@ export default function HomePage({
         </section>
 
         {/* Popular Foods Section - Light with Green Accents */}
-        <section className="relative py-24 md:py-32 bg-gradient-to-b from-green-50 to-white overflow-hidden">
+        <section className="relative py-12 md:py-16 bg-gradient-to-b from-green-50 to-white overflow-hidden">
           <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8">
             {/* Section Header */}
             <div className="text-center mb-16">

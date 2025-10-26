@@ -1,6 +1,6 @@
 import React from "react";
 import { type Food } from "@shared/schema";
-import { Flame } from "lucide-react";
+import { Flame, Beef, Wheat, Droplet, Sparkles } from "lucide-react";
 
 interface FoodCardProps {
   food: Food;
@@ -54,7 +54,7 @@ export function FoodCard({ food, compact = false }: FoodCardProps) {
     );
   }
 
-  // Full mode: Light Futuristic Glass Card
+  // Full mode: Modern Futuristic Card with Icons
   return (
     <a
       href={`/${food.slug}`}
@@ -62,9 +62,9 @@ export function FoodCard({ food, compact = false }: FoodCardProps) {
       data-testid={`link-food-${food.slug}`}
     >
       {/* Main Card Container - Glassmorphic */}
-      <div className="h-full backdrop-blur-xl bg-white/70 border-2 border-green-200/50 rounded-3xl overflow-hidden hover:border-green-500/50 hover:scale-105 hover:-translate-y-2 transition-all duration-500 shadow-xl shadow-green-500/10 hover:shadow-2xl hover:shadow-green-500/30">
+      <div className="h-full backdrop-blur-xl bg-white/80 border-2 border-green-200/50 rounded-3xl overflow-hidden hover:border-green-400/60 hover:scale-[1.02] hover:-translate-y-1 transition-all duration-500 shadow-xl shadow-green-500/10 hover:shadow-2xl hover:shadow-green-500/25">
         {/* Image Section */}
-        <div className="relative h-64 bg-gradient-to-br from-green-100 to-emerald-100 overflow-hidden">
+        <div className="relative h-48 bg-gradient-to-br from-green-100 to-emerald-100 overflow-hidden">
           <img
             src={imageUrl}
             alt={food.name}
@@ -74,78 +74,87 @@ export function FoodCard({ food, compact = false }: FoodCardProps) {
           />
           
           {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-green-900/30 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent"></div>
 
           {/* Category Badge - Top Left */}
           {food.category && (
-            <div className="absolute top-4 left-4">
-              <span className="text-xs px-3 py-1.5 bg-white/80 backdrop-blur-md text-green-700 rounded-full font-semibold border-2 border-green-200/50 shadow-lg shadow-green-500/20">
+            <div className="absolute top-3 left-3">
+              <span className="text-xs px-3 py-1.5 bg-white/90 backdrop-blur-md text-green-700 rounded-full font-semibold border border-green-200/50 shadow-lg">
                 {food.category}
               </span>
             </div>
           )}
 
           {/* Floating Calorie Badge - Top Right */}
-          <div className="absolute top-4 right-4">
-            <div className="backdrop-blur-xl bg-white/80 border-2 border-green-500/50 rounded-2xl px-4 py-3 shadow-lg shadow-green-500/30 group-hover:shadow-xl group-hover:shadow-green-500/50 group-hover:scale-110 transition-all duration-500">
-              <div className="flex items-center gap-2">
-                <Flame className="w-6 h-6 text-orange-500" />
+          <div className="absolute top-3 right-3">
+            <div className="backdrop-blur-xl bg-gradient-to-br from-white/95 to-white/85 border-2 border-green-400/50 rounded-2xl px-3 py-2 shadow-lg shadow-green-500/30 group-hover:shadow-xl group-hover:shadow-green-500/50 group-hover:scale-110 transition-all duration-500">
+              <div className="flex items-center gap-1.5">
+                <Flame className="w-5 h-5 text-orange-500" />
                 <div className="text-right">
-                  <div className="text-2xl font-black text-green-600" data-testid={`badge-calories-${food.slug}`}>
+                  <div className="text-xl font-black text-green-600" data-testid={`badge-calories-${food.slug}`}>
                     {Number(food.calories).toFixed(0)}
                   </div>
-                  <div className="text-xs font-bold text-slate-600">kal</div>
+                  <div className="text-[10px] font-bold text-slate-600">kcal</div>
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Sparkle Icon - Bottom Right */}
+          <div className="absolute bottom-3 right-3">
+            <Sparkles className="w-6 h-6 text-white/80 drop-shadow-lg" />
+          </div>
         </div>
 
         {/* Content Section */}
-        <div className="p-6 bg-gradient-to-br from-white to-green-50/30">
+        <div className="p-5 bg-gradient-to-br from-white to-green-50/20">
           {/* Food Name */}
           <h3
-            className="text-xl font-black text-slate-900 mb-3 line-clamp-2 group-hover:bg-gradient-to-r group-hover:from-green-600 group-hover:to-emerald-600 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-500"
+            className="text-lg font-black text-slate-900 mb-2 line-clamp-2 group-hover:bg-gradient-to-r group-hover:from-green-600 group-hover:to-emerald-600 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-500"
             data-testid={`text-food-name-${food.slug}`}
           >
             {food.name}
           </h3>
           
           {/* Serving Info */}
-          <p className="text-sm text-slate-600 mb-4" data-testid={`text-serving-${food.slug}`}>
+          <p className="text-xs text-slate-600 mb-4 flex items-center gap-1.5" data-testid={`text-serving-${food.slug}`}>
+            <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
             {food.servingLabel}
           </p>
 
-          {/* Macros - Gradient Pills */}
-          <div className="flex gap-2 flex-wrap">
+          {/* Macros Grid - Modern Icon Layout */}
+          <div className="grid grid-cols-3 gap-2">
             {/* Protein */}
-            <span 
-              className="text-xs px-3 py-1.5 bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 rounded-full font-medium border border-green-200/50"
-              data-testid={`text-protein-${food.slug}`}
-            >
-              {Number(food.protein || 0).toFixed(1)}g protein
-            </span>
+            <div className="flex flex-col items-center justify-center bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-3 border border-green-200/50 group-hover:scale-105 transition-transform">
+              <Beef className="w-4 h-4 text-green-600 mb-1" />
+              <div className="text-xs font-bold text-green-700" data-testid={`text-protein-${food.slug}`}>
+                {Number(food.protein || 0).toFixed(1)}g
+              </div>
+              <div className="text-[10px] text-slate-600">Protein</div>
+            </div>
 
             {/* Carbs */}
-            <span 
-              className="text-xs px-3 py-1.5 bg-gradient-to-r from-emerald-100 to-green-100 text-emerald-700 rounded-full font-medium border border-emerald-200/50"
-              data-testid={`text-carbs-${food.slug}`}
-            >
-              {Number(food.carbs || 0).toFixed(1)}g karb
-            </span>
+            <div className="flex flex-col items-center justify-center bg-gradient-to-br from-emerald-50 to-green-50 rounded-xl p-3 border border-emerald-200/50 group-hover:scale-105 transition-transform">
+              <Wheat className="w-4 h-4 text-emerald-600 mb-1" />
+              <div className="text-xs font-bold text-emerald-700" data-testid={`text-carbs-${food.slug}`}>
+                {Number(food.carbs || 0).toFixed(1)}g
+              </div>
+              <div className="text-[10px] text-slate-600">Karb</div>
+            </div>
 
             {/* Fat */}
-            <span 
-              className="text-xs px-3 py-1.5 bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 rounded-full font-medium border border-green-200/50"
-              data-testid={`text-fat-${food.slug}`}
-            >
-              {Number(food.fat || 0).toFixed(1)}g yağ
-            </span>
+            <div className="flex flex-col items-center justify-center bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-3 border border-green-200/50 group-hover:scale-105 transition-transform">
+              <Droplet className="w-4 h-4 text-green-600 mb-1" />
+              <div className="text-xs font-bold text-green-700" data-testid={`text-fat-${food.slug}`}>
+                {Number(food.fat || 0).toFixed(1)}g
+              </div>
+              <div className="text-[10px] text-slate-600">Yağ</div>
+            </div>
           </div>
         </div>
 
         {/* Bottom Green Gradient Accent Line */}
-        <div className="h-1 bg-gradient-to-r from-green-400 via-emerald-500 to-green-600"></div>
+        <div className="h-1.5 bg-gradient-to-r from-green-400 via-emerald-500 to-green-600"></div>
       </div>
     </a>
   );

@@ -35,7 +35,7 @@ export function Header({ categories = [], currentPath = "/" }: HeaderProps = {})
           </a>
 
           {/* Categories - Green Pills */}
-          <div className="flex flex-1 items-center gap-2 overflow-x-auto scrollbar-hide min-w-0">
+          <div className="flex flex-1 items-center gap-2 flex-wrap min-w-0">
             <a 
               href="/" 
               data-testid="link-category-all"
