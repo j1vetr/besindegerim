@@ -151,6 +151,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  /**
+   * API: Search foods in database (for autocomplete)
+   * GET /api/foods/search?q=domates
+   */
+  app.get("/api/foods/search", async (req, res) => {
+    try {
+      const query = req.query.q as string;
+      if (!query || query.length < 3) {
+        return res.json({ foods: [] });
+      }
+
+      const cacheKey = `foods_search_${query.toLowerCase()}`;
+      let foods = cache.get<any[]>(cacheKey);
+
+      if (!foods) {
+        foods = await storage.searchFoods(query, 8);
+        cache.set(cacheKey, foods, 600000); // Cache for 10 minutes
+      }
+
+      res.json({ foods });
+    } catch (error) {
+      console.error("Foods Search API Error:", error);
+      res.status(500).json({ error: "Failed to search foods" });
+    }
+  });
+
   // Register SSR routes (must be last to catch all non-API routes)
   registerSSRRoutes(app);
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Search } from "lucide-react";
+import { SearchAutocomplete } from "./SearchAutocomplete";
 
 interface HeaderProps {
   categories?: string[];
@@ -64,23 +64,11 @@ export function Header({ categories = [], currentPath = "/" }: HeaderProps = {})
           </div>
         </div>
 
-        {/* Search Bar - Light Glassmorphic */}
-        <form 
-          action="/ara"
-          method="GET"
-          data-testid="form-search"
-        >
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
-            <input
-              type="text"
-              name="q"
-              placeholder="Hangi gıdanın besin değerlerini öğrenmek istersiniz?"
-              className="h-14 w-full rounded-2xl border-2 border-green-200/50 bg-white/70 backdrop-blur-md pl-12 pr-6 text-base text-slate-900 placeholder:text-slate-500 outline-none transition-all duration-300 focus:border-green-500 focus:shadow-lg focus:shadow-green-500/20"
-              data-testid="input-search"
-            />
-          </div>
-        </form>
+        {/* Search Bar with Autocomplete */}
+        <SearchAutocomplete 
+          placeholder="Hangi gıdanın besin değerlerini öğrenmek istersiniz?"
+          compact={true}
+        />
       </div>
     </header>
   );
