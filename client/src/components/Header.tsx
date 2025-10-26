@@ -53,7 +53,7 @@ export function Header({ categoryGroups = [], currentPath = "/" }: HeaderProps) 
 
         {/* Categories - Horizontal Scroll with Dropdowns */}
         <div className="relative -mx-4 px-4">
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory">
+          <div className="flex items-center gap-2 overflow-x-auto overflow-y-visible pb-2 scrollbar-hide snap-x snap-mandatory">
             <a 
               href="/" 
               data-testid="link-category-all"
@@ -67,27 +67,19 @@ export function Header({ categoryGroups = [], currentPath = "/" }: HeaderProps) 
             </a>
             
             {categoryGroups.map((group) => (
-              <div key={group.mainCategory} className="relative group flex-shrink-0 snap-start">
-                {/* Main Category Button */}
-                <button 
+              <div key={group.mainCategory} className="relative flex-shrink-0 snap-start category-dropdown-wrapper">
+                {/* Main Category Button/Link */}
+                <a 
+                  href={`/kategori/${encodeURIComponent(group.mainCategory)}`}
                   className="whitespace-nowrap rounded-full px-5 py-2 text-sm font-semibold transition-all duration-300 bg-green-100 text-green-700 hover:bg-green-200 border-2 border-green-200/50 flex items-center gap-1"
                   data-testid={`button-category-${group.mainCategory}`}
                 >
                   {group.mainCategory}
                   <ChevronDown className="w-3 h-3" />
-                </button>
+                </a>
                 
                 {/* Dropdown Menu */}
-                <div className="absolute left-0 top-full mt-2 hidden group-hover:block z-50 min-w-[200px] bg-white rounded-2xl shadow-xl border-2 border-green-200/50 overflow-hidden">
-                  {/* Main Category Link */}
-                  <a
-                    href={`/kategori/${encodeURIComponent(group.mainCategory)}`}
-                    className="block px-4 py-2.5 text-sm font-semibold text-green-700 hover:bg-green-50 transition-colors border-b border-green-100"
-                    data-testid={`link-category-${group.mainCategory}`}
-                  >
-                    Tümü ({group.mainCategory})
-                  </a>
-                  
+                <div className="dropdown-menu absolute left-0 top-full mt-2 hidden min-w-[200px] bg-white rounded-2xl shadow-xl border-2 border-green-200/50 overflow-hidden z-[100]">
                   {/* Subcategory Links */}
                   {group.subcategories.map((subcategory) => (
                     <a
@@ -103,6 +95,13 @@ export function Header({ categoryGroups = [], currentPath = "/" }: HeaderProps) 
               </div>
             ))}
           </div>
+          
+          {/* CSS for dropdown hover */}
+          <style>{`
+            .category-dropdown-wrapper:hover .dropdown-menu {
+              display: block;
+            }
+          `}</style>
         </div>
 
       </div>

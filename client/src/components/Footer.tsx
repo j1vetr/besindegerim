@@ -49,15 +49,6 @@ export function Footer() {
                   İletişim
                 </a>
               </li>
-              <li>
-                <a 
-                  href="/blog" 
-                  className="text-slate-700 hover:text-green-600 transition-colors hover-elevate rounded px-1"
-                  data-testid="link-blog"
-                >
-                  Blog
-                </a>
-              </li>
             </ul>
           </div>
 
@@ -143,12 +134,12 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="pt-6 border-t-2 border-green-200/50 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
           <p className="text-sm text-slate-600" data-testid="text-copyright">
-            © {currentYear} besindegerim.com - Tüm hakları saklıdır
+            © {currentYear} besindegerim.com - Tüm Hakları Saklıdır.
           </p>
           
           {/* Made by TOOV */}
           <div className="flex items-center gap-2 text-sm text-slate-700">
-            <span>Sağlıklı yaşam için</span>
+            <span>Sağlıklı Yaşam için ❤️</span>
             <a 
               href="https://toov.com.tr" 
               target="_blank" 
@@ -158,7 +149,7 @@ export function Footer() {
             >
               TOOV
             </a>
-            <span>tarafından yapıldı</span>
+            <span>tarafından yapıldı.</span>
           </div>
         </div>
 
