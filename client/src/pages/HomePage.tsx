@@ -125,8 +125,11 @@ export default function HomePage({
           </div>
         </section>
 
+        {/* Decorative Divider */}
+        <div className="h-2 bg-gradient-to-r from-green-400 via-emerald-500 to-green-600"></div>
+
         {/* Popular Foods Section - Medium Green Tone */}
-        <section className="relative py-12 md:py-16 bg-gradient-to-b from-green-100 via-green-50 to-emerald-50 overflow-hidden">
+        <section className="relative py-12 md:py-16 bg-gradient-to-b from-green-200 via-emerald-100 to-green-100 overflow-hidden border-t-4 border-green-400">
           <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8">
             {/* Section Header */}
             <div className="text-center mb-16">
@@ -183,8 +186,11 @@ export default function HomePage({
           </div>
         </section>
 
+        {/* Decorative Divider */}
+        <div className="h-2 bg-gradient-to-r from-emerald-600 via-green-500 to-emerald-600"></div>
+
         {/* FAQ Section - SEO Optimized - Darker Green Tone */}
-        <section className="relative py-16 md:py-24 bg-gradient-to-b from-emerald-50 via-green-100 to-emerald-100 overflow-hidden">
+        <section className="relative py-16 md:py-24 bg-white overflow-hidden border-t-4 border-emerald-500">
           <div className="max-w-4xl mx-auto px-4 md:px-8">
             {/* Section Title */}
             <div className="text-center mb-12">
