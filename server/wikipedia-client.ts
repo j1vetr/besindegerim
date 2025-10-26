@@ -15,21 +15,24 @@ interface WikimediaImage {
  */
 export async function searchWikimediaImage(query: string): Promise<string | null> {
   try {
+    // Build URL manually to avoid Turkish character encoding issues
+    const params = new URLSearchParams({
+      action: 'query',
+      generator: 'search',
+      gsrsearch: query,
+      gsrnamespace: '6', // File namespace
+      prop: 'imageinfo',
+      iiprop: 'url|dimensions',
+      iiurlwidth: '800',
+      format: 'json',
+      gsrlimit: '5'
+    }).toString();
+    
     const response = await fetch(
-      `${COMMONS_API_URL}?` + new URLSearchParams({
-        action: 'query',
-        generator: 'search',
-        gsrsearch: query,
-        gsrnamespace: '6', // File namespace
-        prop: 'imageinfo',
-        iiprop: 'url|dimensions',
-        iiurlwidth: '800',
-        format: 'json',
-        gsrlimit: '5'
-      }),
+      `${COMMONS_API_URL}?${params}`,
       {
         headers: {
-          'User-Agent': 'BesınDegerim/1.0 (Turkish Nutrition Platform)',
+          'User-Agent': 'BesinDegerim/1.0 (Turkish Nutrition Platform)',
         },
       }
     );
@@ -79,18 +82,20 @@ export async function searchWikimediaImage(query: string): Promise<string | null
 export async function searchWikidataImage(foodName: string): Promise<string | null> {
   try {
     // Step 1: Search for the food entity
+    const searchParams = new URLSearchParams({
+      action: 'wbsearchentities',
+      search: foodName,
+      language: 'en',
+      format: 'json',
+      limit: '1',
+      type: 'item'
+    }).toString();
+    
     const searchResponse = await fetch(
-      `${WIKIDATA_API_URL}?` + new URLSearchParams({
-        action: 'wbsearchentities',
-        search: foodName,
-        language: 'en',
-        format: 'json',
-        limit: '1',
-        type: 'item'
-      }),
+      `${WIKIDATA_API_URL}?${searchParams}`,
       {
         headers: {
-          'User-Agent': 'BesınDegerim/1.0 (Turkish Nutrition Platform)',
+          'User-Agent': 'BesinDegerim/1.0 (Turkish Nutrition Platform)',
         },
       }
     );
@@ -108,16 +113,18 @@ export async function searchWikidataImage(foodName: string): Promise<string | nu
     const entityId = searchData.search[0].id;
 
     // Step 2: Get entity claims (including P18 - image property)
+    const entityParams = new URLSearchParams({
+      action: 'wbgetentities',
+      ids: entityId,
+      format: 'json',
+      props: 'claims'
+    }).toString();
+    
     const entityResponse = await fetch(
-      `${WIKIDATA_API_URL}?` + new URLSearchParams({
-        action: 'wbgetentities',
-        ids: entityId,
-        format: 'json',
-        props: 'claims'
-      }),
+      `${WIKIDATA_API_URL}?${entityParams}`,
       {
         headers: {
-          'User-Agent': 'BesınDegerim/1.0 (Turkish Nutrition Platform)',
+          'User-Agent': 'BesinDegerim/1.0 (Turkish Nutrition Platform)',
         },
       }
     );
@@ -151,8 +158,14 @@ export async function searchWikidataImage(foodName: string): Promise<string | nu
 
 /**
  * Try multiple sources for food images (cascade fallback)
+ * @param foodName - English name preferred (Turkish names cause encoding issues)
  */
-export async function getWikipediaImage(foodName: string): Promise<string | null> {
+export async function getWikipediaImage(foodName: string | null): Promise<string | null> {
+  // Skip if no food name provided or contains Turkish characters (which cause encoding issues)
+  if (!foodName || /[çğıöşüÇĞİÖŞÜ]/.test(foodName)) {
+    return null;
+  }
+  
   // Try Wikidata first (more structured, often has curated images)
   const wikidataImage = await searchWikidataImage(foodName);
   if (wikidataImage) {

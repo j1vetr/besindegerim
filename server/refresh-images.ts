@@ -24,10 +24,10 @@ async function refreshImages() {
         let imageUrl = await searchPexelsImage(food.name, food.name);
         let source = 'pexels';
         
-        // If Pexels fails, try Wikipedia
-        if (!imageUrl) {
-          console.log(`  📚 Trying Wikipedia for: ${food.name}`);
-          imageUrl = await getWikipediaImage(food.nameEn || food.name);
+        // If Pexels fails, try Wikipedia (only with English names to avoid encoding issues)
+        if (!imageUrl && food.nameEn) {
+          console.log(`  📚 Trying Wikipedia for: ${food.nameEn}`);
+          imageUrl = await getWikipediaImage(food.nameEn);
           source = 'wikipedia';
         }
         
