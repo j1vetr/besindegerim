@@ -4,7 +4,7 @@ import { FoodCard } from "@/components/FoodCard";
 import { SearchForm } from "@/components/SearchForm";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Database, TrendingUp, Sparkles, Zap } from "lucide-react";
+import { Database, TrendingUp, Sparkles, Zap, HelpCircle, ChevronRight } from "lucide-react";
 
 interface HomePageProps {
   categories?: string[];
@@ -142,63 +142,153 @@ export default function HomePage({
           </div>
         </section>
 
-        {/* Features Section - Light Glassmorphic */}
-        <section className="relative py-24 md:py-32 bg-white overflow-hidden">
-          <div className="max-w-7xl mx-auto px-4 md:px-8">
+        {/* FAQ Section - SEO Optimized */}
+        <section className="relative py-16 md:py-24 bg-gradient-to-b from-white to-green-50 overflow-hidden">
+          <div className="max-w-4xl mx-auto px-4 md:px-8">
             {/* Section Title */}
-            <div className="text-center mb-16">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-3 mb-6">
+                <HelpCircle className="w-8 h-8 text-green-500" />
+              </div>
               <h2 className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                Neden Besin Değerim?
+                Sıkça Sorulan Sorular
               </h2>
+              <p className="text-lg text-slate-600">
+                Besin değerleri hakkında merak ettikleriniz
+              </p>
             </div>
 
-            {/* Features Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Feature 1: USDA Verisi */}
-              <div 
-                className="group backdrop-blur-xl bg-white/70 border-2 border-green-200/50 rounded-3xl p-8 hover:bg-white/90 hover:border-green-500/50 hover:scale-105 hover:-translate-y-2 transition-all duration-500 shadow-lg shadow-green-500/10 hover:shadow-xl hover:shadow-green-500/30"
-                data-testid="feature-card-0"
-              >
-                <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-emerald-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform border-2 border-green-200/50">
-                  <Database className="w-8 h-8 text-green-600" />
+            {/* FAQ Items - Accordion Style */}
+            <div className="space-y-4">
+              {/* FAQ 1 */}
+              <details className="group backdrop-blur-xl bg-white/80 border-2 border-green-200/50 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300" data-testid="faq-item-1">
+                <summary className="flex items-center justify-between cursor-pointer p-6 hover:bg-green-50/50 transition-colors">
+                  <h3 className="text-lg font-bold text-slate-900 flex items-center gap-3">
+                    <ChevronRight className="w-5 h-5 text-green-500 group-open:rotate-90 transition-transform" />
+                    Besin değerleri nereden geliyor?
+                  </h3>
+                </summary>
+                <div className="px-6 pb-6 text-slate-700 leading-relaxed">
+                  Tüm besin değerleri, Amerika Tarım Bakanlığı'nın (USDA) FoodData Central veritabanından alınmaktadır. 
+                  Bu, dünyanın en kapsamlı ve bilimsel olarak doğrulanmış besin değerleri kaynağıdır. 
+                  Veriler düzenli olarak güncellenir ve vitamin, mineral gibi mikrobesinleri de içerir.
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-3">USDA Verisi</h3>
-                <p className="text-slate-600 leading-relaxed">
-                  Amerika Tarım Bakanlığı'ndan doğrulanmış, bilimsel verilerle desteklenen besin değerleri
-                </p>
-                <div className="mt-6 h-1 w-16 bg-gradient-to-r from-green-500 to-transparent rounded-full group-hover:w-full transition-all duration-700"></div>
-              </div>
+              </details>
 
-              {/* Feature 2: Gerçek Porsiyon */}
-              <div 
-                className="group backdrop-blur-xl bg-white/70 border-2 border-green-200/50 rounded-3xl p-8 hover:bg-white/90 hover:border-green-500/50 hover:scale-105 hover:-translate-y-2 transition-all duration-500 shadow-lg shadow-green-500/10 hover:shadow-xl hover:shadow-green-500/30"
-                data-testid="feature-card-1"
-              >
-                <div className="w-16 h-16 bg-gradient-to-br from-emerald-100 to-green-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform border-2 border-emerald-200/50">
-                  <TrendingUp className="w-8 h-8 text-emerald-600" />
+              {/* FAQ 2 */}
+              <details className="group backdrop-blur-xl bg-white/80 border-2 border-green-200/50 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300" data-testid="faq-item-2">
+                <summary className="flex items-center justify-between cursor-pointer p-6 hover:bg-green-50/50 transition-colors">
+                  <h3 className="text-lg font-bold text-slate-900 flex items-center gap-3">
+                    <ChevronRight className="w-5 h-5 text-green-500 group-open:rotate-90 transition-transform" />
+                    Gerçek porsiyon ne demek?
+                  </h3>
+                </summary>
+                <div className="px-6 pb-6 text-slate-700 leading-relaxed">
+                  Diğer sitelerden farklı olarak, 100g bazlı değil gerçek porsiyon bazlı kalori gösteriyoruz. 
+                  Örneğin "1 orta domates = 22 kcal" veya "1 dilim ekmek = 66 kcal" şeklinde. 
+                  Bu sayede günlük hayatta daha kolay hesaplama yapabilirsiniz.
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-3">Gerçek Porsiyon</h3>
-                <p className="text-slate-600 leading-relaxed">
-                  100g yerine gerçek porsiyon bazlı kalori hesaplama. Örnek: '1 orta domates = 22 kal'
-                </p>
-                <div className="mt-6 h-1 w-16 bg-gradient-to-r from-emerald-500 to-transparent rounded-full group-hover:w-full transition-all duration-700"></div>
-              </div>
+              </details>
 
-              {/* Feature 3: Detaylı Bilgi */}
-              <div 
-                className="group backdrop-blur-xl bg-white/70 border-2 border-green-200/50 rounded-3xl p-8 hover:bg-white/90 hover:border-green-500/50 hover:scale-105 hover:-translate-y-2 transition-all duration-500 shadow-lg shadow-green-500/10 hover:shadow-xl hover:shadow-green-500/30"
-                data-testid="feature-card-2"
-              >
-                <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-emerald-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform border-2 border-green-200/50">
-                  <Sparkles className="w-8 h-8 text-green-600" />
+              {/* FAQ 3 */}
+              <details className="group backdrop-blur-xl bg-white/80 border-2 border-green-200/50 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300" data-testid="faq-item-3">
+                <summary className="flex items-center justify-between cursor-pointer p-6 hover:bg-green-50/50 transition-colors">
+                  <h3 className="text-lg font-bold text-slate-900 flex items-center gap-3">
+                    <ChevronRight className="w-5 h-5 text-green-500 group-open:rotate-90 transition-transform" />
+                    Hangi besin değerleri gösteriliyor?
+                  </h3>
+                </summary>
+                <div className="px-6 pb-6 text-slate-700 leading-relaxed">
+                  Her gıda için kalori, protein, karbonhidrat, yağ, lif ve şeker gibi makro besinleri gösteriyoruz. 
+                  Ayrıca A vitamini, C vitamini, demir, kalsiyum gibi 20+ vitamin ve mineral değerlerini de sunuyoruz. 
+                  Tüm değerler porsiyon başına hesaplanmıştır.
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-3">Detaylı Bilgi</h3>
-                <p className="text-slate-600 leading-relaxed">
-                  Kalori, makro besinler, 20+ vitamin ve minerallerle tam analiz
-                </p>
-                <div className="mt-6 h-1 w-16 bg-gradient-to-r from-green-500 to-transparent rounded-full group-hover:w-full transition-all duration-700"></div>
-              </div>
+              </details>
+
+              {/* FAQ 4 */}
+              <details className="group backdrop-blur-xl bg-white/80 border-2 border-green-200/50 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300" data-testid="faq-item-4">
+                <summary className="flex items-center justify-between cursor-pointer p-6 hover:bg-green-50/50 transition-colors">
+                  <h3 className="text-lg font-bold text-slate-900 flex items-center gap-3">
+                    <ChevronRight className="w-5 h-5 text-green-500 group-open:rotate-90 transition-transform" />
+                    Veriler güvenilir mi?
+                  </h3>
+                </summary>
+                <div className="px-6 pb-6 text-slate-700 leading-relaxed">
+                  Evet, tüm veriler USDA FoodData Central'dan alındığı için %100 güvenilirdir. 
+                  Bu veritabanı, laboratuvar analizleri ve bilimsel çalışmalarla desteklenen, 
+                  dünya çapında kabul görmüş bir kaynaktır. Ancak, bireysel sağlık kararları için 
+                  mutlaka bir sağlık profesyoneline danışmanız önerilir.
+                </div>
+              </details>
+
+              {/* FAQ 5 */}
+              <details className="group backdrop-blur-xl bg-white/80 border-2 border-green-200/50 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300" data-testid="faq-item-5">
+                <summary className="flex items-center justify-between cursor-pointer p-6 hover:bg-green-50/50 transition-colors">
+                  <h3 className="text-lg font-bold text-slate-900 flex items-center gap-3">
+                    <ChevronRight className="w-5 h-5 text-green-500 group-open:rotate-90 transition-transform" />
+                    Yeni gıdalar nasıl ekleniyor?
+                  </h3>
+                </summary>
+                <div className="px-6 pb-6 text-slate-700 leading-relaxed">
+                  Platformumuz sürekli genişlemektedir. Türkiye'de yaygın tüketilen gıdaları önceliklendirerek, 
+                  USDA veritabanından Türkçe karşılıklarını bulup ekliyoruz. Pexels'ten profesyonel görseller 
+                  kullanarak her gıdayı görsel olarak da zenginleştiriyoruz. Öneri için bizimle iletişime geçebilirsiniz.
+                </div>
+              </details>
             </div>
+
+            {/* FAQ Schema for SEO */}
+            <script 
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify({
+                  "@context": "https://schema.org",
+                  "@type": "FAQPage",
+                  "mainEntity": [
+                    {
+                      "@type": "Question",
+                      "name": "Besin değerleri nereden geliyor?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Tüm besin değerleri, Amerika Tarım Bakanlığı'nın (USDA) FoodData Central veritabanından alınmaktadır. Bu, dünyanın en kapsamlı ve bilimsel olarak doğrulanmış besin değerleri kaynağıdır."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "Gerçek porsiyon ne demek?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Diğer sitelerden farklı olarak, 100g bazlı değil gerçek porsiyon bazlı kalori gösteriyoruz. Örneğin '1 orta domates = 22 kcal' veya '1 dilim ekmek = 66 kcal' şeklinde."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "Hangi besin değerleri gösteriliyor?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Her gıda için kalori, protein, karbonhidrat, yağ, lif ve şeker gibi makro besinleri gösteriyoruz. Ayrıca A vitamini, C vitamini, demir, kalsiyum gibi 20+ vitamin ve mineral değerlerini de sunuyoruz."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "Veriler güvenilir mi?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Evet, tüm veriler USDA FoodData Central'dan alındığı için %100 güvenilirdir. Bu veritabanı, laboratuvar analizleri ve bilimsel çalışmalarla desteklenen, dünya çapında kabul görmüş bir kaynaktır."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "Yeni gıdalar nasıl ekleniyor?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Platformumuz sürekli genişlemektedir. Türkiye'de yaygın tüketilen gıdaları önceliklendirerek, USDA veritabanından Türkçe karşılıklarını bulup ekliyoruz."
+                      }
+                    }
+                  ]
+                })
+              }}
+            />
           </div>
         </section>
       </main>
