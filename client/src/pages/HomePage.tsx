@@ -4,7 +4,7 @@ import { FoodCard } from "@/components/FoodCard";
 import { SearchForm } from "@/components/SearchForm";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Database, TrendingUp, Sparkles, Zap, HelpCircle, ChevronRight } from "lucide-react";
+import { Database, TrendingUp, Sparkles, Zap, HelpCircle, ChevronRight, Apple, Cookie, Beef, Fish, Milk, Carrot, Salad, Pizza } from "lucide-react";
 
 interface HomePageProps {
   categories?: string[];
@@ -24,12 +24,53 @@ export default function HomePage({
       <Header categories={categories} currentPath={currentPath} />
       
       <main>
-        {/* Hero Section - Light Futuristic with Green */}
-        <section className="relative py-20 md:py-32 flex items-center justify-center overflow-hidden bg-gradient-to-br from-white via-green-50 to-emerald-50">
-          {/* Animated Background Orbs */}
-          <div className="absolute top-20 left-20 w-96 h-96 bg-green-400/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-emerald-400/20 rounded-full blur-3xl animate-pulse delay-700"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-green-300/10 rounded-full blur-3xl"></div>
+        {/* Hero Section - Floating Food Icons Background */}
+        <section className="relative py-20 md:py-32 flex items-center justify-center overflow-hidden bg-white">
+          {/* Floating Food Icons - Animated */}
+          <div className="absolute inset-0 overflow-hidden">
+            {/* Apple - Top Left */}
+            <div className="absolute top-20 left-[10%] animate-float-slow">
+              <Apple className="w-16 h-16 md:w-24 md:h-24 text-red-400/30" strokeWidth={1.5} />
+            </div>
+            
+            {/* Carrot - Top Right */}
+            <div className="absolute top-32 right-[15%] animate-float-slower">
+              <Carrot className="w-12 h-12 md:w-20 md:h-20 text-orange-400/30" strokeWidth={1.5} />
+            </div>
+            
+            {/* Pizza - Middle Left */}
+            <div className="absolute top-[40%] left-[5%] animate-float-medium">
+              <Pizza className="w-14 h-14 md:w-22 md:h-22 text-yellow-500/30" strokeWidth={1.5} />
+            </div>
+            
+            {/* Fish - Middle Right */}
+            <div className="absolute top-[45%] right-[8%] animate-float-slow">
+              <Fish className="w-16 h-16 md:w-24 md:h-24 text-blue-400/30" strokeWidth={1.5} />
+            </div>
+            
+            {/* Milk - Bottom Left */}
+            <div className="absolute bottom-24 left-[12%] animate-float-slower">
+              <Milk className="w-12 h-12 md:w-18 md:h-18 text-slate-400/30" strokeWidth={1.5} />
+            </div>
+            
+            {/* Cookie - Bottom Right */}
+            <div className="absolute bottom-32 right-[20%] animate-float-medium">
+              <Cookie className="w-14 h-14 md:w-20 md:h-20 text-amber-500/30" strokeWidth={1.5} />
+            </div>
+            
+            {/* Beef - Top Center */}
+            <div className="absolute top-16 left-[50%] -translate-x-1/2 animate-float-slow">
+              <Beef className="w-10 h-10 md:w-16 md:h-16 text-red-500/30" strokeWidth={1.5} />
+            </div>
+            
+            {/* Salad - Bottom Center */}
+            <div className="absolute bottom-20 left-[45%] animate-float-slower">
+              <Salad className="w-12 h-12 md:w-20 md:h-20 text-green-500/30" strokeWidth={1.5} />
+            </div>
+
+            {/* Green Gradient Overlay for depth */}
+            <div className="absolute inset-0 bg-gradient-to-br from-green-50/40 via-transparent to-emerald-50/40 pointer-events-none"></div>
+          </div>
 
           {/* Hero Content */}
           <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-8 py-20 text-center">
@@ -84,8 +125,8 @@ export default function HomePage({
           </div>
         </section>
 
-        {/* Popular Foods Section - Light with Green Accents */}
-        <section className="relative py-12 md:py-16 bg-gradient-to-b from-green-50 to-white overflow-hidden">
+        {/* Popular Foods Section - Medium Green Tone */}
+        <section className="relative py-12 md:py-16 bg-gradient-to-b from-green-100 via-green-50 to-emerald-50 overflow-hidden">
           <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8">
             {/* Section Header */}
             <div className="text-center mb-16">
@@ -142,8 +183,8 @@ export default function HomePage({
           </div>
         </section>
 
-        {/* FAQ Section - SEO Optimized */}
-        <section className="relative py-16 md:py-24 bg-gradient-to-b from-white to-green-50 overflow-hidden">
+        {/* FAQ Section - SEO Optimized - Darker Green Tone */}
+        <section className="relative py-16 md:py-24 bg-gradient-to-b from-emerald-50 via-green-100 to-emerald-100 overflow-hidden">
           <div className="max-w-4xl mx-auto px-4 md:px-8">
             {/* Section Title */}
             <div className="text-center mb-12">
