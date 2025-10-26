@@ -1,10 +1,11 @@
 import React from "react";
+import type { CategoryGroup } from "@shared/schema";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 interface LegalPageProps {
   slug: string;
-  categories?: string[];
+  categoryGroups?: CategoryGroup[];
   currentPath?: string;
 }
 
@@ -280,14 +281,14 @@ const legalPages: Record<string, LegalContent> = {
 
 export function LegalPage(props?: LegalPageProps) {
   const slug = props?.slug || "";
-  const categories = props?.categories;
+  const categoryGroups = props?.categoryGroups;
   const currentPath = props?.currentPath;
   const content = legalPages[slug];
 
   if (!content) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Header categories={categories} currentPath={currentPath} />
+        <Header categoryGroups={categoryGroups} currentPath={currentPath} />
         <main className="flex-1">
           <div className="container mx-auto px-4 py-12">
             <h1 className="text-3xl font-bold">Sayfa Bulunamadı</h1>
@@ -300,7 +301,7 @@ export function LegalPage(props?: LegalPageProps) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header categories={categories} currentPath={currentPath} />
+      <Header categoryGroups={categoryGroups} currentPath={currentPath} />
       <main className="flex-1 bg-gradient-to-br from-white via-green-50/20 to-white">
         <div className="container mx-auto max-w-4xl px-4 py-12">
       <h1 className="mb-8 text-4xl font-bold text-foreground" data-testid="text-page-title">

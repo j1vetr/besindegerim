@@ -17,7 +17,7 @@ import {
   buildArticleJsonLd,
   injectHead,
 } from "./seo/meta-inject";
-import { storage } from "./storage";
+import { storage, type CategoryGroup } from "./storage";
 import { cache } from "./cache";
 import type { Food } from "@shared/schema";
 
@@ -39,15 +39,15 @@ export function registerSSRRoutes(app: Express): void {
     app.get(`/${slug}`, async (req: Request, res: Response) => {
       try {
         // Get categories from cache
-        const categoriesCacheKey = "all_categories";
-        let categories: string[] | undefined = cache.get<string[]>(categoriesCacheKey);
-        if (!categories) {
-          categories = await storage.getAllCategories();
-          cache.set(categoriesCacheKey, categories, 3600000);
+        const categoryGroupsCacheKey = "all_categories";
+        let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+        if (!categoryGroups) {
+          categoryGroups = await storage.getCategoryGroups();
+          cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
         }
 
         // Render legal page
-        const htmlBody = renderComponentToHTML(LegalPage({ slug, categories, currentPath: req.path }));
+        const htmlBody = renderComponentToHTML(LegalPage({ slug, categoryGroups, currentPath: req.path }));
 
         // Title mapping
         const titles: Record<string, string> = {
@@ -93,16 +93,16 @@ export function registerSSRRoutes(app: Express): void {
       const results = await storage.searchFoods(query, 50);
 
       // Get categories from cache
-      const categoriesCacheKey = "all_categories";
-      let categories: string[] | undefined = cache.get<string[]>(categoriesCacheKey);
-      if (!categories) {
-        categories = await storage.getAllCategories();
-        cache.set(categoriesCacheKey, categories, 3600000);
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
       }
 
       // Render search results page
       const htmlBody = renderComponentToHTML(
-        SearchResultsPage({ query, results, categories, currentPath: req.path })
+        SearchResultsPage({ query, results, categoryGroups, currentPath: req.path })
       );
 
       // Build meta tags for search
@@ -138,17 +138,17 @@ export function registerSSRRoutes(app: Express): void {
       }
 
       // Get categories from cache or database
-      const categoriesCacheKey = "all_categories";
-      let categories: string[] | undefined = cache.get<string[]>(categoriesCacheKey);
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
 
-      if (!categories) {
-        categories = await storage.getAllCategories();
-        cache.set(categoriesCacheKey, categories, 3600000); // Cache for 1 hour
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000); // Cache for 1 hour
       }
 
       // Render homepage component
       const htmlBody = renderComponentToHTML(
-        HomePage({ popularFoods, categories, currentPath: req.path })
+        HomePage({ popularFoods, categoryGroups, currentPath: req.path })
       );
 
       // Build meta tags
@@ -176,11 +176,11 @@ export function registerSSRRoutes(app: Express): void {
       }
 
       // Get categories from cache
-      const categoriesCacheKey = "all_categories";
-      let categories: string[] | undefined = cache.get<string[]>(categoriesCacheKey);
-      if (!categories) {
-        categories = await storage.getAllCategories();
-        cache.set(categoriesCacheKey, categories, 3600000);
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
       }
 
       // Get food from cache or database
@@ -196,7 +196,7 @@ export function registerSSRRoutes(app: Express): void {
 
       if (!food) {
         // Food not found - render 404 page
-        const htmlBody = renderComponentToHTML(NotFoundPage({ categories, currentPath: req.path }));
+        const htmlBody = renderComponentToHTML(NotFoundPage({ categoryGroups, currentPath: req.path }));
         const meta = {
           title: "Sayfa Bulunamadı - besindegerim.com",
           description: "Aradığınız gıda bulunamadı.",
@@ -218,7 +218,7 @@ export function registerSSRRoutes(app: Express): void {
 
       // Render food detail page
       const htmlBody = renderComponentToHTML(
-        FoodDetailPage({ food, alternatives, categories, currentPath: req.path })
+        FoodDetailPage({ food, alternatives, categoryGroups, currentPath: req.path })
       );
 
       // Build meta tags
@@ -281,16 +281,16 @@ export function registerSSRRoutes(app: Express): void {
       const foods = await storage.getFoodsByCategory(category);
 
       // Get categories from cache
-      const categoriesCacheKey = "all_categories";
-      let categories: string[] | undefined = cache.get<string[]>(categoriesCacheKey);
-      if (!categories) {
-        categories = await storage.getAllCategories();
-        cache.set(categoriesCacheKey, categories, 3600000);
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
       }
 
       // Render category page
       const htmlBody = renderComponentToHTML(
-        CategoryPage({ category, foods, categories, currentPath: req.path })
+        CategoryPage({ category, foods, categoryGroups, currentPath: req.path })
       );
 
       // Build meta tags

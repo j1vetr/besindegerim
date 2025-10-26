@@ -1,5 +1,5 @@
 import React from "react";
-import type { Food } from "@shared/schema";
+import type { Food, CategoryGroup } from "@shared/schema";
 import { FoodCard } from "@/components/FoodCard";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -7,7 +7,7 @@ import { Footer } from "@/components/Footer";
 interface CategoryPageProps {
   category: string;
   foods: Food[];
-  categories?: string[];
+  categoryGroups?: CategoryGroup[];
   currentPath?: string;
 }
 
@@ -15,12 +15,12 @@ export function CategoryPage(props?: CategoryPageProps) {
   // Default props for SSR
   const category = props?.category || "Kategori";
   const foods = props?.foods || [];
-  const categories = props?.categories;
+  const categoryGroups = props?.categoryGroups;
   const currentPath = props?.currentPath;
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header categories={categories} currentPath={currentPath} />
+      <Header categoryGroups={categoryGroups} currentPath={currentPath} />
       <main className="flex-1 bg-gradient-to-br from-white via-green-50/20 to-white">
       <div className="container mx-auto px-4 py-8">
       <div className="mb-8">

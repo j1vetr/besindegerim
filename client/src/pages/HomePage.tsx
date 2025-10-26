@@ -1,5 +1,5 @@
 import React from "react";
-import { type Food } from "@shared/schema";
+import { type Food, type CategoryGroup } from "@shared/schema";
 import { FoodCard } from "@/components/FoodCard";
 import { SearchForm } from "@/components/SearchForm";
 import { SearchAutocomplete } from "@/components/SearchAutocomplete";
@@ -9,21 +9,21 @@ import { Footer } from "@/components/Footer";
 import { Database, TrendingUp, Sparkles, Zap, HelpCircle, ChevronRight, Apple, Cookie, Beef, Fish, Milk, Carrot, Salad, Pizza } from "lucide-react";
 
 interface HomePageProps {
-  categories?: string[];
+  categoryGroups?: CategoryGroup[];
   popularFoods?: Food[];
   currentPath?: string;
 }
 
 export default function HomePage({ 
-  categories = [], 
+  categoryGroups = [], 
   popularFoods = [],
   currentPath = "/"
-}: HomePageProps = {}) {
+}: HomePageProps) {
   const isLoading = false;
 
   return (
     <div className="min-h-screen bg-white">
-      <Header categories={categories} currentPath={currentPath} />
+      <Header categoryGroups={categoryGroups} currentPath={currentPath} />
       
       <main>
         {/* Hero Section - Floating Food Icons Background */}

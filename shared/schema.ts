@@ -63,6 +63,12 @@ export interface MicronutrientsData {
   [key: string]: Micronutrient;
 }
 
+// Category group interface (used in Header and pages)
+export interface CategoryGroup {
+  mainCategory: string;
+  subcategories: string[];
+}
+
 // Type for USDA API response (simplified - we'll normalize this)
 export interface USDAFoodResponse {
   fdcId: number;

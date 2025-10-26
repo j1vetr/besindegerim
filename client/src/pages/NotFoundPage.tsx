@@ -1,19 +1,20 @@
 import React from "react";
+import type { CategoryGroup } from "@shared/schema";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 interface NotFoundPageProps {
-  categories?: string[];
+  categoryGroups?: CategoryGroup[];
   currentPath?: string;
 }
 
 export function NotFoundPage(props?: NotFoundPageProps) {
-  const categories = props?.categories;
+  const categoryGroups = props?.categoryGroups;
   const currentPath = props?.currentPath;
   
   return (
     <div className="min-h-screen flex flex-col">
-      <Header categories={categories} currentPath={currentPath} />
+      <Header categoryGroups={categoryGroups} currentPath={currentPath} />
       <main className="flex-1 bg-background flex items-center justify-center px-4">
       <div className="text-center max-w-md">
         <h1

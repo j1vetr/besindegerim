@@ -1,5 +1,5 @@
 import React from "react";
-import { type Food } from "@shared/schema";
+import { type Food, type CategoryGroup } from "@shared/schema";
 import { CalorieCard } from "@/components/CalorieCard";
 import { NutritionTable } from "@/components/NutritionTable";
 import { FoodCard } from "@/components/FoodCard";
@@ -11,11 +11,11 @@ import { TrendingUp, Heart, Zap, Activity, Shield, Flame } from "lucide-react";
 interface FoodDetailPageProps {
   food: Food;
   alternatives: Food[];
-  categories?: string[];
+  categoryGroups?: CategoryGroup[];
   currentPath?: string;
 }
 
-export function FoodDetailPage({ food, alternatives, categories, currentPath }: FoodDetailPageProps) {
+export function FoodDetailPage({ food, alternatives, categoryGroups, currentPath }: FoodDetailPageProps) {
   // Calculate macro percentages for visual bars
   const totalMacros = Number(food.protein || 0) + Number(food.carbs || 0) + Number(food.fat || 0);
   const proteinPercent = totalMacros > 0 ? (Number(food.protein || 0) / totalMacros) * 100 : 0;
@@ -24,7 +24,7 @@ export function FoodDetailPage({ food, alternatives, categories, currentPath }: 
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header categories={categories} currentPath={currentPath} />
+      <Header categoryGroups={categoryGroups} currentPath={currentPath} />
       <main className="flex-1">
         {/* Hero Section - Stunning Visual with Image */}
         <section className="relative min-h-[60vh] md:min-h-[70vh] flex items-center overflow-hidden bg-gradient-to-br from-[#22c55e] via-[#16a34a] to-[#15803d]">
