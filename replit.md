@@ -48,6 +48,14 @@ besindegerim.com, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tama
    - Yeşil gradient tema (from-[#22c55e] to-[#16a34a])
    - Touch-friendly controls
 
+7. **AJAX Live Search Autocomplete**
+   - Real-time search-as-you-type functionality
+   - 300ms debounce for optimal performance
+   - Minimum 3 characters to trigger search
+   - Dropdown with food images, names, and calories
+   - SSR-safe implementation with client-side hydration
+   - Works seamlessly with React hydration
+
 ## Proje Yapısı
 
 ```
@@ -226,6 +234,15 @@ npx tsx server/debug-usda.ts
 - Frontend Port: 5000
 - Database: PostgreSQL (Neon)
 - SSR: Express.js server
+
+### Known Limitations
+
+1. **Production Build Asset Resolution**
+   - Current implementation: Hardcoded `/assets/main.js` in production
+   - Issue: Vite generates hashed filenames (`main-abc123.js`)
+   - Impact: Client hydration fails in production builds
+   - Status: Works in development mode, needs manifest-based resolution for production
+   - Future fix: Read `dist/.vite/manifest.json` at startup and inject correct hashed filename
 
 ## İletişim
 
