@@ -1,7 +1,6 @@
 // Enhanced USDA FoodData Central API Client with full nutrition + Branded Foods support
 import type { USDAFoodResponse, InsertFood, MicronutrientsData } from "@shared/schema";
-import { searchPexelsImage } from "./pexels-client";
-import { getWikipediaImage } from "./wikipedia-client";
+import { searchOpenFoodFactsImage } from "./openfoodfacts-client";
 
 const USDA_API_BASE = "https://api.nal.usda.gov/fdc/v1";
 const API_KEY = process.env.FOODDATA_API_KEY;
@@ -222,7 +221,7 @@ export function normalizeFoodData(
 }
 
 /**
- * Normalize USDA food data with image fetching (Pexels + Wikipedia fallback)
+ * Normalize USDA food data with image fetching from Open Food Facts
  */
 export async function normalizeFoodDataWithImage(
   usdaFood: any,
@@ -231,22 +230,16 @@ export async function normalizeFoodDataWithImage(
 ): Promise<Omit<InsertFood, "slug">> {
   const baseData = normalizeFoodData(usdaFood, turkishName);
   
-  // Fetch image using cascade strategy: Pexels (filtered) → Wikipedia → Placeholder
+  // Fetch image from Open Food Facts (translates Turkish to English internally)
   try {
     const searchQuery = turkishName || baseData.name;
     
-    // Try Pexels first (with relevance filtering)
-    let imageUrl = await searchPexelsImage(searchQuery, turkishName);
+    // Get image from Open Food Facts
+    let imageUrl = await searchOpenFoodFactsImage(searchQuery);
     
-    // If Pexels fails, try Wikipedia/Wikidata
+    // Fallback to placeholder if not found
     if (!imageUrl) {
-      console.log(`📚 Trying Wikipedia for: ${searchQuery}`);
-      imageUrl = await getWikipediaImage(baseData.nameEn || searchQuery);
-    }
-    
-    // Fallback to placeholder if both fail
-    if (!imageUrl) {
-      console.warn(`⚠️  No images found for "${searchQuery}", using placeholder`);
+      console.warn(`⚠️  No image found for "${searchQuery}", using placeholder`);
       imageUrl = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80";
     }
     
@@ -256,7 +249,7 @@ export async function normalizeFoodDataWithImage(
       imageUrl,
     };
   } catch (error) {
-    console.error("Error fetching images:", error);
+    console.error("Error fetching image:", error);
     // Always provide a placeholder image
     return {
       ...baseData,
