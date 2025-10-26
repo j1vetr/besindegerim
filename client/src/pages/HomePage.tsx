@@ -85,7 +85,7 @@ export default function HomePage({
             </div>
 
             {/* Main Heading with Green Gradient */}
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight tracking-tight bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent drop-shadow-2xl">
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-black mb-6 py-4 leading-[1.2] tracking-tight bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
               Besin Değerleri
             </h1>
 
