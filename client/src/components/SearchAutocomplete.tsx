@@ -1,65 +1,69 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Search, Loader2 } from "lucide-react";
 import { type Food } from "@shared/schema";
 
 interface SearchAutocompleteProps {
   placeholder?: string;
+  inputClassName?: string;
+  buttonClassName?: string;
   compact?: boolean;
 }
 
 export function SearchAutocomplete({ 
   placeholder = "Gıda ara... (ör: domates, tavuk, elma)",
+  inputClassName = "",
+  buttonClassName = "",
   compact = false
 }: SearchAutocompleteProps) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Food[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [showResults, setShowResults] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdown on outside click
+  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
-        setShowDropdown(false);
+        setShowResults(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Search with debounce
+  // Fetch results when query changes (min 3 chars)
   useEffect(() => {
-    if (query.length < 3) {
-      setResults([]);
-      setShowDropdown(false);
-      return;
-    }
+    const fetchResults = async () => {
+      if (query.length < 3) {
+        setResults([]);
+        setShowResults(false);
+        return;
+      }
 
-    setIsLoading(true);
-    const timer = setTimeout(async () => {
+      setIsLoading(true);
       try {
         const response = await fetch(`/api/foods/search?q=${encodeURIComponent(query)}`);
         const data = await response.json();
-        console.log("Search API response:", data);
         setResults(data.foods || []);
-        setShowDropdown(true);
+        setShowResults(true);
       } catch (error) {
         console.error("Search error:", error);
         setResults([]);
       } finally {
         setIsLoading(false);
       }
-    }, 300);
+    };
 
-    return () => clearTimeout(timer);
+    const debounceTimer = setTimeout(fetchResults, 300);
+    return () => clearTimeout(debounceTimer);
   }, [query]);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
     if (query.trim()) {
       window.location.href = `/ara?q=${encodeURIComponent(query)}`;
     }
+    e.preventDefault();
   };
 
   return (
@@ -80,10 +84,10 @@ export function SearchAutocomplete({
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={placeholder}
-              className={compact 
-                ? "w-full h-11 pl-12 pr-4 bg-white border-2 border-green-200/50 focus:border-green-500 rounded-2xl text-sm text-slate-900 placeholder:text-slate-500 outline-none transition-all duration-300"
+              className={inputClassName || (compact 
+                ? "w-full h-12 pl-12 pr-4 bg-white border-2 border-green-200/50 focus:border-green-500 rounded-2xl text-sm text-slate-900 placeholder:text-slate-500 outline-none transition-all duration-300"
                 : "w-full h-14 pl-12 pr-4 bg-white border-2 border-green-200/50 focus:border-green-500 rounded-2xl text-base text-slate-900 placeholder:text-slate-500 outline-none transition-all duration-300 shadow-sm focus:shadow-lg focus:shadow-green-500/20"
-              }
+              )}
               data-testid="input-search-autocomplete"
               autoComplete="off"
             />
@@ -93,8 +97,9 @@ export function SearchAutocomplete({
           {!compact && (
             <button
               type="submit"
-              className="h-14 px-8 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 rounded-2xl font-bold text-white flex items-center gap-2 transition-all duration-300 hover:scale-105 shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/50"
+              className={buttonClassName || "h-14 px-8 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 rounded-2xl font-bold text-white flex items-center gap-2 transition-all duration-300 hover:scale-105 shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/50"}
               data-testid="button-search"
+              aria-label="Gıda ara"
             >
               <span className="hidden sm:inline">Ara</span>
               <Search className="h-5 w-5 sm:hidden" />
@@ -103,8 +108,8 @@ export function SearchAutocomplete({
         </div>
       </form>
 
-      {/* Autocomplete Dropdown */}
-      {showDropdown && results.length > 0 && (
+      {/* Autocomplete Results - Resimli Liste */}
+      {showResults && results.length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-green-200/50 rounded-2xl shadow-2xl shadow-green-500/20 overflow-hidden z-50 max-h-[400px] overflow-y-auto">
           {results.map((food) => (
             <a
@@ -112,7 +117,7 @@ export function SearchAutocomplete({
               href={`/${food.slug}`}
               className="flex items-center gap-4 p-3 hover:bg-green-50 transition-colors border-b border-green-100 last:border-0"
               data-testid={`autocomplete-result-${food.slug}`}
-              onClick={() => setShowDropdown(false)}
+              onClick={() => setShowResults(false)}
             >
               {/* Food Image */}
               <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-green-100 to-emerald-100 rounded-xl overflow-hidden">
@@ -148,8 +153,8 @@ export function SearchAutocomplete({
         </div>
       )}
 
-      {/* No Results */}
-      {showDropdown && results.length === 0 && query.length >= 3 && !isLoading && (
+      {/* No Results Message */}
+      {showResults && results.length === 0 && query.length >= 3 && !isLoading && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-green-200/50 rounded-2xl shadow-2xl shadow-green-500/20 p-6 text-center z-50">
           <p className="text-sm text-slate-600">
             "{query}" için sonuç bulunamadı.

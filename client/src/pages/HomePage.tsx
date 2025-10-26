@@ -6,7 +6,7 @@ import { SearchAutocomplete } from "@/components/SearchAutocomplete";
 import { ClientOnly } from "@/components/ClientOnly";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Database, TrendingUp, Sparkles, Zap, HelpCircle, ChevronRight, Apple, Cookie, Beef, Fish, Milk, Carrot, Salad, Pizza, Search } from "lucide-react";
+import { Database, TrendingUp, Sparkles, Zap, HelpCircle, ChevronRight, Apple, Cookie, Beef, Fish, Milk, Carrot, Salad, Pizza } from "lucide-react";
 
 interface HomePageProps {
   categories?: string[];
@@ -98,24 +98,7 @@ export default function HomePage({
             {/* Glassmorphic Search Form with AJAX Autocomplete */}
             <div className="max-w-2xl mx-auto mb-16">
               <div className="backdrop-blur-2xl bg-white/70 rounded-3xl p-2 border-2 border-green-200/50 shadow-2xl shadow-green-500/20 hover:shadow-green-500/40 transition-all duration-500">
-                <ClientOnly fallback={
-                  <form action="/ara" method="GET">
-                    <div className="flex gap-3">
-                      <input
-                        type="search"
-                        name="q"
-                        placeholder="Gıda ara... (ör: domates, tavuk, elma)"
-                        className="flex-1 h-14 px-6 bg-white border-2 border-green-200/50 rounded-2xl text-base text-slate-900 placeholder:text-slate-500 outline-none"
-                      />
-                      <button
-                        type="submit"
-                        className="h-14 px-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl font-bold text-white"
-                      >
-                        Ara
-                      </button>
-                    </div>
-                  </form>
-                }>
+                <ClientOnly fallback={<SearchForm />}>
                   <SearchAutocomplete />
                 </ClientOnly>
               </div>

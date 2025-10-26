@@ -23,28 +23,6 @@ import type { Food } from "@shared/schema";
  * Register SSR routes
  */
 export function registerSSRRoutes(app: Express): void {
-  // Middleware to skip SSR for static assets and Vite dev files
-  app.use((req, res, next) => {
-    // Skip SSR for:
-    // - Vite dev files (/src/*, /@vite/*, /@id/*, etc.)
-    // - Static assets (/assets/*, *.js, *.css, *.png, *.jpg, etc.)
-    // - API routes (already handled)
-    const skipPaths = [
-      /^\/src\//,           // Vite source files
-      /^\/@/,               // Vite internal paths
-      /^\/node_modules\//,  // Node modules
-      /^\/assets\//,        // Static assets
-      /\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/i,
-    ];
-
-    if (skipPaths.some(pattern => pattern.test(req.path))) {
-      return next();
-    }
-
-    // Continue to SSR routes
-    next();
-  });
-
   // Legal pages routes - MUST come before /:slug catch-all route
   const legalPages = [
     "gizlilik-politikasi",

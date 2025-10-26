@@ -26,7 +26,7 @@ try {
 }
 
 /**
- * Render a React component to HTML string with injected CSS and client JS
+ * Render a React component to HTML string with injected CSS
  */
 export function renderComponentToHTML(component: ReactElement): string {
   const reactHtml = renderToString(component);
@@ -37,15 +37,9 @@ export function renderComponentToHTML(component: ReactElement): string {
     ? '<link rel="stylesheet" href="/src/index.css" />'
     : `<style>${cssContent}</style>`;
 
-  // Inject client-side JavaScript for hydration
-  const scriptTag = isDev
-    ? '<script type="module" src="/src/main.tsx"></script>'
-    : '<script type="module" src="/assets/main.js"></script>';
-
-  // Wrap in a div with id="root" for client-side hydration
+  // Wrap in a div with id="root" for client-side hydration (if needed)
   return `
     ${styleTag}
     <div id="root">${reactHtml}</div>
-    ${scriptTag}
   `;
 }
