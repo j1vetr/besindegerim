@@ -1,5 +1,7 @@
 import React from "react";
+import { Search } from "lucide-react";
 import { SearchAutocomplete } from "./SearchAutocomplete";
+import { ClientOnly } from "./ClientOnly";
 
 interface HeaderProps {
   categories?: string[];
@@ -64,11 +66,26 @@ export function Header({ categories = [], currentPath = "/" }: HeaderProps = {})
           </div>
         </div>
 
-        {/* Search Bar with Autocomplete */}
-        <SearchAutocomplete 
-          placeholder="Hangi gıdanın besin değerlerini öğrenmek istersiniz?"
-          compact={true}
-        />
+        {/* Search Bar with Autocomplete (Progressive Enhancement) */}
+        <ClientOnly fallback={
+          <form action="/ara" method="GET" data-testid="form-search">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                name="q"
+                placeholder="Hangi gıdanın besin değerlerini öğrenmek istersiniz?"
+                className="h-12 w-full rounded-2xl border-2 border-green-200/50 bg-white pl-12 pr-6 text-sm text-slate-900 placeholder:text-slate-500 outline-none transition-all duration-300 focus:border-green-500"
+                data-testid="input-search"
+              />
+            </div>
+          </form>
+        }>
+          <SearchAutocomplete 
+            placeholder="Hangi gıdanın besin değerlerini öğrenmek istersiniz?"
+            compact={true}
+          />
+        </ClientOnly>
       </div>
     </header>
   );

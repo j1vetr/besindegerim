@@ -2,6 +2,8 @@ import React from "react";
 import { type Food } from "@shared/schema";
 import { FoodCard } from "@/components/FoodCard";
 import { SearchForm } from "@/components/SearchForm";
+import { SearchAutocomplete } from "@/components/SearchAutocomplete";
+import { ClientOnly } from "@/components/ClientOnly";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Database, TrendingUp, Sparkles, Zap, HelpCircle, ChevronRight, Apple, Cookie, Beef, Fish, Milk, Carrot, Salad, Pizza } from "lucide-react";
@@ -93,10 +95,12 @@ export default function HomePage({
               <span className="text-emerald-600 font-semibold"> vitamin ve minerallerle</span> zenginleştirilmiş platform.
             </p>
 
-            {/* Glassmorphic Search Form */}
+            {/* Glassmorphic Search Form with AJAX Autocomplete */}
             <div className="max-w-2xl mx-auto mb-16">
               <div className="backdrop-blur-2xl bg-white/70 rounded-3xl p-2 border-2 border-green-200/50 shadow-2xl shadow-green-500/20 hover:shadow-green-500/40 transition-all duration-500">
-                <SearchForm />
+                <ClientOnly fallback={<SearchForm />}>
+                  <SearchAutocomplete />
+                </ClientOnly>
               </div>
             </div>
 
