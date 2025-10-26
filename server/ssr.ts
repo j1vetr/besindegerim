@@ -17,9 +17,9 @@ import {
   buildArticleJsonLd,
   injectHead,
 } from "./seo/meta-inject";
-import { storage, type CategoryGroup } from "./storage";
+import { storage } from "./storage";
 import { cache } from "./cache";
-import type { Food } from "@shared/schema";
+import type { Food, CategoryGroup } from "@shared/schema";
 
 /**
  * Register SSR routes

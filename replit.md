@@ -22,6 +22,7 @@ besindegerim.com, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tama
    - Gıda verisi depolama
    - serving_size, serving_label, calories, macros, micronutrients
    - Slug-based routing (/domates, /elma, vb.)
+   - Hiyerarşik kategori sistemi (category, subcategory)
 
 4. **In-Memory Cache**
    - API çağrılarını azaltma
@@ -37,7 +38,15 @@ besindegerim.com, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tama
      - BreadcrumbList
      - Organization
 
-6. **Modern, Göze Çarpan Tasarım**
+6. **Hiyerarşik Kategori Sistemi**
+   - 6 ana kategori (Hayvansal Ürünler, Bitkisel Ürünler, Tahıllar ve Baklagiller, vb.)
+   - 2-4 alt kategori per ana kategori
+   - Dropdown menü navigasyonu
+   - SSR route'ları: /kategori/:category ve /kategori/:category/:subcategory
+   - Otomatik kategorilendirme (251/266 gıda)
+   - CategoryGroup type shared/schema.ts'den export ediliyor
+
+7. **Modern, Göze Çarpan Tasarım**
    - Yeni hero section: "Besin Değeri Anında" kısa başlık
    - Gradient hero arka plan + CSS-only animasyonlar
    - Glassmorphic arama çubuğu
@@ -47,6 +56,7 @@ besindegerim.com, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tama
    - Mobil öncelikli, responsive tasarım
    - Yeşil gradient tema (from-[#22c55e] to-[#16a34a])
    - Touch-friendly controls
+   - Kategorize dropdown menü (horizontal scroll)
 
 ## Proje Yapısı
 
@@ -106,6 +116,8 @@ BASE_URL              # Site base URL'i (varsayılan: https://kacgram.net)
 | slug | text | URL-friendly slug (ör: "domates") |
 | name | text | Türkçe gıda adı |
 | nameEn | text | İngilizce adı (USDA referansı) |
+| category | text | Ana kategori (ör: "Bitkisel Ürünler") |
+| subcategory | text | Alt kategori (ör: "Sebzeler") |
 | servingSize | decimal | Porsiyon büyüklüğü (gram) |
 | servingLabel | text | Porsiyon etiketi (ör: "1 orta domates") |
 | calories | decimal | Kalori (porsiyon bazında) |
@@ -124,9 +136,13 @@ BASE_URL              # Site base URL'i (varsayılan: https://kacgram.net)
 ### SSR Routes
 
 - `GET /` - Ana sayfa (arama + popüler gıdalar)
+- `GET /kategori/:category` - Ana kategori sayfası (ör: /kategori/Hayvansal%20Ürünler)
+- `GET /kategori/:category/:subcategory` - Alt kategori sayfası (ör: /kategori/Hayvansal%20Ürünler/Et%20Ürünleri)
+- `GET /ara?q=query` - Arama sonuçları sayfası
 - `GET /:slug` - Gıda detay sayfası (ör: /domates)
 - `GET /robots.txt` - robots.txt
 - `GET /sitemap.xml` - Dinamik sitemap
+- Legal pages: /gizlilik-politikasi, /kullanim-kosullari, /kvkk, /cerez-politikasi, /hakkimizda, /iletisim
 
 ### API Routes
 
@@ -162,6 +178,9 @@ food_{slug}           // 1 saat
 alternatives_{foodId} // 10 dakika
 usda_search_{query}   // 1 saat
 sitemap_foods         // 1 saat
+all_categories        // 1 saat (CategoryGroup[])
+category_{category}   // 1 saat
+subcategory_{subcategory} // 1 saat
 ```
 
 ### SEO Meta Tag Injection

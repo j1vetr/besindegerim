@@ -1,12 +1,8 @@
 import React from "react";
 import { Search, ChevronDown } from "lucide-react";
+import type { CategoryGroup } from "@shared/schema";
 import { SearchAutocomplete } from "./SearchAutocomplete";
 import { ClientOnly } from "./ClientOnly";
-
-interface CategoryGroup {
-  mainCategory: string;
-  subcategories: string[];
-}
 
 interface HeaderProps {
   categoryGroups?: CategoryGroup[];

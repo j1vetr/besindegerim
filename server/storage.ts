@@ -1,12 +1,7 @@
 // Database storage implementation following javascript_database blueprint pattern
-import { foods, type Food, type InsertFood } from "@shared/schema";
+import { foods, type Food, type InsertFood, type CategoryGroup } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc } from "drizzle-orm";
-
-export interface CategoryGroup {
-  mainCategory: string;
-  subcategories: string[];
-}
 
 export interface IStorage {
   // Food operations
