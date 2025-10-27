@@ -58,6 +58,15 @@ besindegerim.com, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tama
    - Touch-friendly controls
    - Kategorize dropdown menü (horizontal scroll)
 
+8. **AI-Generated Görseller & Optimizasyon**
+   - 143 gıda için AI-generated profesyonel ürün fotoğrafları (DALL-E 3)
+   - Toplu görsel optimizasyonu: PNG → WebP dönüşümü
+   - Ortalama %94-98 boyut azalması (Sharp library)
+   - 800x800px boyut, quality 85, effort 6
+   - Express.static ile /attached_assets serving
+   - Cache headers: public, max-age=1y, immutable
+   - 266/266 ürün görsel coverage (%100)
+
 ## Proje Yapısı
 
 ```
@@ -83,7 +92,11 @@ besindegerim.com, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tama
 │   ├── ssr.ts                         # SSR routes (/, /:slug, /robots.txt, /sitemap.xml)
 │   ├── storage.ts                     # Database storage layer
 │   ├── usda-client.ts                 # USDA API client
-│   └── seed.ts                        # Database seed script
+│   ├── seed.ts                        # Database seed script
+│   ├── bulk-optimize.ts               # Toplu görsel optimizasyon script'i
+│   └── smart-image-mapping.ts         # Akıllı görsel eşleştirme script'i
+├── attached_assets/
+│   └── generated_images/              # AI-generated ve optimize edilmiş görseller (WebP)
 └── shared/
     └── schema.ts                      # Database schema (Drizzle ORM)
 ```
@@ -94,8 +107,10 @@ besindegerim.com, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tama
 - **Backend**: Express.js, Node.js
 - **Database**: PostgreSQL (Neon)
 - **ORM**: Drizzle ORM
-- **API**: USDA FoodData Central
+- **API**: USDA FoodData Central, Pexels API
 - **Cache**: In-memory cache (process-based)
+- **Image Processing**: Sharp (PNG → WebP optimizasyon)
+- **AI Images**: OpenAI DALL-E 3 (generate_image_tool)
 
 ## Ortam Değişkenleri
 
