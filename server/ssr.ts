@@ -1,5 +1,6 @@
 // SSR Routes - Server-side rendering for all pages
 import type { Express, Request, Response } from "express";
+import React from "react";
 import HomePage from "../client/src/pages/HomePage";
 import AllFoodsPage from "../client/src/pages/AllFoodsPage";
 import { FoodDetailPage } from "../client/src/pages/FoodDetailPage";
@@ -269,7 +270,7 @@ export function registerSSRRoutes(app: Express): void {
       // Render homepage component
       const pageProps = { popularFoods, categoryGroups, currentPath: req.path };
       const htmlBody = renderComponentToHTML(
-        HomePage(pageProps),
+        React.createElement(HomePage, pageProps),
         pageProps
       );
 
