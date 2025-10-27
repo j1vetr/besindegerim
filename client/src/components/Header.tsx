@@ -92,14 +92,16 @@ export function Header({ categoryGroups = [], currentPath = "/" }: HeaderProps) 
   const isHomeActive = currentPath === "/" || currentPath.startsWith("/?");
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-2xl bg-white/80 border-b-2 border-green-200/50 shadow-lg shadow-green-500/5">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 lg:py-4">
-        {/* Top bar - Logo, Search & Menu */}
-        <div className="flex items-center gap-2 sm:gap-4">
-          {/* Mobile Menu - Hidden on desktop */}
-          <div className="lg:hidden">
-            <MobileMenu categoryGroups={categoryGroups} currentPath={currentPath} />
-          </div>
+    <>
+      {/* Mobile Menu - Rendered OUTSIDE header to avoid container constraints */}
+      <div className="lg:hidden">
+        <MobileMenu categoryGroups={categoryGroups} currentPath={currentPath} />
+      </div>
+
+      <header className="sticky top-0 z-50 backdrop-blur-2xl bg-white/80 border-b-2 border-green-200/50 shadow-lg shadow-green-500/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 lg:py-4">
+          {/* Top bar - Logo, Search & Menu */}
+          <div className="flex items-center gap-2 sm:gap-4">
 
           {/* Logo */}
           <a href="/" data-testid="link-home" className="flex-shrink-0 hover:scale-105 transition-transform">
@@ -161,5 +163,6 @@ export function Header({ categoryGroups = [], currentPath = "/" }: HeaderProps) 
 
       </div>
     </header>
+    </>
   );
 }
