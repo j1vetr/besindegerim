@@ -144,7 +144,7 @@ export function SearchAutocomplete({
   };
 
   return (
-    <div ref={wrapperRef} className="relative w-full">
+    <div ref={wrapperRef} className="relative w-full z-[999]">
       <form onSubmit={handleSubmit} className="w-full" data-testid="form-search">
         <div className="flex gap-3">
           {/* Search Input */}
