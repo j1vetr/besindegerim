@@ -59,16 +59,23 @@ besindegerim.com, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tama
    - Kategorize dropdown menü (horizontal scroll)
 
 8. **AI-Generated Görseller & Optimizasyon**
-   - 153 gıda için AI-generated profesyonel ürün fotoğrafları (DALL-E 3)
+   - **213 gıda için AI-generated profesyonel ürün fotoğrafları (DALL-E 3)**
    - Akıllı görsel eşleştirme sistemi (fix-image-mapping.ts)
-   - Manuel mapping tablosu: Türkçe slug → İngilizce dosya adı (121 eşleşme)
+   - Manuel mapping tablosu: Türkçe slug → İngilizce dosya adı (177 eşleşme)
    - Toplu görsel optimizasyonu: PNG → WebP dönüşümü
    - Ortalama %94-98 boyut azalması (Sharp library)
    - 800x800px boyut, quality 85, effort 6
    - Express.static ile /attached_assets serving
    - Cache headers: public, max-age=1y, immutable
-   - 121/266 ürün görsel coverage (%45.5) - Kritik gıdalar %100 kapsanıyor
+   - **174/266 ürün görsel coverage (%65.4)** - Kritik gıdalar %100 kapsanıyor
    - Kola bug'ı düzeltildi: Artık doğru kola görseli gösteriliyor
+   - **Yeni eklenen görseller (Ekim 2025 - İkinci Batch):**
+     - 60 yeni AI görsel (4 grup x 15)
+     - Sebze/Meyveler: brokoli, havuç, ıspanak, karnabahar, marul, roka, patates, soğan, sarımsak, limon, armut, mandalina, pancar, kabak
+     - Tahıllar/Baklagiller: buğday, arpa, kinoa, darı, pirinç, beyaz fasulye, siyah fasulye, kırmızı fasulye, soya fasulyesi, edamame
+     - Fırın/İçecekler: kruvasan, kuskus, mısır tortilla, limonata, bamya, kuşkonmaz, donut, köfte, bal, hardal, bitter çikolata
+     - Diğer: kale, brüksel lahanası, tatlı patates, kuru üzüm, yer fıstığı, yeşil zeytin, siyah zeytin, turşu, yulaf ezmesi, çavdar, pırasa
+     - Toplam optimizasyon: 49.85 MB tasarruf (%95.3 azalma)
 
 ## Proje Yapısı
 
