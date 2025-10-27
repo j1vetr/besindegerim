@@ -1,0 +1,60 @@
+
+root@162-55-4-35:/var/www/besindegerim# find . -name "*logo*" -o -name "*.png" | grep -v node_modules | head -20
+./dist/public/logo.png
+./dist/public/favicon.png
+./attached_assets/besindegerimlogo_1761360550284.png
+./client/public/logo.png
+./client/public/favicon.png
+root@162-55-4-35:/var/www/besindegerim# ls -la dist/public/
+total 68
+drwxr-xr-x 4 root root  4096 Oct 28 02:01 .
+drwxr-xr-x 3 root root  4096 Oct 28 02:00 ..
+drwxr-xr-x 2 root root  4096 Oct 28 02:01 assets
+-rw-r--r-- 1 root root  1145 Oct 28 02:01 favicon.png
+drwxr-xr-x 2 root root  4096 Oct 28 02:01 food-images
+-rw-r--r-- 1 root root  2069 Oct 28 02:01 index.html
+-rw-r--r-- 1 root root 44061 Oct 28 02:01 logo.png
+root@162-55-4-35:/var/www/besindegerim# ls -la dist/public/favicon.png
+-rw-r--r-- 1 root root 1145 Oct 28 02:01 dist/public/favicon.png
+root@162-55-4-35:/var/www/besindegerim# pm2 logs besindegerim --lines 20
+[TAILING] Tailing last 20 lines for [besindegerim] process (change the value with --lines option)
+/var/www/besindegerim/logs/err-77.log last 20 lines:
+/var/www/besindegerim/logs/out-77.log last 20 lines:
+77|besinde | 2025-10-28 02:03:47 +03:00: [DB] ✅ Using standard pg driver
+77|besinde | 2025-10-28 02:03:47 +03:00: 2:03:47 AM [express] serving on port 1453
+77|besinde | 2025-10-28 02:04:00 +03:00: 2:04:00 AM [express] GET /api/random 200 in 5ms :: {"foods":[{"id":"94c1e3e6-30d9-44ff-b91b-4b50eff7…
+77|besinde | 2025-10-28 02:04:00 +03:00: 2:04:00 AM [express] GET /api/random/[object%20Object] 404 in 3ms
+77|besinde | 2025-10-28 02:04:00 +03:00: 2:04:00 AM [express] GET /api/category-groups 304 in 5ms :: [{"mainCategory":"Hayvansal Ürünler","su…
+77|besinde | 2025-10-28 02:04:00 +03:00: 2:04:00 AM [express] GET /api/foods 304 in 20ms :: {"items":[{"id":"96dd3580-7ba0-4cac-a3b7-4523093b…
+77|besinde | 2025-10-28 02:04:00 +03:00: 2:04:00 AM [express] GET /api/random 200 in 4ms :: {"foods":[{"id":"cd727a05-8cd4-4543-bf6d-10ddc2ac…
+77|besinde | 2025-10-28 02:04:12 +03:00: 2:04:12 AM [express] GET /api/foods/category/hayvansal-urunler 200 in 3ms :: {"foods":[{"id":"7c3480…
+77|besinde | 2025-10-28 02:04:12 +03:00: 2:04:12 AM [express] GET /api/category-groups 304 in 0ms :: [{"mainCategory":"Hayvansal Ürünler","su…
+77|besinde | 2025-10-28 02:04:13 +03:00: 2:04:13 AM [express] GET /api/random 200 in 5ms :: {"foods":[{"id":"660d7e5e-5306-4f5f-9ea8-d13dd916…
+77|besinde | 2025-10-28 02:04:14 +03:00: 2:04:14 AM [express] GET /api/foods/category/bitkisel-urunler 200 in 3ms :: {"foods":[{"id":"914ca1a…
+77|besinde | 2025-10-28 02:04:14 +03:00: 2:04:14 AM [express] GET /api/category-groups 304 in 0ms :: [{"mainCategory":"Hayvansal Ürünler","su…
+77|besinde | 2025-10-28 02:04:14 +03:00: 2:04:14 AM [express] GET /api/random 200 in 5ms :: {"foods":[{"id":"77abe28b-4108-4868-93fb-d93941cd…
+
+^C
+root@162-55-4-35:/var/www/besindegerim# grep -n "logo" server/render.ts | head -10
+root@162-55-4-35:/var/www/besindegerim# grep -A5 -B5 "besindegerim.com" server/render.ts | head -20
+    <header class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div class="container mx-auto px-4">
+        <div class="flex h-16 items-center justify-between">
+          <a href="/" class="flex items-center gap-2">
+            <span class="text-2xl font-bold bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent">
+              besindegerim.com
+            </span>
+          </a>
+          <nav class="hidden md:flex items-center gap-6">
+            <a href="/" class="text-sm font-medium hover:text-green-600 transition-colors">Ana Sayfa</a>
+            <a href="/tum-gidalar" class="text-sm font-medium hover:text-green-600 transition-colors">Tüm Gıdalar</a>
+--
+  return `
+    <footer class="mt-auto border-t border-border/40 bg-muted/50">
+      <div class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <h3 class="font-semibold mb-4">besindegerim.com</h3>
+            <p class="text-sm text-muted-foreground">
+              Gerçek porsiyon bazlı besin değerleri. USDA verisi ile güvenilir bilgi.
+root@162-55-4-35:/var/www/besindegerim#
