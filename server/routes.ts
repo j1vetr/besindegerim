@@ -130,10 +130,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   /**
-   * API: Get foods by category
-   * GET /api/category/:category
+   * API: Get category groups (with subcategories)
+   * GET /api/category-groups
    */
-  app.get("/api/category/:category", async (req, res) => {
+  app.get("/api/category-groups", async (req, res) => {
+    try {
+      const cacheKey = "all_category_groups";
+      let categoryGroups = cache.get<any[]>(cacheKey);
+
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(cacheKey, categoryGroups, 3600000); // Cache for 1 hour
+      }
+
+      res.json(categoryGroups);
+    } catch (error) {
+      console.error("Category Groups API Error:", error);
+      res.status(500).json({ error: "Failed to get category groups" });
+    }
+  });
+
+  /**
+   * API: Get food by slug
+   * GET /api/foods/:slug
+   */
+  app.get("/api/foods/:slug", async (req, res) => {
+    try {
+      const { slug } = req.params;
+      const cacheKey = `food_${slug}`;
+      let food = cache.get<any>(cacheKey);
+
+      if (!food) {
+        food = await storage.getFoodBySlug(slug);
+        if (food) {
+          cache.set(cacheKey, food, 3600000); // Cache for 1 hour
+        }
+      }
+
+      if (!food) {
+        return res.status(404).json({ error: "Food not found" });
+      }
+
+      // Get alternatives
+      const alternatives = await storage.getRandomFoods(6, food.id);
+
+      res.json({ food, alternatives });
+    } catch (error) {
+      console.error("Food Detail API Error:", error);
+      res.status(500).json({ error: "Failed to get food" });
+    }
+  });
+
+  /**
+   * API: Get foods by category
+   * GET /api/foods/category/:category
+   */
+  app.get("/api/foods/category/:category", async (req, res) => {
     try {
       const category = decodeURIComponent(req.params.category);
       const cacheKey = `category_${category}`;
@@ -144,10 +196,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
         cache.set(cacheKey, foods, 600000); // Cache for 10 minutes
       }
 
-      res.json(foods);
+      res.json({ foods });
     } catch (error) {
       console.error("Category Foods API Error:", error);
       res.status(500).json({ error: "Failed to get foods by category" });
+    }
+  });
+
+  /**
+   * API: Get foods by subcategory
+   * GET /api/foods/subcategory/:subcategory
+   */
+  app.get("/api/foods/subcategory/:subcategory", async (req, res) => {
+    try {
+      const subcategory = decodeURIComponent(req.params.subcategory);
+      const cacheKey = `subcategory_${subcategory}`;
+      let foods = cache.get<any[]>(cacheKey);
+
+      if (!foods) {
+        foods = await storage.getFoodsBySubcategory(subcategory);
+        cache.set(cacheKey, foods, 600000); // Cache for 10 minutes
+      }
+
+      res.json({ foods });
+    } catch (error) {
+      console.error("Subcategory Foods API Error:", error);
+      res.status(500).json({ error: "Failed to get foods by subcategory" });
     }
   });
 
@@ -177,8 +251,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Register SSR routes (must be last to catch all non-API routes)
-  registerSSRRoutes(app);
+  // Register SSR routes only in production (must be last to catch all non-API routes)
+  // In development, Vite dev server handles all page rendering
+  if (app.get("env") !== "development") {
+    registerSSRRoutes(app);
+  }
 
   const httpServer = createServer(app);
   return httpServer;

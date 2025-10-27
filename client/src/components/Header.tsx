@@ -16,12 +16,8 @@ function MobileMenu({ categoryGroups, currentPath }: { categoryGroups: CategoryG
   const isHomeActive = currentPath === "/" || currentPath.startsWith("/?");
 
   const handleClick = () => {
-    console.log("Hamburger clicked! Current isOpen:", isOpen);
     setIsOpen(!isOpen);
-    console.log("After setIsOpen, new value should be:", !isOpen);
   };
-
-  console.log("MobileMenu render - isOpen:", isOpen);
 
   return (
     <>
