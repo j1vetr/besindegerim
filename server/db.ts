@@ -1,18 +1,7 @@
-// Database connection setup using javascript_database blueprint pattern
-import { Pool, neonConfig } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-serverless';
-import ws from "ws";
+// Database connection setup - Standard PostgreSQL
+import { Pool } from 'pg';
+import { drizzle } from 'drizzle-orm/node-postgres';
 import * as schema from "@shared/schema";
-
-neonConfig.webSocketConstructor = ws;
-
-// Disable SSL verification for localhost (production fix)
-if (process.env.NODE_ENV === 'production') {
-  neonConfig.wsProxy = (host) => `${host}?sslmode=disable`;
-  neonConfig.useSecureWebSocket = false;
-  neonConfig.pipelineTLS = false;
-  neonConfig.pipelineConnect = false;
-}
 
 if (!process.env.DATABASE_URL) {
   throw new Error(
@@ -22,6 +11,7 @@ if (!process.env.DATABASE_URL) {
 
 export const pool = new Pool({ 
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? false : undefined
+  ssl: false // Localhost PostgreSQL - no SSL needed
 });
-export const db = drizzle({ client: pool, schema });
+
+export const db = drizzle(pool, { schema });
