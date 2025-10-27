@@ -1,0 +1,211 @@
+root@162-55-4-35:/var/www/besindegerim# echo "DATABASE_URL=$DATABASE_URL"
+DATABASE_URL=
+root@162-55-4-35:/var/www/besindegerim# echo "NODE_ENV=$NODE_ENV"
+NODE_ENV=
+root@162-55-4-35:/var/www/besindegerim# echo "BASE_URL=$BASE_URL"
+BASE_URL=
+root@162-55-4-35:/var/www/besindegerim# cat .env
+NODE_ENV=production
+PORT=1453
+
+# PostgreSQL Database (YENİ ŞİFRE)
+DATABASE_URL=postgresql://besindegerim_admin:BsnDgr2025PgSecure987@localhost:5432/besindegerim_db
+
+PGHOST=localhost
+PGPORT=5432
+PGDATABASE=besindegerim_db
+PGUSER=besindegerim_admin
+PGPASSWORD=BsnDgr2025PgSecure987
+
+# USDA API Key
+FOODDATA_API_KEY=ROHYH9BNvyzUsuoPEfL3LP4HyivEhxyKutsJGAxS
+
+# Session Secret
+SESSION_SECRET=Session2025SecretKeyBsnDgr
+
+# Base URL
+BASE_URL=https://besindegerim.com
+root@162-55-4-35:/var/www/besindegerim# nano env
+root@162-55-4-35:/var/www/besindegerim# nano .env
+root@162-55-4-35:/var/www/besindegerim# echo "DATABASE_URL=$DATABASE_URL"
+DATABASE_URL=
+root@162-55-4-35:/var/www/besindegerim# systemctl status postgresql
+● postgresql.service - PostgreSQL RDBMS
+     Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
+     Active: active (exited) since Tue 2025-10-28 00:27:37 +03; 1h 19min ago
+    Process: 1375175 ExecStart=/bin/true (code=exited, status=0/SUCCESS)
+   Main PID: 1375175 (code=exited, status=0/SUCCESS)
+        CPU: 1ms
+
+Oct 28 00:27:37 162-55-4-35.datahost.net.tr systemd[1]: Starting PostgreSQL RDBMS...
+Oct 28 00:27:37 162-55-4-35.datahost.net.tr systemd[1]: Finished PostgreSQL RDBMS.
+root@162-55-4-35:/var/www/besindegerim# psql -h localhost -U besindegerim_admin -d besindegerim_db -c "SELECT COUNT(*) FROM foods;"
+Password for user besindegerim_admin:
+ count
+-------
+   266
+(1 row)
+
+root@162-55-4-35:/var/www/besindegerim# pm2 logs besindegerim --lines 100
+[TAILING] Tailing last 100 lines for [besindegerim] process (change the value with --lines option)
+/var/www/besindegerim/logs/out.log last 100 lines:
+76|besinde | 2025-10-28 00:35:00 +03:00: 12:35:00 AM [express] serving on port 1453
+76|besinde | 2025-10-28 00:35:04 +03:00: 12:35:04 AM [express] GET /api/random 200 in 3ms :: {"foods":[]}
+76|besinde | 2025-10-28 00:35:04 +03:00: 12:35:04 AM [express] GET /api/random/[object%20Object] 404 in 1ms
+76|besinde | 2025-10-28 00:35:04 +03:00: 12:35:04 AM [express] GET /api/category-groups 200 in 3ms :: []
+76|besinde | 2025-10-28 00:35:04 +03:00: 12:35:04 AM [express] GET /api/foods 200 in 14ms :: {"items":[],"page":1,"limit":30,"total":0,"totalP…
+76|besinde | 2025-10-28 00:35:05 +03:00: 12:35:05 AM [express] GET /api/random 304 in 4ms :: {"foods":[]}
+76|besinde | 2025-10-28 00:35:40 +03:00: 12:35:40 AM [express] GET /api/random 304 in 3ms :: {"foods":[]}
+76|besinde | 2025-10-28 00:35:40 +03:00: 12:35:40 AM [express] GET /api/category-groups 304 in 1ms :: []
+76|besinde | 2025-10-28 00:35:40 +03:00: 12:35:40 AM [express] GET /api/foods 200 in 12ms :: {"items":[],"page":1,"limit":30,"total":0,"totalP…
+76|besinde | 2025-10-28 00:35:44 +03:00: 12:35:44 AM [express] GET /api/random 304 in 4ms :: {"foods":[]}
+76|besinde | 2025-10-28 00:35:44 +03:00: 12:35:44 AM [express] GET /api/category-groups 304 in 1ms :: []
+76|besinde | 2025-10-28 00:35:44 +03:00: 12:35:44 AM [express] GET /api/foods 304 in 5ms :: {"items":[],"page":1,"limit":30,"total":0,"totalPa…
+76|besinde | 2025-10-28 00:35:44 +03:00: 12:35:44 AM [express] GET /api/random/[object%20Object] 404 in 1ms
+76|besinde | 2025-10-28 00:35:44 +03:00: 12:35:44 AM [express] GET /api/random 304 in 2ms :: {"foods":[]}
+76|besinde | 2025-10-28 00:35:54 +03:00: 12:35:54 AM [express] GET /api/foods/search 200 in 2ms :: {"foods":[]}
+76|besinde | 2025-10-28 00:50:19 +03:00: 12:50:19 AM [express] GET /api/category-groups 304 in 0ms :: []
+76|besinde | 2025-10-28 00:50:19 +03:00: 12:50:19 AM [express] GET /api/random 200 in 5ms :: {"foods":[{"id":"5e43e453-decc-4edd-b65e-48452b7b…
+76|besinde | 2025-10-28 00:50:19 +03:00: 12:50:19 AM [express] GET /api/random/[object%20Object] 404 in 1ms
+76|besinde | 2025-10-28 00:50:19 +03:00: 12:50:19 AM [express] GET /api/foods 200 in 17ms :: {"items":[{"id":"96dd3580-7ba0-4cac-a3b7-4523093b…
+76|besinde | 2025-10-28 00:50:19 +03:00: 12:50:19 AM [express] GET /api/random 200 in 6ms :: {"foods":[{"id":"14582c61-85a8-4c4c-bb27-1037b66c…
+76|besinde | 2025-10-28 00:50:27 +03:00: 12:50:27 AM [express] GET /api/category-groups 304 in 0ms :: []
+76|besinde | 2025-10-28 00:50:27 +03:00: 12:50:27 AM [express] GET /api/foods/protein-tozu 200 in 3ms :: {"food":{"id":"660d7e5e-5306-4f5f-9ea…
+76|besinde | 2025-10-28 00:50:27 +03:00: 12:50:27 AM [express] GET /api/random 200 in 4ms :: {"foods":[{"id":"ad288246-fdc5-4aff-88ce-1bf1993c…
+76|besinde | 2025-10-28 00:51:15 +03:00: 12:51:15 AM [express] serving on port 1453
+76|besinde | 2025-10-28 00:51:17 +03:00: 12:51:17 AM [express] GET /api/category-groups 200 in 2ms :: [{"mainCategory":"Hayvansal Ürünler","su…
+76|besinde | 2025-10-28 00:51:17 +03:00: 12:51:17 AM [express] GET /api/foods/protein-tozu 200 in 3ms :: {"food":{"id":"660d7e5e-5306-4f5f-9ea…
+76|besinde | 2025-10-28 00:51:17 +03:00: 12:51:17 AM [express] GET /api/random 200 in 3ms :: {"foods":[{"id":"8f79c4f2-c782-4877-810f-5cd68e9f…
+76|besinde | 2025-10-28 00:51:27 +03:00: 12:51:27 AM [express] GET /api/random 200 in 3ms :: {"foods":[{"id":"ae952212-65b3-4188-bc79-cea35b58…
+76|besinde | 2025-10-28 00:51:27 +03:00: 12:51:27 AM [express] GET /api/category-groups 304 in 0ms :: [{"mainCategory":"Hayvansal Ürünler","su…
+76|besinde | 2025-10-28 00:51:27 +03:00: 12:51:27 AM [express] GET /api/random/[object%20Object] 404 in 1ms
+76|besinde | 2025-10-28 00:51:27 +03:00: 12:51:27 AM [express] GET /api/foods 304 in 19ms :: {"items":[{"id":"96dd3580-7ba0-4cac-a3b7-4523093b…
+76|besinde | 2025-10-28 00:51:27 +03:00: 12:51:27 AM [express] GET /api/random 200 in 4ms :: {"foods":[{"id":"f3a52a81-eeb2-48ca-aa9d-d3eb0d3d…
+76|besinde | 2025-10-28 00:51:40 +03:00: 12:51:40 AM [express] GET /api/category-groups 304 in 0ms :: [{"mainCategory":"Hayvansal Ürünler","su…
+76|besinde | 2025-10-28 00:51:40 +03:00: 12:51:40 AM [express] GET /api/random/[object%20Object] 404 in 0ms
+76|besinde | 2025-10-28 00:51:40 +03:00: 12:51:40 AM [express] GET /api/random 200 in 15ms :: {"foods":[{"id":"84c29fd4-d8fc-499c-a18e-10d0d74…
+76|besinde | 2025-10-28 00:51:40 +03:00: 12:51:40 AM [express] GET /api/foods 304 in 17ms :: {"items":[{"id":"96dd3580-7ba0-4cac-a3b7-4523093b…
+76|besinde | 2025-10-28 00:51:40 +03:00: 12:51:40 AM [express] GET /api/random 200 in 3ms :: {"foods":[{"id":"32c9dc08-e89e-452c-8f2d-17296aa4…
+76|besinde | 2025-10-28 00:51:45 +03:00: 12:51:45 AM [express] GET /api/category-groups 304 in 0ms :: [{"mainCategory":"Hayvansal Ürünler","su…
+76|besinde | 2025-10-28 00:51:45 +03:00: 12:51:45 AM [express] GET /api/foods/protein-tozu 200 in 2ms :: {"food":{"id":"660d7e5e-5306-4f5f-9ea…
+76|besinde | 2025-10-28 00:51:45 +03:00: 12:51:45 AM [express] GET /api/random 200 in 4ms :: {"foods":[{"id":"84cb3e4e-c743-4ac2-8336-26ea2c80…
+76|besinde | 2025-10-28 00:52:54 +03:00: 12:52:54 AM [express] GET /api/category-groups 304 in 1ms :: [{"mainCategory":"Hayvansal Ürünler","su…
+76|besinde | 2025-10-28 00:52:54 +03:00: 12:52:54 AM [express] GET /api/random/[object%20Object] 404 in 1ms
+76|besinde | 2025-10-28 00:52:54 +03:00: 12:52:54 AM [express] GET /api/random 200 in 15ms :: {"foods":[{"id":"44eca0c1-29a9-4bab-bd44-3fe0c93…
+76|besinde | 2025-10-28 00:52:54 +03:00: 12:52:54 AM [express] GET /api/foods 304 in 19ms :: {"items":[{"id":"96dd3580-7ba0-4cac-a3b7-4523093b…
+76|besinde | 2025-10-28 00:52:54 +03:00: 12:52:54 AM [express] GET /api/random 200 in 3ms :: {"foods":[{"id":"654fa60a-befc-4e74-b682-6b6f041f…
+76|besinde | 2025-10-28 00:53:16 +03:00: 12:53:16 AM [express] GET /api/category-groups 304 in 1ms :: [{"mainCategory":"Hayvansal Ürünler","su…
+76|besinde | 2025-10-28 00:53:16 +03:00: 12:53:16 AM [express] GET /api/foods/kategori 404 in 3ms :: {"error":"Food not found"}
+76|besinde | 2025-10-28 00:53:16 +03:00: 12:53:16 AM [express] GET /api/random 200 in 4ms :: {"foods":[{"id":"bd01d8e4-6dab-45ab-abba-0cbb96ff…
+76|besinde | 2025-10-28 00:53:24 +03:00: 12:53:24 AM [express] GET /api/random 200 in 4ms :: {"foods":[{"id":"0bccd847-f9f7-4f14-9d58-aaba4c2b…
+76|besinde | 2025-10-28 00:56:02 +03:00: 12:56:02 AM [express] GET /api/.env 404 in 1ms
+76|besinde | 2025-10-28 00:57:05 +03:00: 12:57:05 AM [express] GET /api/shared/config/config.env 404 in 1ms
+76|besinde | 2025-10-28 00:57:05 +03:00: 12:57:05 AM [express] GET /api/shared/config.env 404 in 0ms
+76|besinde | 2025-10-28 00:57:05 +03:00: 12:57:05 AM [express] GET /api/shared/config/.env 404 in 0ms
+76|besinde | 2025-10-28 00:57:05 +03:00: 12:57:05 AM [express] GET /api/shared/.env 404 in 0ms
+76|besinde | 2025-10-28 00:57:05 +03:00: 12:57:05 AM [express] GET /api/config.env 404 in 0ms
+76|besinde | 2025-10-28 01:07:22 +03:00: 1:07:22 AM [express] serving on port 1453
+76|besinde | 2025-10-28 01:07:50 +03:00: 1:07:50 AM [express] serving on port 1453
+76|besinde | 2025-10-28 01:43:34 +03:00: 1:43:34 AM [express] serving on port 1453
+
+/var/www/besindegerim/logs/err.log last 100 lines:
+76|besinde | 2025-10-28 01:45:04 +03:00:   },
+76|besinde | 2025-10-28 01:45:04 +03:00:   [Symbol(kType)]: 'error',
+76|besinde | 2025-10-28 01:45:04 +03:00:   [Symbol(kError)]: Error [ERR_TLS_CERT_ALTNAME_INVALID]: Hostname/IP does not match certificate's altnames: Host: localhost. is not in the cert's altnames: DNS:besindegerim.com, DNS:www.besindegerim.com
+76|besinde | 2025-10-28 01:45:04 +03:00:       at Object.checkServerIdentity (node:tls:316:12)
+76|besinde | 2025-10-28 01:45:04 +03:00:       at TLSSocket.onConnectSecure (node:_tls_wrap:1687:27)
+76|besinde | 2025-10-28 01:45:04 +03:00:       at TLSSocket.emit (node:events:524:28)
+76|besinde | 2025-10-28 01:45:04 +03:00:       at TLSSocket._finishInit (node:_tls_wrap:1076:8)
+76|besinde | 2025-10-28 01:45:04 +03:00:       at ssl.onhandshakedone (node:_tls_wrap:862:12) {
+76|besinde | 2025-10-28 01:45:04 +03:00:     code: 'ERR_TLS_CERT_ALTNAME_INVALID',
+76|besinde | 2025-10-28 01:45:04 +03:00:     reason: "Host: localhost. is not in the cert's altnames: DNS:besindegerim.com, DNS:www.besindegerim.com",
+76|besinde | 2025-10-28 01:45:04 +03:00:     host: 'localhost',
+76|besinde | 2025-10-28 01:45:04 +03:00:     cert: {
+76|besinde | 2025-10-28 01:45:04 +03:00:       subject: [Object: null prototype],
+76|besinde | 2025-10-28 01:45:04 +03:00:       issuer: [Object: null prototype],
+76|besinde | 2025-10-28 01:45:04 +03:00:       subjectaltname: 'DNS:besindegerim.com, DNS:www.besindegerim.com',
+76|besinde | 2025-10-28 01:45:04 +03:00:       infoAccess: [Object: null prototype],
+76|besinde | 2025-10-28 01:45:04 +03:00:       ca: false,
+76|besinde | 2025-10-28 01:45:04 +03:00:       modulus: 'DD1278D6F9DAE13D5D56F3A1D953D0EA4FAA7249F3B4EFA6DAAE5CB1616304A4B2C52270D905D622427FD67F315B9123533921C93F0EB1718EA0E33026067804554F239BC921459CB7A0BFD6E8C4A201476A52246860C1D03F6DC4A999540DF3EC60E11A6E73A0CAB7B3013A61CE3CDB6D29759BEEF62052BB699CE1BD6C07872E6C054E96F10838C5990A44639094F5A12398FD475C9B66BB90B13F22F26EDAC9BD78F8A1D93C49295707CA3F07DC63FA643BD6B653E754BC5692333CF7129D6A6594055922FE0B9CE810F643DCF3D63331B3D8359393AC3F1C94A0F8D491B45CF637FD88967329E5178BA1D9062D756D7BB7C0A57899F8897317136DF16099',
+76|besinde | 2025-10-28 01:45:04 +03:00:       bits: 2048,
+76|besinde | 2025-10-28 01:45:04 +03:00:       exponent: '0x10001',
+76|besinde | 2025-10-28 01:45:04 +03:00:       pubkey: <Buffer 30 82 01 22 30 0d 06 09 2a 86 48 86 f7 0d 01 01 01 05 00 03 82 01 0f 00 30 82 01 0a 02 82 01 01 00 dd 12 78 d6 f9 da e1 3d 5d 56 f3 a1 d9 53 d0 ea 4f ... 244 more bytes>,
+76|besinde | 2025-10-28 01:45:04 +03:00:       valid_from: 'Oct 27 19:21:37 2025 GMT',
+76|besinde | 2025-10-28 01:45:04 +03:00:       valid_to: 'Jan 25 19:21:36 2026 GMT',
+76|besinde | 2025-10-28 01:45:04 +03:00:       fingerprint: '92:DD:B9:96:8C:35:29:D0:36:51:79:C3:65:09:D8:C2:E4:89:63:54',
+76|besinde | 2025-10-28 01:45:04 +03:00:       fingerprint256: '69:09:56:54:B3:00:14:EE:80:31:21:8A:C5:72:0A:31:3A:4D:E0:D3:0F:8D:44:4A:60:29:B4:B0:3A:3A:48:46',
+76|besinde | 2025-10-28 01:45:04 +03:00:       fingerprint512: '10:DE:75:83:07:07:F8:DC:45:15:A2:BF:26:A4:36:B6:BB:79:7C:18:C8:E5:A3:8C:03:2F:AA:9E:23:CF:E5:C8:BB:1B:D2:07:71:07:B6:1C:26:CD:3F:AC:C4:6D:E7:AF:1F:9A:EF:2B:83:D3:6D:A8:99:12:77:03:80:AB:33:97',
+76|besinde | 2025-10-28 01:45:04 +03:00:       ext_key_usage: [Array],
+76|besinde | 2025-10-28 01:45:04 +03:00:       serialNumber: '05130D6CAC18680C2EA5653C97627A58E4D4',
+76|besinde | 2025-10-28 01:45:04 +03:00:       raw: <Buffer 30 82 05 12 30 82 03 fa a0 03 02 01 02 02 12 05 13 0d 6c ac 18 68 0c 2e a5 65 3c 97 62 7a 58 e4 d4 30 0d 06 09 2a 86 48 86 f7 0d 01 01 0b 05 00 30 33 ... 1252 more bytes>,
+76|besinde | 2025-10-28 01:45:04 +03:00:       issuerCertificate: [Object]
+76|besinde | 2025-10-28 01:45:04 +03:00:     }
+76|besinde | 2025-10-28 01:45:04 +03:00:   },
+76|besinde | 2025-10-28 01:45:04 +03:00:   [Symbol(kMessage)]: "Hostname/IP does not match certificate's altnames: Host: localhost. is not in the cert's altnames: DNS:besindegerim.com, DNS:www.besindegerim.com"
+76|besinde | 2025-10-28 01:45:04 +03:00: }
+76|besinde | 2025-10-28 01:45:07 +03:00: [SSR /] Error: ErrorEvent {
+76|besinde | 2025-10-28 01:45:07 +03:00:   [Symbol(kTarget)]: WebSocket {
+76|besinde | 2025-10-28 01:45:07 +03:00:     _events: [Object: null prototype] {
+76|besinde | 2025-10-28 01:45:07 +03:00:       error: [Function],
+76|besinde | 2025-10-28 01:45:07 +03:00:       message: [Function],
+76|besinde | 2025-10-28 01:45:07 +03:00:       close: [Function],
+76|besinde | 2025-10-28 01:45:07 +03:00:       open: [Function]
+76|besinde | 2025-10-28 01:45:07 +03:00:     },
+76|besinde | 2025-10-28 01:45:07 +03:00:     _eventsCount: 4,
+76|besinde | 2025-10-28 01:45:07 +03:00:     _maxListeners: undefined,
+76|besinde | 2025-10-28 01:45:07 +03:00:     _binaryType: 'arraybuffer',
+76|besinde | 2025-10-28 01:45:07 +03:00:     _closeCode: 1006,
+76|besinde | 2025-10-28 01:45:07 +03:00:     _closeFrameReceived: false,
+76|besinde | 2025-10-28 01:45:07 +03:00:     _closeFrameSent: false,
+76|besinde | 2025-10-28 01:45:07 +03:00:     _closeMessage: <Buffer >,
+76|besinde | 2025-10-28 01:45:07 +03:00:     _closeTimer: null,
+76|besinde | 2025-10-28 01:45:07 +03:00:     _errorEmitted: true,
+76|besinde | 2025-10-28 01:45:07 +03:00:     _extensions: {},
+76|besinde | 2025-10-28 01:45:07 +03:00:     _paused: false,
+76|besinde | 2025-10-28 01:45:07 +03:00:     _protocol: '',
+76|besinde | 2025-10-28 01:45:07 +03:00:     _readyState: 3,
+76|besinde | 2025-10-28 01:45:07 +03:00:     _receiver: null,
+76|besinde | 2025-10-28 01:45:07 +03:00:     _sender: null,
+76|besinde | 2025-10-28 01:45:07 +03:00:     _socket: null,
+76|besinde | 2025-10-28 01:45:07 +03:00:     _bufferedAmount: 0,
+76|besinde | 2025-10-28 01:45:07 +03:00:     _isServer: false,
+76|besinde | 2025-10-28 01:45:07 +03:00:     _redirects: 0,
+76|besinde | 2025-10-28 01:45:07 +03:00:     _autoPong: true,
+76|besinde | 2025-10-28 01:45:07 +03:00:     _url: 'wss://localhost/v2',
+76|besinde | 2025-10-28 01:45:07 +03:00:     _req: null,
+76|besinde | 2025-10-28 01:45:07 +03:00:     [Symbol(shapeMode)]: false,
+76|besinde | 2025-10-28 01:45:07 +03:00:     [Symbol(kCapture)]: false
+76|besinde | 2025-10-28 01:45:07 +03:00:   },
+76|besinde | 2025-10-28 01:45:07 +03:00:   [Symbol(kType)]: 'error',
+76|besinde | 2025-10-28 01:45:07 +03:00:   [Symbol(kError)]: Error [ERR_TLS_CERT_ALTNAME_INVALID]: Hostname/IP does not match certificate's altnames: Host: localhost. is not in the cert's altnames: DNS:besindegerim.com, DNS:www.besindegerim.com
+76|besinde | 2025-10-28 01:45:07 +03:00:       at Object.checkServerIdentity (node:tls:316:12)
+76|besinde | 2025-10-28 01:45:07 +03:00:       at TLSSocket.onConnectSecure (node:_tls_wrap:1687:27)
+76|besinde | 2025-10-28 01:45:07 +03:00:       at TLSSocket.emit (node:events:524:28)
+76|besinde | 2025-10-28 01:45:07 +03:00:       at TLSSocket._finishInit (node:_tls_wrap:1076:8)
+76|besinde | 2025-10-28 01:45:07 +03:00:       at ssl.onhandshakedone (node:_tls_wrap:862:12) {
+76|besinde | 2025-10-28 01:45:07 +03:00:     code: 'ERR_TLS_CERT_ALTNAME_INVALID',
+76|besinde | 2025-10-28 01:45:07 +03:00:     reason: "Host: localhost. is not in the cert's altnames: DNS:besindegerim.com, DNS:www.besindegerim.com",
+76|besinde | 2025-10-28 01:45:07 +03:00:     host: 'localhost',
+76|besinde | 2025-10-28 01:45:07 +03:00:     cert: {
+76|besinde | 2025-10-28 01:45:07 +03:00:       subject: [Object: null prototype],
+76|besinde | 2025-10-28 01:45:07 +03:00:       issuer: [Object: null prototype],
+76|besinde | 2025-10-28 01:45:07 +03:00:       subjectaltname: 'DNS:besindegerim.com, DNS:www.besindegerim.com',
+76|besinde | 2025-10-28 01:45:07 +03:00:       infoAccess: [Object: null prototype],
+76|besinde | 2025-10-28 01:45:07 +03:00:       ca: false,
+76|besinde | 2025-10-28 01:45:07 +03:00:       modulus: 'DD1278D6F9DAE13D5D56F3A1D953D0EA4FAA7249F3B4EFA6DAAE5CB1616304A4B2C52270D905D622427FD67F315B9123533921C93F0EB1718EA0E33026067804554F239BC921459CB7A0BFD6E8C4A201476A52246860C1D03F6DC4A999540DF3EC60E11A6E73A0CAB7B3013A61CE3CDB6D29759BEEF62052BB699CE1BD6C07872E6C054E96F10838C5990A44639094F5A12398FD475C9B66BB90B13F22F26EDAC9BD78F8A1D93C49295707CA3F07DC63FA643BD6B653E754BC5692333CF7129D6A6594055922FE0B9CE810F643DCF3D63331B3D8359393AC3F1C94A0F8D491B45CF637FD88967329E5178BA1D9062D756D7BB7C0A57899F8897317136DF16099',
+76|besinde | 2025-10-28 01:45:07 +03:00:       bits: 2048,
+76|besinde | 2025-10-28 01:45:07 +03:00:       exponent: '0x10001',
+76|besinde | 2025-10-28 01:45:07 +03:00:       pubkey: <Buffer 30 82 01 22 30 0d 06 09 2a 86 48 86 f7 0d 01 01 01 05 00 03 82 01 0f 00 30 82 01 0a 02 82 01 01 00 dd 12 78 d6 f9 da e1 3d 5d 56 f3 a1 d9 53 d0 ea 4f ... 244 more bytes>,
+76|besinde | 2025-10-28 01:45:07 +03:00:       valid_from: 'Oct 27 19:21:37 2025 GMT',
+76|besinde | 2025-10-28 01:45:07 +03:00:       valid_to: 'Jan 25 19:21:36 2026 GMT',
+76|besinde | 2025-10-28 01:45:07 +03:00:       fingerprint: '92:DD:B9:96:8C:35:29:D0:36:51:79:C3:65:09:D8:C2:E4:89:63:54',
+76|besinde | 2025-10-28 01:45:07 +03:00:       fingerprint256: '69:09:56:54:B3:00:14:EE:80:31:21:8A:C5:72:0A:31:3A:4D:E0:D3:0F:8D:44:4A:60:29:B4:B0:3A:3A:48:46',
+76|besinde | 2025-10-28 01:45:07 +03:00:       fingerprint512: '10:DE:75:83:07:07:F8:DC:45:15:A2:BF:26:A4:36:B6:BB:79:7C:18:C8:E5:A3:8C:03:2F:AA:9E:23:CF:E5:C8:BB:1B:D2:07:71:07:B6:1C:26:CD:3F:AC:C4:6D:E7:AF:1F:9A:EF:2B:83:D3:6D:A8:99:12:77:03:80:AB:33:97',
+76|besinde | 2025-10-28 01:45:07 +03:00:       ext_key_usage: [Array],
+76|besinde | 2025-10-28 01:45:07 +03:00:       serialNumber: '05130D6CAC18680C2EA5653C97627A58E4D4',
+76|besinde | 2025-10-28 01:45:07 +03:00:       raw: <Buffer 30 82 05 12 30 82 03 fa a0 03 02 01 02 02 12 05 13 0d 6c ac 18 68 0c 2e a5 65 3c 97 62 7a 58 e4 d4 30 0d 06 09 2a 86 48 86 f7 0d 01 01 0b 05 00 30 33 ... 1252 more bytes>,
+76|besinde | 2025-10-28 01:45:07 +03:00:       issuerCertificate: [Object]
+76|besinde | 2025-10-28 01:45:07 +03:00:     }
+76|besinde | 2025-10-28 01:45:07 +03:00:   },
+76|besinde | 2025-10-28 01:45:07 +03:00:   [Symbol(kMessage)]: "Hostname/IP does not match certificate's altnames: Host: localhost. is not in the cert's altnames: DNS:besindegerim.com, DNS:www.besindegerim.com"
+76|besinde | 2025-10-28 01:45:07 +03:00: }
