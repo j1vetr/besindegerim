@@ -310,6 +310,11 @@ export function injectHead(
   </head>
   <body>
     ${htmlBody}
+    
+    <!-- Vite Dev Server Client (Required for HMR and Hydration) -->
+    <script type="module" src="/@vite/client"></script>
+    <!-- Vite Client-Side JavaScript for Hydration -->
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>`;
 

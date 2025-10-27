@@ -264,8 +264,10 @@ export function registerSSRRoutes(app: Express): void {
       }
 
       // Render homepage component
+      const pageProps = { popularFoods, categoryGroups, currentPath: req.path };
       const htmlBody = renderComponentToHTML(
-        HomePage({ popularFoods, categoryGroups, currentPath: req.path })
+        HomePage(pageProps),
+        pageProps
       );
 
       // Build meta tags

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Search, ChevronDown, Menu, X } from "lucide-react";
 import type { CategoryGroup } from "@shared/schema";
 import { categoryToSlug } from "@shared/utils";
@@ -10,33 +10,24 @@ interface HeaderProps {
   currentPath?: string;
 }
 
-// Client-side mobile menu component
-function MobileMenuInteractive({ categoryGroups, currentPath }: { categoryGroups: CategoryGroup[], currentPath: string }) {
+// Mobile menu component - Simple, SSR-safe
+function MobileMenu({ categoryGroups, currentPath }: { categoryGroups: CategoryGroup[], currentPath: string }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const isHomeActive = currentPath === "/" || currentPath.startsWith("/?");
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const handleClick = () => {
+    console.log("Hamburger clicked! Current isOpen:", isOpen);
+    setIsOpen(!isOpen);
+    console.log("After setIsOpen, new value should be:", !isOpen);
+  };
 
-  if (!mounted) {
-    return (
-      <button
-        className="p-2 rounded-lg bg-green-100"
-        disabled
-        aria-label="Menü"
-      >
-        <Menu className="w-6 h-6 text-green-700" />
-      </button>
-    );
-  }
+  console.log("MobileMenu render - isOpen:", isOpen);
 
   return (
     <>
       {/* Hamburger Button */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleClick}
         className="p-2 hover:bg-green-100 rounded-lg transition-colors z-50 relative"
         data-testid="button-mobile-menu"
         aria-label={isOpen ? "Menüyü kapat" : "Menüyü aç"}
@@ -127,9 +118,9 @@ export function Header({ categoryGroups = [], currentPath = "/" }: HeaderProps) 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 lg:py-4">
         {/* Top bar - Logo, Search & Menu */}
         <div className="flex items-center gap-2 sm:gap-4">
-          {/* Mobile Menu - Client Side Only */}
+          {/* Mobile Menu - Hidden on desktop */}
           <div className="lg:hidden">
-            <MobileMenuInteractive categoryGroups={categoryGroups} currentPath={currentPath} />
+            <MobileMenu categoryGroups={categoryGroups} currentPath={currentPath} />
           </div>
 
           {/* Logo */}

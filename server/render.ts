@@ -27,8 +27,13 @@ try {
 
 /**
  * Render a React component to HTML string with injected CSS
+ * @param component - React component to render
+ * @param pageProps - Serialized props for client-side hydration (optional)
  */
-export function renderComponentToHTML(component: ReactElement): string {
+export function renderComponentToHTML(
+  component: ReactElement,
+  pageProps?: any
+): string {
   const reactHtml = renderToString(component);
   
   // Inject compiled CSS or dev server link
@@ -37,9 +42,15 @@ export function renderComponentToHTML(component: ReactElement): string {
     ? '<link rel="stylesheet" href="/src/index.css" />'
     : `<style>${cssContent}</style>`;
 
-  // Wrap in a div with id="root" for client-side hydration (if needed)
+  // Serialize props for client hydration (if provided)
+  const propsScript = pageProps
+    ? `<script id="__PAGE_PROPS__" type="application/json">${JSON.stringify(pageProps)}</script>`
+    : '';
+
+  // Wrap in a div with id="root" for client-side hydration
   return `
     ${styleTag}
+    ${propsScript}
     <div id="root">${reactHtml}</div>
   `;
 }
