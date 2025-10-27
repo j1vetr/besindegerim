@@ -3,6 +3,14 @@ import { foods, type Food, type InsertFood, type CategoryGroup } from "@shared/s
 import { db } from "./db";
 import { eq, sql, desc } from "drizzle-orm";
 
+export interface PaginatedResult<T> {
+  items: T[];
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
 export interface IStorage {
   // Food operations
   getFoodBySlug(slug: string): Promise<Food | undefined>;
@@ -11,6 +19,7 @@ export interface IStorage {
   createFood(food: InsertFood): Promise<Food>;
   updateFood(id: string, food: Partial<InsertFood>): Promise<Food | undefined>;
   getAllFoods(limit?: number): Promise<Food[]>;
+  getAllFoodsPaginated(page: number, limit: number): Promise<PaginatedResult<Food>>;
   getRandomFoods(count: number, excludeId?: string): Promise<Food[]>;
   searchFoods(query: string, limit?: number): Promise<Food[]>;
   getFoodsByCategory(category: string, limit?: number): Promise<Food[]>;
@@ -61,6 +70,34 @@ export class DatabaseStorage implements IStorage {
       .from(foods)
       .orderBy(desc(foods.cachedAt))
       .limit(limit);
+  }
+
+  async getAllFoodsPaginated(page: number, limit: number): Promise<PaginatedResult<Food>> {
+    const offset = (page - 1) * limit;
+    
+    // Get total count
+    const [countResult] = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(foods);
+    
+    const total = countResult?.count || 0;
+    const totalPages = Math.ceil(total / limit);
+    
+    // Get paginated items
+    const items = await db
+      .select()
+      .from(foods)
+      .orderBy(desc(foods.cachedAt))
+      .limit(limit)
+      .offset(offset);
+    
+    return {
+      items,
+      page,
+      limit,
+      total,
+      totalPages,
+    };
   }
 
   async getRandomFoods(count: number, excludeId?: string): Promise<Food[]> {

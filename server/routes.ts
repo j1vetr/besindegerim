@@ -246,6 +246,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   /**
+   * API: Get all foods with pagination
+   * GET /api/foods?page=1&limit=30
+   */
+  app.get("/api/foods", async (req, res) => {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 30;
+
+      const result = await storage.getAllFoodsPaginated(page, limit);
+      res.json(result);
+    } catch (error) {
+      console.error("Foods API Error:", error);
+      res.status(500).json({ error: "Failed to get foods" });
+    }
+  });
+
+  /**
    * API: Search foods in database (for autocomplete)
    * GET /api/foods/search?q=domates
    */

@@ -1,4 +1,5 @@
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
 import { type Food, type CategoryGroup } from "@shared/schema";
 import { FoodCard } from "@/components/FoodCard";
 import { SearchForm } from "@/components/SearchForm";
@@ -19,7 +20,15 @@ export default function HomePage({
   popularFoods = [],
   currentPath = "/"
 }: HomePageProps) {
-  const isLoading = false;
+  // Client-side data fetching for development mode (CSR)
+  // Only fetch if popularFoods prop is empty (not from SSR)
+  const { data: foodsData, isLoading: isFetching } = useQuery<{ items: Food[] }>({
+    queryKey: ['/api/foods'],
+    enabled: popularFoods.length === 0,
+  });
+
+  const displayFoods = popularFoods.length > 0 ? popularFoods : (foodsData?.items || []).slice(0, 8);
+  const isLoading = popularFoods.length === 0 && isFetching;
 
   return (
     <div className="min-h-screen bg-white">
@@ -169,7 +178,7 @@ export default function HomePage({
               <>
                 {/* Food Cards Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {popularFoods.map((food) => (
+                  {displayFoods.map((food) => (
                     <FoodCard key={food.id} food={food} />
                   ))}
                 </div>
@@ -177,7 +186,7 @@ export default function HomePage({
                 {/* View All CTA */}
                 <div className="text-center mt-16">
                   <a
-                    href="/kategori/sebzeler"
+                    href="/tum-gidalar"
                     className="inline-flex items-center gap-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-8 py-4 rounded-full text-lg font-bold transition-all duration-500 shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/50 hover:scale-105"
                     data-testid="link-view-all"
                   >
