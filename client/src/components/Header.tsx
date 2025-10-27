@@ -110,8 +110,12 @@ export function Header({ categoryGroups = [], currentPath = "/" }: HeaderProps) 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 lg:py-4">
         {/* Top bar - Logo, Search & Menu */}
         <div className="flex items-center gap-2 sm:gap-4">
-          {/* Mobile Menu */}
-          <MobileMenuInteractive categoryGroups={categoryGroups} currentPath={currentPath} />
+          {/* Mobile Menu - Client Side Only */}
+          <div className="lg:hidden">
+            <ClientOnly>
+              <MobileMenuInteractive categoryGroups={categoryGroups} currentPath={currentPath} />
+            </ClientOnly>
+          </div>
 
           {/* Logo */}
           <a href="/" data-testid="link-home" className="flex-shrink-0 hover:scale-105 transition-transform">
