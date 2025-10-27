@@ -9,12 +9,13 @@ import { CategoryPage } from "@/pages/CategoryPage";
 import { SearchResultsPage } from "@/pages/SearchResultsPage";
 import { LegalPage } from "@/pages/LegalPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
+import type { CategoryGroup, Food } from "@shared/schema";
 
 // Wrapper components that fetch data
 
 function HomePageWrapper() {
-  const { data: categoryGroups = [] } = useQuery({ queryKey: ["/api/category-groups"] });
-  const { data: popularResponse } = useQuery({ queryKey: ["/api/random", { count: 8 }] });
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  const { data: popularResponse } = useQuery<{ foods: Food[] }>({ queryKey: ["/api/random", { count: 8 }] });
   
   return <HomePage 
     categoryGroups={categoryGroups} 
@@ -25,8 +26,8 @@ function HomePageWrapper() {
 
 function FoodDetailWrapper() {
   const { slug } = useParams<{ slug: string }>();
-  const { data: categoryGroups = [] } = useQuery({ queryKey: ["/api/category-groups"] });
-  const { data: foodData, isLoading } = useQuery({ 
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  const { data: foodData, isLoading } = useQuery<{ food: Food; alternatives: Food[] }>({ 
     queryKey: [`/api/foods/${slug}`],
     enabled: !!slug
   });
@@ -45,8 +46,8 @@ function FoodDetailWrapper() {
 function CategoryPageWrapper() {
   const { category, subcategory } = useParams<{ category?: string; subcategory?: string }>();
   const [location] = useLocation();
-  const { data: categoryGroups = [] } = useQuery({ queryKey: ["/api/category-groups"] });
-  const { data: foodsData, isLoading } = useQuery({ 
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  const { data: foodsData, isLoading } = useQuery<{ foods: Food[] }>({ 
     queryKey: subcategory 
       ? [`/api/foods/subcategory/${subcategory}`]
       : [`/api/foods/category/${category}`],
@@ -69,8 +70,8 @@ function CategoryPageWrapper() {
 function SearchResultsWrapper() {
   const search = useSearch();
   const query = new URLSearchParams(search).get("q") || "";
-  const { data: categoryGroups = [] } = useQuery({ queryKey: ["/api/category-groups"] });
-  const { data: searchData, isLoading } = useQuery({ 
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  const { data: searchData, isLoading } = useQuery<{ foods: Food[] }>({ 
     queryKey: ["/api/foods/search", { q: query }],
     enabled: query.length >= 2
   });
@@ -91,8 +92,8 @@ function AllFoodsPageWrapper() {
   const search = useSearch();
   const page = parseInt(new URLSearchParams(search).get("page") || "1");
   const [location] = useLocation();
-  const { data: categoryGroups = [] } = useQuery({ queryKey: ["/api/category-groups"] });
-  const { data: foodsData } = useQuery({ 
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  const { data: foodsData } = useQuery<{ items: Food[]; page: number; totalPages: number; total: number }>({ 
     queryKey: [`/api/foods?page=${page}&limit=30`]
   });
   

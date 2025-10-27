@@ -187,17 +187,17 @@ export function SearchAutocomplete({
 
       {/* Autocomplete Results - Resimli Liste */}
       {showResults && results.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-green-200/50 rounded-2xl shadow-2xl shadow-green-500/20 overflow-hidden z-50 max-h-[400px] overflow-y-auto">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-green-200/50 rounded-2xl shadow-2xl shadow-green-500/20 overflow-hidden z-[100] max-h-[70vh] sm:max-h-[400px] overflow-y-auto">
           {results.map((food) => (
             <a
               key={food.id}
               href={`/${food.slug}`}
-              className="flex items-center gap-4 p-3 hover:bg-green-50 transition-colors border-b border-green-100 last:border-0"
+              className="flex items-center gap-3 sm:gap-4 p-4 sm:p-3 hover:bg-green-50 active:bg-green-100 transition-colors border-b border-green-100 last:border-0"
               data-testid={`autocomplete-result-${food.slug}`}
               onClick={() => setShowResults(false)}
             >
               {/* Food Image */}
-              <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-green-100 to-emerald-100 rounded-xl overflow-hidden">
+              <div className="flex-shrink-0 w-20 h-20 sm:w-16 sm:h-16 bg-gradient-to-br from-green-100 to-emerald-100 rounded-xl overflow-hidden">
                 <img
                   src={
                     food.imageUrl 
@@ -212,20 +212,20 @@ export function SearchAutocomplete({
 
               {/* Food Info */}
               <div className="flex-1 min-w-0">
-                <h4 className="text-sm font-bold text-slate-900 truncate">
+                <h4 className="text-base sm:text-sm font-bold text-slate-900 truncate">
                   {food.name}
                 </h4>
-                <p className="text-xs text-slate-600 truncate">
+                <p className="text-sm sm:text-xs text-slate-600 truncate">
                   {food.servingLabel}
                 </p>
-                <p className="text-xs text-green-600 font-semibold">
+                <p className="text-sm sm:text-xs text-green-600 font-semibold mt-1">
                   {Number(food.calories).toFixed(0)} kcal
                 </p>
               </div>
 
               {/* Arrow */}
               <div className="flex-shrink-0">
-                <svg className="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-6 h-6 sm:w-5 sm:h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </div>
@@ -236,8 +236,8 @@ export function SearchAutocomplete({
 
       {/* No Results Message */}
       {showResults && results.length === 0 && query.length >= 3 && !isLoading && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-green-200/50 rounded-2xl shadow-2xl shadow-green-500/20 p-6 text-center z-50">
-          <p className="text-sm text-slate-600">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-green-200/50 rounded-2xl shadow-2xl shadow-green-500/20 p-6 text-center z-[100]">
+          <p className="text-base sm:text-sm text-slate-600">
             "{query}" için sonuç bulunamadı.
           </p>
         </div>

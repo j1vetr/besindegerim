@@ -4,7 +4,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 interface LegalPageProps {
-  slug: string;
+  pageType?: string;
+  slug?: string;
   categoryGroups?: CategoryGroup[];
   currentPath?: string;
 }
@@ -280,7 +281,7 @@ const legalPages: Record<string, LegalContent> = {
 };
 
 export function LegalPage(props?: LegalPageProps) {
-  const slug = props?.slug || "";
+  const slug = props?.pageType || props?.slug || "";
   const categoryGroups = props?.categoryGroups;
   const currentPath = props?.currentPath;
   const content = legalPages[slug];
