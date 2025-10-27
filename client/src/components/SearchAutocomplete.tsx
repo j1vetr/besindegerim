@@ -20,6 +20,41 @@ export function SearchAutocomplete({
   const [isLoading, setIsLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  
+  // Animated placeholder with random food names
+  const [animatedPlaceholder, setAnimatedPlaceholder] = useState("Ara... (ör: domates)");
+  const [placeholderFoods, setPlaceholderFoods] = useState<string[]>([]);
+
+  // Fetch random foods for placeholder animation
+  useEffect(() => {
+    const fetchRandomFoods = async () => {
+      try {
+        const response = await fetch("/api/random?count=12");
+        const data = await response.json();
+        if (data.foods && data.foods.length > 0) {
+          setPlaceholderFoods(data.foods.map((f: Food) => f.name.toLowerCase()));
+        }
+      } catch (error) {
+        console.error("Failed to fetch random foods for placeholder:", error);
+        // Fallback to hardcoded foods
+        setPlaceholderFoods(["domates", "tavuk", "elma", "yumurta", "süt", "ekmek", "muz", "portakal", "dana eti", "peynir"]);
+      }
+    };
+    fetchRandomFoods();
+  }, []);
+
+  // Animate placeholder with random food names
+  useEffect(() => {
+    if (placeholderFoods.length === 0 || query.length > 0) return;
+
+    let currentIndex = 0;
+    const interval = setInterval(() => {
+      currentIndex = (currentIndex + 1) % placeholderFoods.length;
+      setAnimatedPlaceholder(`Ara... (ör: ${placeholderFoods[currentIndex]})`);
+    }, 3000); // Change every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [placeholderFoods, query]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -45,6 +80,8 @@ export function SearchAutocomplete({
       try {
         const response = await fetch(`/api/foods/search?q=${encodeURIComponent(query)}`);
         const data = await response.json();
+        console.log("Search API response:", data); // DEBUG
+        console.log("Search results count:", data.foods?.length); // DEBUG
         setResults(data.foods || []);
         setShowResults(true);
       } catch (error) {
@@ -83,7 +120,7 @@ export function SearchAutocomplete({
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={placeholder}
+              placeholder={animatedPlaceholder}
               className={inputClassName || (compact 
                 ? "w-full h-12 pl-12 pr-4 bg-white border-2 border-green-200/50 focus:border-green-500 rounded-2xl text-sm text-slate-900 placeholder:text-slate-500 outline-none transition-all duration-300"
                 : "w-full h-14 pl-12 pr-4 bg-white border-2 border-green-200/50 focus:border-green-500 rounded-2xl text-base text-slate-900 placeholder:text-slate-500 outline-none transition-all duration-300 shadow-sm focus:shadow-lg focus:shadow-green-500/20"
