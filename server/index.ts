@@ -60,6 +60,12 @@ app.use((req, res, next) => {
 import { registerSSRRoutes, handleSSRRequest } from "./ssr";
 
 (async () => {
+  // Production modda SSR routes'u API routes'tan ÖNCE register et
+  if (process.env.NODE_ENV !== "development") {
+    // Production Mode: SSR routes FIRST (prevent /api/foods/:slug catching sitemap/robots)
+    registerSSRRoutes(app);
+  }
+
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
@@ -103,13 +109,10 @@ import { registerSSRRoutes, handleSSRRequest } from "./ssr";
     // 2️⃣ SONRA: Vite middleware (Catch-all SPA routing)
     await setupVite(app, server);
   } else {
-    // Production Mode: SSR → Static
+    // Production Mode: Static file serving
     const distPath = path.resolve(process.cwd(), "dist", "public");
     
-    // 1️⃣ ÖNCE: SSR routes (sitemap.xml, robots.txt, dynamic pages)
-    registerSSRRoutes(app);
-    
-    // 2️⃣ SONRA: Serve static assets (CSS, JS, images) - catch-all için
+    // Serve static assets (CSS, JS, images)
     app.use(express.static(distPath, {
       maxAge: "1y",
       immutable: true,
