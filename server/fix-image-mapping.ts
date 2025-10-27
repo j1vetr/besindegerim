@@ -171,7 +171,7 @@ const manualMappings: Record<string, string> = {
   "sutlu-cikolata": "chocolate-almond-milk",
   "elma-sirkesi": "apple-cider-vinegar",
   
-  // Yeni eklenen görseller (Ekim 2025)
+  // Yeni eklenen görseller (Ekim 2025 - İlk Batch)
   "kola": "cola-soda-bottle-product-photo",
   "domates": "fresh-red-tomato-photo",
   "muz": "fresh-banana-bunch-photo",
@@ -182,6 +182,71 @@ const manualMappings: Record<string, string> = {
   "patlican": "fresh-eggplant-photo",
   "makarna": "cooked-spaghetti-pasta-photo",
   "bulgur": "bulgur-wheat-grains-photo",
+  
+  // Yeni eklenen görseller (Ekim 2025 - İkinci Batch - 60 görsel)
+  // Grup 1: Sebze ve Meyveler
+  "brokoli": "fresh-broccoli-vegetable-photo",
+  "havuc": "fresh-carrots-photo",
+  "ispanak": "fresh-spinach-leaves-photo",
+  "karnabahar": "fresh-cauliflower-photo",
+  "marul": "fresh-lettuce-head-photo",
+  "roka": "fresh-arugula-leaves-photo",
+  "patates": "fresh-potatoes-photo",
+  "sogan": "fresh-onions-photo",
+  "sarimsak": "fresh-garlic-bulbs-photo",
+  "limon": "fresh-lemons-photo",
+  "armut": "fresh-pear-fruit-photo",
+  "mandalina": "fresh-mandarin-oranges-photo",
+  "pancar": "fresh-beetroot-photo",
+  "kabak": "fresh-zucchini-photo",
+  "yesil-biber": "fresh-green-bell-pepper-photo",
+  
+  // Grup 2: Tahıllar, Baklagiller, Et
+  "bugday": "wheat-grains-photo",
+  "arpa": "barley-grains-photo",
+  "kinoa": "quinoa-grains-photo",
+  "dari": "millet-grains-photo",
+  "pirinc": "white-rice-grains-photo",
+  "beyaz-fasulye": "white-beans-photo",
+  "siyah-fasulye": "black-beans-photo",
+  "kirmizi-fasulye": "red-kidney-beans-photo",
+  "soya-fasulyesi": "soybeans-photo",
+  "edamame": "edamame-beans-photo",
+  "misir-gevregi": "corn-flakes-cereal-photo",
+  "beyaz-ekmek": "white-bread-loaf-photo",
+  "simit": "turkish-simit-bread-photo",
+  "kizarmis-tavuk": "fried-chicken-pieces-photo",
+  "kirmizi-biber": "fresh-red-bell-pepper-photo",
+  
+  // Grup 3: Fırın Ürünleri ve İçecekler
+  "kruvasan": "croissant-pastry-photo",
+  "kuskus": "couscous-grains-photo",
+  "misir-tortilla": "corn-tortillas-photo",
+  "limonata": "fresh-lemonade-glass-photo",
+  "bamya": "fresh-okra-pods-photo",
+  "kuskonmaz": "fresh-asparagus-spears-photo",
+  "donut": "glazed-donut-photo",
+  "kofte": "turkish-kofte-meatballs-photo",
+  "bal": "honey-jar-photo",
+  "hardal": "yellow-mustard-jar-photo",
+  "bitter-cikolata": "dark-chocolate-bar-photo",
+  "fistik-ezmesi": "peanut-butter-jar-photo",
+  "soya-sosu": "soy-sauce-bottle-photo",
+  "tofu": "tofu-block-photo",
+  "aci-biber": "fresh-chili-peppers-photo",
+  
+  // Grup 4: Diğer Önemli Gıdalar
+  "kale": "fresh-kale-leaves-photo",
+  "bruksel-lahanasi": "fresh-brussels-sprouts-photo",
+  "tatli-patates": "fresh-sweet-potato-photo",
+  "kuru-uzum": "golden-raisins-photo",
+  "yer-fistigi": "roasted-peanuts-photo",
+  "yesil-zeytin": "green-olives-photo",
+  "siyah-zeytin": "black-olives-photo",
+  "tursu": "pickled-cucumbers-jar-photo",
+  "yulaf-ezmesi": "cooked-oatmeal-porridge-photo",
+  "cavdar": "rye-bread-loaf-photo",
+  "pirasa": "fresh-leeks-photo",
 };
 
 // Benzerlik skorlama - Levenshtein mesafesi basit versiyonu
