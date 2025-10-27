@@ -69,20 +69,22 @@ app.use((req, res, next) => {
     res.status(status).json({ message });
   });
 
-  // SSR routes - HER İKİ MODDA DA
-  const { registerSSRRoutes } = await import("./ssr");
-  registerSSRRoutes(app);
-
-  // Development: Vite middleware (en sonda - catch-all)
-  // Production: Static files
   if (process.env.NODE_ENV === "development") {
+    // Development: Vite middleware (React SPA)
     await setupVite(app, server);
   } else {
+    // Production: SSR routes + Static files
+    const { registerSSRRoutes } = await import("./ssr");
     const distPath = path.resolve(process.cwd(), "dist", "public");
+    
+    // 1. Serve static assets (CSS, JS, images)
     app.use(express.static(distPath, {
       maxAge: "1y",
       immutable: true,
     }));
+    
+    // 2. SSR routes (catch-all)
+    registerSSRRoutes(app);
   }
 
   // ALWAYS serve the app on the port specified in the environment variable PORT
