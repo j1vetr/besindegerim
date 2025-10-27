@@ -42,7 +42,14 @@ besindegerim.com, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tama
    - 6 ana kategori (Hayvansal Ürünler, Bitkisel Ürünler, Tahıllar ve Baklagiller, vb.)
    - 2-4 alt kategori per ana kategori
    - Dropdown menü navigasyonu
-   - SSR route'ları: /kategori/:category ve /kategori/:category/:subcategory
+   - **SEO-dostu slug URL'leri**: /kategori/hayvansal-urunler/et-tavuk
+     - Türkçe karakterler ASCII'ye dönüştürülür (ğ→g, ü→u, ş→s, ı→i, ö→o, ç→c)
+     - "ve" kelimesi tire ile değiştirilir
+     - "&" karakteri kaldırılır
+     - Encoded URL'ler yerine temiz slug'lar (%C3%9C yerine "u")
+   - SSR route'ları: /kategori/:categorySlug ve /kategori/:categorySlug/:subcategorySlug
+   - categoryToSlug() fonksiyonu: Header.tsx ve server/ssr.ts
+   - findCategoryBySlug(): Slug'dan orijinal kategori adını bulur
    - Otomatik kategorilendirme (251/266 gıda)
    - CategoryGroup type shared/schema.ts'den export ediliyor
 

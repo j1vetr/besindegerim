@@ -9,6 +9,23 @@ interface HeaderProps {
   currentPath?: string;
 }
 
+// Convert category name to URL-friendly slug
+function categoryToSlug(category: string): string {
+  return category
+    .toLowerCase()
+    .replace(/ğ/g, "g")
+    .replace(/ü/g, "u")
+    .replace(/ş/g, "s")
+    .replace(/ı/g, "i")
+    .replace(/ö/g, "o")
+    .replace(/ç/g, "c")
+    .replace(/\s+ve\s+/g, "-") // "ve" kelimesini "-" ile değiştir
+    .replace(/&/g, "") // "&" karakterini kaldır
+    .replace(/\s+/g, "-") // Boşlukları "-" ile değiştir
+    .replace(/-+/g, "-") // Çift tire varsa tek tire yap
+    .replace(/^-|-$/g, ""); // Başta ve sonda tire varsa kaldır
+}
+
 export function Header({ categoryGroups = [], currentPath = "/" }: HeaderProps) {
   const isHomeActive = currentPath === "/" || currentPath.startsWith("/?");
 
@@ -70,7 +87,7 @@ export function Header({ categoryGroups = [], currentPath = "/" }: HeaderProps) 
               <div key={group.mainCategory} className="relative flex-shrink-0 snap-start category-dropdown-wrapper">
                 {/* Main Category Button/Link */}
                 <a 
-                  href={`/kategori/${encodeURIComponent(group.mainCategory)}`}
+                  href={`/kategori/${categoryToSlug(group.mainCategory)}`}
                   className="whitespace-nowrap rounded-full px-5 py-2 text-sm font-semibold transition-all duration-300 bg-green-100 text-green-700 hover:bg-green-200 border-2 border-green-200/50 flex items-center gap-1"
                   data-testid={`button-category-${group.mainCategory}`}
                 >
@@ -84,7 +101,7 @@ export function Header({ categoryGroups = [], currentPath = "/" }: HeaderProps) 
                   {group.subcategories.map((subcategory) => (
                     <a
                       key={subcategory}
-                      href={`/kategori/${encodeURIComponent(group.mainCategory)}/${encodeURIComponent(subcategory)}`}
+                      href={`/kategori/${categoryToSlug(group.mainCategory)}/${categoryToSlug(subcategory)}`}
                       className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-green-50 hover:text-green-700 transition-colors"
                       data-testid={`link-subcategory-${subcategory}`}
                     >

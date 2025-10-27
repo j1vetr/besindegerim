@@ -21,6 +21,40 @@ import { storage } from "./storage";
 import { cache } from "./cache";
 import type { Food, CategoryGroup } from "@shared/schema";
 
+// Convert category name to URL-friendly slug
+function categoryToSlug(category: string): string {
+  return category
+    .toLowerCase()
+    .replace(/ğ/g, "g")
+    .replace(/ü/g, "u")
+    .replace(/ş/g, "s")
+    .replace(/ı/g, "i")
+    .replace(/ö/g, "o")
+    .replace(/ç/g, "c")
+    .replace(/\s+ve\s+/g, "-") // "ve" kelimesini "-" ile değiştir
+    .replace(/&/g, "") // "&" karakterini kaldır
+    .replace(/\s+/g, "-") // Boşlukları "-" ile değiştir
+    .replace(/-+/g, "-") // Çift tire varsa tek tire yap
+    .replace(/^-|-$/g, ""); // Başta ve sonda tire varsa kaldır
+}
+
+// Find original category name from slug
+function findCategoryBySlug(slug: string, categoryGroups: CategoryGroup[]): string | null {
+  for (const group of categoryGroups) {
+    // Check main category
+    if (categoryToSlug(group.mainCategory) === slug) {
+      return group.mainCategory;
+    }
+    // Check subcategories
+    for (const sub of group.subcategories) {
+      if (categoryToSlug(sub) === slug) {
+        return sub;
+      }
+    }
+  }
+  return null;
+}
+
 /**
  * Register SSR routes
  */
@@ -28,7 +62,7 @@ export function registerSSRRoutes(app: Express): void {
   // Category routes - MUST come before /:slug catch-all route
   app.get("/kategori/:category/:subcategory?", async (req: Request, res: Response) => {
     try {
-      const { category, subcategory } = req.params;
+      const { category: categorySlug, subcategory: subcategorySlug } = req.params;
 
       // Get categories from cache
       const categoryGroupsCacheKey = "all_categories";
@@ -38,11 +72,28 @@ export function registerSSRRoutes(app: Express): void {
         cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
       }
 
+      // Convert slugs to original category names
+      const category = findCategoryBySlug(categorySlug, categoryGroups);
+      const subcategory = subcategorySlug ? findCategoryBySlug(subcategorySlug, categoryGroups) : null;
+
+      // If category not found, show 404
+      if (!category) {
+        const htmlBody = renderComponentToHTML(NotFoundPage({ categoryGroups, currentPath: req.path }));
+        const meta = {
+          title: "Kategori Bulunamadı - besindegerim.com",
+          description: "Bu kategori bulunamadı.",
+          keywords: "kategori, besin değerleri",
+          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${req.path}`,
+        };
+        const fullHTML = injectHead(htmlBody, meta);
+        return res.status(404).send(fullHTML);
+      }
+
       // Get foods based on category or subcategory
       let foods: Food[];
       let displayCategory: string;
       
-      if (subcategory) {
+      if (subcategorySlug && subcategory) {
         // Get by subcategory
         const cacheKey = `subcategory_${subcategory}`;
         let cachedFoods = cache.get<Food[]>(cacheKey);
@@ -71,7 +122,7 @@ export function registerSSRRoutes(app: Express): void {
           title: "Kategori Bulunamadı - besindegerim.com",
           description: "Bu kategoride henüz gıda bulunmamaktadır.",
           keywords: "kategori, besin değerleri",
-          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/kategori/${category}${subcategory ? `/${subcategory}` : ""}`,
+          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/kategori/${categorySlug}${subcategorySlug ? `/${subcategorySlug}` : ""}`,
         };
         const fullHTML = injectHead(htmlBody, meta);
         return res.status(404).send(fullHTML);
@@ -87,12 +138,12 @@ export function registerSSRRoutes(app: Express): void {
         })
       );
 
-      // Build meta tags
+      // Build meta tags (use slugs for canonical URL)
       const meta = {
         title: `${displayCategory} Besin Değerleri - besindegerim.com`,
         description: `${displayCategory} kategorisindeki gıdaların detaylı besin değerleri, kalori, protein, karbonhidrat ve yağ oranları.`,
         keywords: `${displayCategory}, besin değeri, kalori, protein, karbonhidrat`,
-        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/kategori/${category}${subcategory ? `/${subcategory}` : ""}`,
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/kategori/${categorySlug}${subcategorySlug ? `/${subcategorySlug}` : ""}`,
       };
 
       const jsonLd = [buildOrganizationJsonLd()];
