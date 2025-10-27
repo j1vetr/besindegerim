@@ -1,6 +1,7 @@
 // SSR Routes - Server-side rendering for all pages
 import type { Express, Request, Response } from "express";
 import HomePage from "../client/src/pages/HomePage";
+import AllFoodsPage from "../client/src/pages/AllFoodsPage";
 import { FoodDetailPage } from "../client/src/pages/FoodDetailPage";
 import { NotFoundPage } from "../client/src/pages/NotFoundPage";
 import { SearchResultsPage } from "../client/src/pages/SearchResultsPage";
@@ -280,6 +281,59 @@ export function registerSSRRoutes(app: Express): void {
       res.send(fullHTML);
     } catch (error) {
       console.error("SSR Error (homepage):", error);
+      res.status(500).send("Server Error");
+    }
+  });
+
+  // All Foods page route
+  app.get("/tum-gidalar", async (req: Request, res: Response) => {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = 30;
+
+      // Get paginated foods
+      const result = await storage.getAllFoodsPaginated(page, limit);
+
+      // Get categories from cache
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
+      }
+
+      // Render All Foods page
+      const pageProps = {
+        categoryGroups,
+        currentPath: req.path,
+        initialFoods: result.items,
+        initialPage: result.page,
+        initialTotalPages: result.totalPages,
+        initialTotal: result.total,
+      };
+
+      const htmlBody = renderComponentToHTML(
+        AllFoodsPage(pageProps),
+        pageProps
+      );
+
+      // Build meta tags
+      const meta = {
+        title: `Tüm Gıdalar ${page > 1 ? `- Sayfa ${page}` : ''} | besindegerim.com`,
+        description: `${result.total} gıdanın tamamı. Gerçek porsiyon bazlı kalori ve besin değerleri. USDA verileriyle desteklenen kapsamlı besin değerleri rehberi.`,
+        keywords: "tüm gıdalar, besin değerleri, kalori tablosu, USDA, porsiyon bazlı",
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/tum-gidalar${page > 1 ? `?page=${page}` : ''}`,
+      };
+
+      const jsonLd = [buildOrganizationJsonLd()];
+
+      // Inject head and send response
+      const fullHTML = injectHead(htmlBody, meta, jsonLd);
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.send(fullHTML);
+    } catch (error) {
+      console.error("SSR Error (all foods page):", error);
       res.status(500).send("Server Error");
     }
   });

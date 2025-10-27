@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
 import HomePage from "@/pages/HomePage";
+import AllFoodsPage from "@/pages/AllFoodsPage";
 import { FoodDetailPage } from "@/pages/FoodDetailPage";
 import { CategoryPage } from "@/pages/CategoryPage";
 import { SearchResultsPage } from "@/pages/SearchResultsPage";
@@ -86,12 +87,27 @@ function SearchResultsWrapper() {
   />;
 }
 
+function AllFoodsPageWrapper() {
+  const search = useSearch();
+  const page = parseInt(new URLSearchParams(search).get("page") || "1");
+  const [location] = useLocation();
+  const { data: categoryGroups = [] } = useQuery({ queryKey: ["/api/category-groups"] });
+  
+  return <AllFoodsPage 
+    categoryGroups={categoryGroups}
+    currentPath={location}
+  />;
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Switch>
         {/* Homepage */}
         <Route path="/" component={HomePageWrapper} />
+        
+        {/* All Foods Page */}
+        <Route path="/tum-gidalar" component={AllFoodsPageWrapper} />
         
         {/* Search */}
         <Route path="/ara" component={SearchResultsWrapper} />

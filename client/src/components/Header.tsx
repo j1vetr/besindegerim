@@ -56,13 +56,9 @@ function MobileMenu({ categoryGroups, currentPath }: { categoryGroups: CategoryG
               <div className="space-y-2">
                 {/* Tümü Link */}
                 <a
-                  href="/"
+                  href="/tum-gidalar"
                   onClick={() => setIsOpen(false)}
-                  className={`block px-4 py-3 rounded-xl font-semibold transition-all ${
-                    isHomeActive
-                      ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg"
-                      : "bg-green-50 text-green-700 hover:bg-green-100"
-                  }`}
+                  className="block px-4 py-3 rounded-xl font-semibold bg-green-50 text-green-700 hover:bg-green-100 transition-all"
                   data-testid="link-mobile-category-all"
                 >
                   Tümü
@@ -140,13 +136,9 @@ export function Header({ categoryGroups = [], currentPath = "/" }: HeaderProps) 
         <div className="hidden lg:block relative -mx-4 px-4 mt-3">
           <div className="flex items-center gap-2 overflow-x-auto overflow-y-visible pb-2 scrollbar-hide snap-x snap-mandatory">
             <a 
-              href="/" 
+              href="/tum-gidalar" 
               data-testid="link-category-all"
-              className={`flex-shrink-0 snap-start whitespace-nowrap rounded-full px-5 py-2 text-sm font-semibold transition-all duration-300 ${
-                isHomeActive
-                  ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/30"
-                  : "bg-green-100 text-green-700 hover:bg-green-200 border-2 border-green-200/50"
-              }`}
+              className="flex-shrink-0 snap-start whitespace-nowrap rounded-full px-5 py-2 text-sm font-semibold transition-all duration-300 bg-green-100 text-green-700 hover:bg-green-200 border-2 border-green-200/50"
             >
               Tümü
             </a>
