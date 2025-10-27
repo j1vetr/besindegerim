@@ -170,6 +170,18 @@ const manualMappings: Record<string, string> = {
   // İçecekler
   "sutlu-cikolata": "chocolate-almond-milk",
   "elma-sirkesi": "apple-cider-vinegar",
+  
+  // Yeni eklenen görseller (Ekim 2025)
+  "kola": "cola-soda-bottle-product-photo",
+  "domates": "fresh-red-tomato-photo",
+  "muz": "fresh-banana-bunch-photo",
+  "salatalik": "fresh-cucumber-photo",
+  "tavuk-gogsu": "raw-chicken-breast-photo",
+  "elma": "fresh-red-apple-photo",
+  "portakal": "fresh-orange-fruit-photo",
+  "patlican": "fresh-eggplant-photo",
+  "makarna": "cooked-spaghetti-pasta-photo",
+  "bulgur": "bulgur-wheat-grains-photo",
 };
 
 // Benzerlik skorlama - Levenshtein mesafesi basit versiyonu
