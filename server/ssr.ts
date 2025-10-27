@@ -314,7 +314,7 @@ export function registerSSRRoutes(app: Express): void {
           title: "Kategori Bulunamadı - besindegerim.com",
           description: "Aradığınız kategori bulunamadı.",
           keywords: "besin değerleri",
-          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${requestPath}`,
+          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${req.path}`,
         };
         return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
       }
@@ -333,7 +333,7 @@ export function registerSSRRoutes(app: Express): void {
         title: `${subcategory} - ${mainCategory} | besindegerim.com`,
         description: `${subcategory} kategorisindeki gıdaların besin değerleri. ${foods.length} gıda bulundu.`,
         keywords: `${subcategory}, ${mainCategory}, besin değerleri, kalori`,
-        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${requestPath}`,
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${req.path}`,
       };
 
       await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
@@ -365,7 +365,7 @@ export function registerSSRRoutes(app: Express): void {
           title: "Kategori Bulunamadı - besindegerim.com",
           description: "Aradığınız kategori bulunamadı.",
           keywords: "besin değerleri",
-          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${requestPath}`,
+          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${req.path}`,
         };
         return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
       }
@@ -384,7 +384,7 @@ export function registerSSRRoutes(app: Express): void {
         title: `${categoryName} | besindegerim.com`,
         description: `${categoryName} kategorisindeki gıdaların besin değerleri. ${foods.length} gıda bulundu.`,
         keywords: `${categoryName}, besin değerleri, kalori`,
-        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${requestPath}`,
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${req.path}`,
       };
 
       await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
@@ -436,7 +436,7 @@ export function registerSSRRoutes(app: Express): void {
           title: "Gıda Bulunamadı - besindegerim.com",
           description: "Aradığınız gıda bulunamadı.",
           keywords: "besin değerleri",
-          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${requestPath}`,
+          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${req.path}`,
         };
         return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
       }

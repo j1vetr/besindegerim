@@ -253,70 +253,96 @@ export function buildArticleJsonLd(data: {
 }
 
 /**
- * Inject meta tags and JSON-LD into HTML head
- * @param htmlBody - The rendered HTML body content
+ * Inject meta tags into HTML template using REPLACE strategy
+ * Bu duplicate meta tag'leri önler - Örnek projedeki gibi
+ * @param htmlTemplate - HTML template (client/index.html)
  * @param meta - Meta tags object
  * @param jsonLdArray - Array of JSON-LD objects
- * @returns Complete HTML document with head and body
+ * @returns HTML with replaced meta tags
  */
 export function injectHead(
-  htmlBody: string,
+  htmlTemplate: string,
   meta: MetaTags,
   jsonLdArray: object[] = []
 ): string {
-  const jsonLdScripts = jsonLdArray
-    .map(
-      (jsonLd) =>
-        `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`
-    )
-    .join("\n    ");
+  let result = htmlTemplate;
 
-  const html = `<!DOCTYPE html>
-<html lang="tr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    
-    <!-- Primary Meta Tags -->
-    <title>${meta.title}</title>
-    <meta name="title" content="${meta.title}" />
-    <meta name="description" content="${meta.description}" />
-    <meta name="keywords" content="${meta.keywords}" />
-    <link rel="canonical" href="${meta.canonical}" />
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="${meta.ogUrl || meta.canonical}" />
-    <meta property="og:title" content="${meta.ogTitle || meta.title}" />
-    <meta property="og:description" content="${meta.ogDescription || meta.description}" />
-    <meta property="og:image" content="${meta.ogImage || ""}" />
-    <meta property="og:locale" content="tr_TR" />
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="${meta.twitterCard || "summary_large_image"}" />
-    <meta property="twitter:url" content="${meta.ogUrl || meta.canonical}" />
-    <meta property="twitter:title" content="${meta.twitterTitle || meta.title}" />
-    <meta property="twitter:description" content="${meta.twitterDescription || meta.description}" />
-    <meta property="twitter:image" content="${meta.twitterImage || meta.ogImage || ""}" />
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Structured Data -->
-    ${jsonLdScripts}
-  </head>
-  <body>
-    ${htmlBody}
-    
-    <!-- Vite Dev Server Client (Required for HMR and Hydration) -->
-    <script type="module" src="/@vite/client"></script>
-    <!-- Vite Client-Side JavaScript for Hydration -->
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>`;
+  // ✅ REPLACE strategy - Duplicate önler
+  // Title
+  result = result.replace(/<title>.*?<\/title>/s, `<title>${meta.title}</title>`);
+  
+  // Primary Meta Tags
+  result = result.replace(
+    /<meta name="title"[^>]*>/,
+    `<meta name="title" content="${meta.title}" />`
+  );
+  result = result.replace(
+    /<meta name="description"[^>]*>/,
+    `<meta name="description" content="${meta.description}" />`
+  );
+  result = result.replace(
+    /<meta name="keywords"[^>]*>/,
+    `<meta name="keywords" content="${meta.keywords}" />`
+  );
+  result = result.replace(
+    /<link rel="canonical"[^>]*>/,
+    `<link rel="canonical" href="${meta.canonical}" />`
+  );
 
-  return html;
+  // Open Graph
+  result = result.replace(
+    /<meta property="og:url"[^>]*>/,
+    `<meta property="og:url" content="${meta.ogUrl || meta.canonical}" />`
+  );
+  result = result.replace(
+    /<meta property="og:title"[^>]*>/,
+    `<meta property="og:title" content="${meta.ogTitle || meta.title}" />`
+  );
+  result = result.replace(
+    /<meta property="og:description"[^>]*>/,
+    `<meta property="og:description" content="${meta.ogDescription || meta.description}" />`
+  );
+  result = result.replace(
+    /<meta property="og:image"[^>]*>/,
+    `<meta property="og:image" content="${meta.ogImage || ""}" />`
+  );
+
+  // Twitter
+  result = result.replace(
+    /<meta property="twitter:card"[^>]*>/,
+    `<meta property="twitter:card" content="${meta.twitterCard || "summary_large_image"}" />`
+  );
+  result = result.replace(
+    /<meta property="twitter:url"[^>]*>/,
+    `<meta property="twitter:url" content="${meta.ogUrl || meta.canonical}" />`
+  );
+  result = result.replace(
+    /<meta property="twitter:title"[^>]*>/,
+    `<meta property="twitter:title" content="${meta.twitterTitle || meta.title}" />`
+  );
+  result = result.replace(
+    /<meta property="twitter:description"[^>]*>/,
+    `<meta property="twitter:description" content="${meta.twitterDescription || meta.description}" />`
+  );
+  result = result.replace(
+    /<meta property="twitter:image"[^>]*>/,
+    `<meta property="twitter:image" content="${meta.twitterImage || meta.ogImage || ""}" />`
+  );
+
+  // JSON-LD Structured Data (</head> tag'inden önce ekle)
+  if (jsonLdArray.length > 0) {
+    const jsonLdScripts = jsonLdArray
+      .map(
+        (jsonLd) =>
+          `    <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`
+      )
+      .join("\n");
+    
+    result = result.replace(
+      /<\/head>/,
+      `\n${jsonLdScripts}\n  </head>`
+    );
+  }
+
+  return result;
 }

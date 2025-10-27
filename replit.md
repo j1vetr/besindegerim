@@ -9,7 +9,13 @@ besindegerim.com, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tama
 ### Tamamlanan MVP Özellikleri
 
 1. **SSR (Server-Side Rendering)**
-   - Tüm sayfalar server-side render edilir
+   - **Pure HTML rendering** - React component yok, sadece string'ler döndürülür
+   - **Bot Detection Middleware** - Dev'de bot kontrolü, prod'da herkes SSR
+   - **Template-based REPLACE strategy** - client/index.html kullanılır, meta tag'ler replace edilir
+   - **Middleware Sıralaması:**
+     - **Development:** SSR middleware (bot check) → Vite
+     - **Production:** Static files → SSR catch-all
+   - **No Duplicate Meta Tags** - REPLACE strategy kullanıldığı için duplicate yok
    - JavaScript kapalıyken bile tam işlevsellik
    - SEO dostu HTML çıktısı
 
@@ -30,6 +36,8 @@ besindegerim.com, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tama
    - TTL-based cache yönetimi
 
 5. **SEO Optimizasyonu**
+   - **REPLACE Strategy Meta Injection** - Template'deki placeholder meta tag'ler replace edilir
+   - client/index.html: Placeholder meta tag'ler (SSR replace için)
    - Benzersiz meta tags (title, description, keywords)
    - Canonical URLs
    - Open Graph ve Twitter Cards
@@ -37,6 +45,8 @@ besindegerim.com, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tama
      - NutritionInformation
      - BreadcrumbList
      - Organization
+     - FAQPage (Google Featured Snippets için)
+     - Article
 
 6. **Hiyerarşik Kategori Sistemi**
    - 6 ana kategori (Hayvansal Ürünler, Bitkisel Ürünler, Tahıllar ve Baklagiller, vb.)
