@@ -1,0 +1,287 @@
+root@162-55-4-35:/var/www/besindegerim# mkdir -p logs
+root@162-55-4-35:/var/www/besindegerim# ls -la logs/
+total 8
+drwxr-xr-x 2 root root 4096 Oct 28 01:59 .
+drwxr-xr-x 9 root root 4096 Oct 28 01:59 ..
+root@162-55-4-35:/var/www/besindegerim# npm install
+npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+
+added 486 packages, and audited 487 packages in 6s
+
+70 packages are looking for funding
+  run `npm fund` for details
+
+8 vulnerabilities (3 low, 5 moderate)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+root@162-55-4-35:/var/www/besindegerim# echo "✅ Dependencies yüklendi"
+ls -la node_modules/pg
+ls -la node_modules/drizzle-orm
+✅ Dependencies yüklendi
+total 36
+drwxr-xr-x   4 root root  4096 Oct 28 02:00 .
+drwxr-xr-x 320 root root 12288 Oct 28 02:00 ..
+drwxr-xr-x   4 root root  4096 Oct 28 02:00 lib
+-rw-r--r--   1 root root  1077 Oct 28 02:00 LICENSE
+drwxr-xr-x   7 root root  4096 Oct 28 02:00 node_modules
+-rw-r--r--   1 root root  1346 Oct 28 02:00 package.json
+-rw-r--r--   1 root root  4083 Oct 28 02:00 README.md
+total 1148
+drwxr-xr-x  38 root root  12288 Oct 28 02:00 .
+drwxr-xr-x 320 root root  12288 Oct 28 02:00 ..
+-rw-r--r--   1 root root   4879 Oct 28 02:00 alias.cjs
+-rw-r--r--   1 root root   6058 Oct 28 02:00 alias.cjs.map
+-rw-r--r--   1 root root   1578 Oct 28 02:00 alias.d.cts
+-rw-r--r--   1 root root   1571 Oct 28 02:00 alias.d.ts
+-rw-r--r--   1 root root   3151 Oct 28 02:00 alias.js
+-rw-r--r--   1 root root   5992 Oct 28 02:00 alias.js.map
+drwxr-xr-x   4 root root   4096 Oct 28 02:00 aws-data-api
+-rw-r--r--   1 root root    775 Oct 28 02:00 batch.cjs
+-rw-r--r--   1 root root    442 Oct 28 02:00 batch.cjs.map
+-rw-r--r--   1 root root    322 Oct 28 02:00 batch.d.cts
+-rw-r--r--   1 root root    320 Oct 28 02:00 batch.d.ts
+-rw-r--r--   1 root root     33 Oct 28 02:00 batch.js
+-rw-r--r--   1 root root     71 Oct 28 02:00 batch.js.map
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 better-sqlite3
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 bun-sql
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 bun-sqlite
+-rw-r--r--   1 root root   3076 Oct 28 02:00 casing.cjs
+-rw-r--r--   1 root root   3779 Oct 28 02:00 casing.cjs.map
+-rw-r--r--   1 root root    503 Oct 28 02:00 casing.d.cts
+-rw-r--r--   1 root root    500 Oct 28 02:00 casing.d.ts
+-rw-r--r--   1 root root   1904 Oct 28 02:00 casing.js
+-rw-r--r--   1 root root   3728 Oct 28 02:00 casing.js.map
+-rw-r--r--   1 root root   4245 Oct 28 02:00 column-builder.cjs
+-rw-r--r--   1 root root  14275 Oct 28 02:00 column-builder.cjs.map
+-rw-r--r--   1 root root  11157 Oct 28 02:00 column-builder.d.cts
+-rw-r--r--   1 root root  11149 Oct 28 02:00 column-builder.d.ts
+-rw-r--r--   1 root root   3185 Oct 28 02:00 column-builder.js
+-rw-r--r--   1 root root  14236 Oct 28 02:00 column-builder.js.map
+-rw-r--r--   1 root root   2333 Oct 28 02:00 column.cjs
+-rw-r--r--   1 root root   6400 Oct 28 02:00 column.cjs.map
+-rw-r--r--   1 root root   3937 Oct 28 02:00 column.d.cts
+-rw-r--r--   1 root root   3932 Oct 28 02:00 column.d.ts
+-rw-r--r--   1 root root   1311 Oct 28 02:00 column.js
+-rw-r--r--   1 root root   6361 Oct 28 02:00 column.js.map
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 d1
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 durable-sqlite
+-rw-r--r--   1 root root   1940 Oct 28 02:00 entity.cjs
+-rw-r--r--   1 root root   1889 Oct 28 02:00 entity.cjs.map
+-rw-r--r--   1 root root    395 Oct 28 02:00 entity.d.cts
+-rw-r--r--   1 root root    395 Oct 28 02:00 entity.d.ts
+-rw-r--r--   1 root root    867 Oct 28 02:00 entity.js
+-rw-r--r--   1 root root   1836 Oct 28 02:00 entity.js.map
+-rw-r--r--   1 root root   1598 Oct 28 02:00 errors.cjs
+-rw-r--r--   1 root root    932 Oct 28 02:00 errors.cjs.map
+-rw-r--r--   1 root root    366 Oct 28 02:00 errors.d.cts
+-rw-r--r--   1 root root    365 Oct 28 02:00 errors.d.ts
+-rw-r--r--   1 root root    490 Oct 28 02:00 errors.js
+-rw-r--r--   1 root root    887 Oct 28 02:00 errors.js.map
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 expo-sqlite
+-rw-r--r--   1 root root   1163 Oct 28 02:00 expressions.cjs
+-rw-r--r--   1 root root    183 Oct 28 02:00 expressions.cjs.map
+-rw-r--r--   1 root root     45 Oct 28 02:00 expressions.d.cts
+-rw-r--r--   1 root root     44 Oct 28 02:00 expressions.d.ts
+-rw-r--r--   1 root root     83 Oct 28 02:00 expressions.js
+-rw-r--r--   1 root root    151 Oct 28 02:00 expressions.js.map
+-rw-r--r--   1 root root   2515 Oct 28 02:00 index.cjs
+-rw-r--r--   1 root root    854 Oct 28 02:00 index.cjs.map
+-rw-r--r--   1 root root    484 Oct 28 02:00 index.d.cts
+-rw-r--r--   1 root root    469 Oct 28 02:00 index.d.ts
+-rw-r--r--   1 root root    502 Oct 28 02:00 index.js
+-rw-r--r--   1 root root    724 Oct 28 02:00 index.js.map
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 knex
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 kysely
+drwxr-xr-x   8 root root   4096 Oct 28 02:00 libsql
+-rw-r--r--   1 root root   1982 Oct 28 02:00 logger.cjs
+-rw-r--r--   1 root root   1918 Oct 28 02:00 logger.cjs.map
+-rw-r--r--   1 root root    694 Oct 28 02:00 logger.d.cts
+-rw-r--r--   1 root root    693 Oct 28 02:00 logger.d.ts
+-rw-r--r--   1 root root    842 Oct 28 02:00 logger.js
+-rw-r--r--   1 root root   1867 Oct 28 02:00 logger.js.map
+-rw-r--r--   1 root root   3010 Oct 28 02:00 migrator.cjs
+-rw-r--r--   1 root root   2638 Oct 28 02:00 migrator.cjs.map
+-rw-r--r--   1 root root    398 Oct 28 02:00 migrator.d.cts
+-rw-r--r--   1 root root    398 Oct 28 02:00 migrator.d.ts
+-rw-r--r--   1 root root   1244 Oct 28 02:00 migrator.js
+-rw-r--r--   1 root root   2554 Oct 28 02:00 migrator.js.map
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 mysql2
+drwxr-xr-x   4 root root   4096 Oct 28 02:00 mysql-core
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 mysql-proxy
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 neon
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 neon-http
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 neon-serverless
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 node-postgres
+-rw-r--r--   1 root root    790 Oct 28 02:00 operations.cjs
+-rw-r--r--   1 root root   1352 Oct 28 02:00 operations.cjs.map
+-rw-r--r--   1 root root   1113 Oct 28 02:00 operations.d.cts
+-rw-r--r--   1 root root   1110 Oct 28 02:00 operations.d.ts
+-rw-r--r--   1 root root     38 Oct 28 02:00 operations.js
+-rw-r--r--   1 root root     71 Oct 28 02:00 operations.js.map
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 op-sqlite
+-rw-r--r--   1 root root 151722 Oct 28 02:00 package.json
+drwxr-xr-x   5 root root   4096 Oct 28 02:00 pg-core
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 pglite
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 pg-proxy
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 planetscale-serverless
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 postgres-js
+-rw-r--r--   1 root root   1298 Oct 28 02:00 primary-key.cjs
+-rw-r--r--   1 root root    601 Oct 28 02:00 primary-key.cjs.map
+-rw-r--r--   1 root root    370 Oct 28 02:00 primary-key.d.cts
+-rw-r--r--   1 root root    367 Oct 28 02:00 primary-key.d.ts
+-rw-r--r--   1 root root    253 Oct 28 02:00 primary-key.js
+-rw-r--r--   1 root root    562 Oct 28 02:00 primary-key.js.map
+drwxr-xr-x   5 root root   4096 Oct 28 02:00 prisma
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 query-builders
+-rw-r--r--   1 root root   1634 Oct 28 02:00 query-promise.cjs
+-rw-r--r--   1 root root   1566 Oct 28 02:00 query-promise.cjs.map
+-rw-r--r--   1 root root    670 Oct 28 02:00 query-promise.d.cts
+-rw-r--r--   1 root root    669 Oct 28 02:00 query-promise.d.ts
+-rw-r--r--   1 root root    579 Oct 28 02:00 query-promise.js
+-rw-r--r--   1 root root   1527 Oct 28 02:00 query-promise.js.map
+-rw-r--r--   1 root root   3219 Oct 28 02:00 README.md
+-rw-r--r--   1 root root  11362 Oct 28 02:00 relations.cjs
+-rw-r--r--   1 root root  26612 Oct 28 02:00 relations.cjs.map
+-rw-r--r--   1 root root  12304 Oct 28 02:00 relations.d.cts
+-rw-r--r--   1 root root  12298 Oct 28 02:00 relations.d.ts
+-rw-r--r--   1 root root   8929 Oct 28 02:00 relations.js
+-rw-r--r--   1 root root  26750 Oct 28 02:00 relations.js.map
+-rw-r--r--   1 root root    802 Oct 28 02:00 runnable-query.cjs
+-rw-r--r--   1 root root    429 Oct 28 02:00 runnable-query.cjs.map
+-rw-r--r--   1 root root    206 Oct 28 02:00 runnable-query.d.cts
+-rw-r--r--   1 root root    205 Oct 28 02:00 runnable-query.d.ts
+-rw-r--r--   1 root root     42 Oct 28 02:00 runnable-query.js
+-rw-r--r--   1 root root     71 Oct 28 02:00 runnable-query.js.map
+-rw-r--r--   1 root root   3620 Oct 28 02:00 selection-proxy.cjs
+-rw-r--r--   1 root root   5304 Oct 28 02:00 selection-proxy.cjs.map
+-rw-r--r--   1 root root    464 Oct 28 02:00 selection-proxy.d.cts
+-rw-r--r--   1 root root    461 Oct 28 02:00 selection-proxy.d.ts
+-rw-r--r--   1 root root   2301 Oct 28 02:00 selection-proxy.js
+-rw-r--r--   1 root root   5291 Oct 28 02:00 selection-proxy.js.map
+-rw-r--r--   1 root root    781 Oct 28 02:00 session.cjs
+-rw-r--r--   1 root root    341 Oct 28 02:00 session.cjs.map
+-rw-r--r--   1 root root    166 Oct 28 02:00 session.d.cts
+-rw-r--r--   1 root root    165 Oct 28 02:00 session.d.ts
+-rw-r--r--   1 root root     35 Oct 28 02:00 session.js
+-rw-r--r--   1 root root     71 Oct 28 02:00 session.js.map
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 singlestore
+drwxr-xr-x   4 root root   4096 Oct 28 02:00 singlestore-core
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 singlestore-proxy
+drwxr-xr-x   4 root root   4096 Oct 28 02:00 sql
+drwxr-xr-x   4 root root   4096 Oct 28 02:00 sqlite-core
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 sqlite-proxy
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 sql-js
+-rw-r--r--   1 root root   1577 Oct 28 02:00 subquery.cjs
+-rw-r--r--   1 root root   1922 Oct 28 02:00 subquery.cjs.map
+-rw-r--r--   1 root root   1015 Oct 28 02:00 subquery.d.cts
+-rw-r--r--   1 root root   1013 Oct 28 02:00 subquery.d.ts
+-rw-r--r--   1 root root    495 Oct 28 02:00 subquery.js
+-rw-r--r--   1 root root   1877 Oct 28 02:00 subquery.js.map
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 supabase
+-rw-r--r--   1 root root   3440 Oct 28 02:00 table.cjs
+-rw-r--r--   1 root root   7859 Oct 28 02:00 table.cjs.map
+-rw-r--r--   1 root root   3855 Oct 28 02:00 table.d.cts
+-rw-r--r--   1 root root   3850 Oct 28 02:00 table.d.ts
+-rw-r--r--   1 root root   1973 Oct 28 02:00 table.js
+-rw-r--r--   1 root root   7771 Oct 28 02:00 table.js.map
+-rw-r--r--   1 root root   1135 Oct 28 02:00 table.utils.cjs
+-rw-r--r--   1 root root    241 Oct 28 02:00 table.utils.cjs.map
+-rw-r--r--   1 root root     11 Oct 28 02:00 table.utils.d.cts
+-rw-r--r--   1 root root     11 Oct 28 02:00 table.utils.d.ts
+-rw-r--r--   1 root root    109 Oct 28 02:00 table.utils.js
+-rw-r--r--   1 root root    198 Oct 28 02:00 table.utils.js.map
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 tidb-serverless
+-rw-r--r--   1 root root   1967 Oct 28 02:00 tracing.cjs
+-rw-r--r--   1 root root   2232 Oct 28 02:00 tracing.cjs.map
+-rw-r--r--   1 root root     11 Oct 28 02:00 tracing.d.cts
+-rw-r--r--   1 root root     11 Oct 28 02:00 tracing.d.ts
+-rw-r--r--   1 root root    898 Oct 28 02:00 tracing.js
+-rw-r--r--   1 root root   2196 Oct 28 02:00 tracing.js.map
+-rw-r--r--   1 root root   1135 Oct 28 02:00 tracing-utils.cjs
+-rw-r--r--   1 root root    312 Oct 28 02:00 tracing-utils.cjs.map
+-rw-r--r--   1 root root     92 Oct 28 02:00 tracing-utils.d.cts
+-rw-r--r--   1 root root     92 Oct 28 02:00 tracing-utils.d.ts
+-rw-r--r--   1 root root    113 Oct 28 02:00 tracing-utils.js
+-rw-r--r--   1 root root    269 Oct 28 02:00 tracing-utils.js.map
+-rw-r--r--   1 root root   7714 Oct 28 02:00 utils.cjs
+-rw-r--r--   1 root root  14497 Oct 28 02:00 utils.cjs.map
+-rw-r--r--   1 root root   2863 Oct 28 02:00 utils.d.cts
+-rw-r--r--   1 root root   2859 Oct 28 02:00 utils.d.ts
+-rw-r--r--   1 root root   5762 Oct 28 02:00 utils.js
+-rw-r--r--   1 root root  14417 Oct 28 02:00 utils.js.map
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 vercel-postgres
+-rw-r--r--   1 root root   1223 Oct 28 02:00 version.cjs
+-rw-r--r--   1 root root    376 Oct 28 02:00 version.cjs.map
+-rw-r--r--   1 root root    123 Oct 28 02:00 version.d.cts
+-rw-r--r--   1 root root    123 Oct 28 02:00 version.d.ts
+-rw-r--r--   1 root root    150 Oct 28 02:00 version.js
+-rw-r--r--   1 root root    333 Oct 28 02:00 version.js.map
+-rw-r--r--   1 root root   1165 Oct 28 02:00 view-common.cjs
+-rw-r--r--   1 root root    242 Oct 28 02:00 view-common.cjs.map
+-rw-r--r--   1 root root     52 Oct 28 02:00 view-common.d.cts
+-rw-r--r--   1 root root     52 Oct 28 02:00 view-common.d.ts
+-rw-r--r--   1 root root    129 Oct 28 02:00 view-common.js
+-rw-r--r--   1 root root    199 Oct 28 02:00 view-common.js.map
+drwxr-xr-x   2 root root   4096 Oct 28 02:00 xata-http
+root@162-55-4-35:/var/www/besindegerim# npm run build
+
+> rest-express@1.0.0 build
+> vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+
+vite v5.4.20 building for production...
+transforming (3) src/main.tsxBrowserslist: browsers data (caniuse-lite) is 12 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+A PostCSS plugin did not pass the `from` option to `postcss.parse`. This may cause imported assets to be incorrectly transformed. If you've recently added a PostCSS plugin that raised this warning, please contact the package author to fix the issue.
+✓ 1644 modules transformed.
+../dist/public/index.html                   2.06 kB │ gzip:  0.70 kB
+../dist/public/assets/index-DM6Thzju.css  131.38 kB │ gzip: 19.48 kB
+../dist/public/assets/index-XDM4LTy4.js   304.90 kB │ gzip: 87.84 kB
+✓ built in 3.60s
+
+  dist/index.js  61.2kb
+
+⚡ Done in 7ms
+root@162-55-4-35:/var/www/besindegerim# ls -la dist/
+ls -la dist/index.js
+ls -la dist/public/index.html
+total 76
+drwxr-xr-x  3 root root  4096 Oct 28 02:00 .
+drwxr-xr-x 11 root root  4096 Oct 28 02:00 ..
+-rw-r--r--  1 root root 62629 Oct 28 02:00 index.js
+drwxr-xr-x  4 root root  4096 Oct 28 02:00 public
+-rw-r--r-- 1 root root 62629 Oct 28 02:00 dist/index.js
+-rw-r--r-- 1 root root 2069 Oct 28 02:00 dist/public/index.html
+root@162-55-4-35:/var/www/besindegerim# psql -h localhost -U besindegerim_admin -d besindegerim_db -c "SELECT COUNT(*) FROM foods;"
+Password for user besindegerim_admin:
+ count
+-------
+   266
+(1 row)
+
+root@162-55-4-35:/var/www/besindegerim# NODE_ENV=production \
+DATABASE_URL=postgresql://besindegerim_admin:BsnDgr2025PgSecure987@localhost:5432/besindegerim_db \
+BASE_URL=https://besindegerim.com \
+PORT=1453 \
+node dist/index.js
+[DB] ✅ Using standard pg driver
+file:///var/www/besindegerim/dist/index.js:1095
+  throw new Error("FOODDATA_API_KEY environment variable is required");
+        ^
+
+Error: FOODDATA_API_KEY environment variable is required
+    at file:///var/www/besindegerim/dist/index.js:1095:9
+    at ModuleJob.run (node:internal/modules/esm/module_job:325:25)
+    at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+
+Node.js v20.19.5
+root@162-55-4-35:/var/www/besindegerim#
