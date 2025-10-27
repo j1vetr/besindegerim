@@ -70,7 +70,7 @@ export function SearchAutocomplete({
   // Fetch results when query changes (min 3 chars)
   useEffect(() => {
     const fetchResults = async () => {
-      if (query.length < 3) {
+      if (query.length < 2) {
         setResults([]);
         setShowResults(false);
         return;
