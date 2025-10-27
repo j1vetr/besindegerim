@@ -36,7 +36,7 @@ export default function HomePage({
       
       <main>
         {/* Hero Section - Floating Food Icons Background */}
-        <section className="relative py-20 md:py-32 flex items-center justify-center overflow-hidden bg-white">
+        <section className="relative py-8 md:py-12 flex items-center justify-center overflow-hidden bg-white">
           {/* Floating Food Icons - Animated */}
           <div className="absolute inset-0 overflow-hidden">
             {/* Apple - Top Left */}
@@ -84,7 +84,7 @@ export default function HomePage({
           </div>
 
           {/* Hero Content */}
-          <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-8 py-20 text-center">
+          <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-8 py-8 text-center">
             {/* Floating Badge */}
             <div className="inline-flex items-center gap-2 backdrop-blur-xl bg-white/70 border-2 border-green-200/50 rounded-full px-6 py-3 mb-8 shadow-lg shadow-green-500/20 hover:shadow-green-500/40 transition-all duration-500">
               <Sparkles className="w-5 h-5 text-green-500" />
