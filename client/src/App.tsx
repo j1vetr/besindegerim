@@ -14,7 +14,7 @@ import { NotFoundPage } from "@/pages/NotFoundPage";
 
 function HomePageWrapper() {
   const { data: categoryGroups = [] } = useQuery({ queryKey: ["/api/category-groups"] });
-  const { data: popularResponse } = useQuery({ queryKey: ["/api/random?count=8"] });
+  const { data: popularResponse } = useQuery({ queryKey: ["/api/random", { count: 8 }] });
   
   return <HomePage 
     categoryGroups={categoryGroups} 
@@ -71,7 +71,7 @@ function SearchResultsWrapper() {
   const query = new URLSearchParams(search).get("q") || "";
   const { data: categoryGroups = [] } = useQuery({ queryKey: ["/api/category-groups"] });
   const { data: searchData, isLoading } = useQuery({ 
-    queryKey: [`/api/foods/search?q=${encodeURIComponent(query)}`],
+    queryKey: ["/api/foods/search", { q: query }],
     enabled: query.length >= 2
   });
   

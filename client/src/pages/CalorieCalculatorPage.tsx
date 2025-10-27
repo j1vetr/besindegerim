@@ -14,19 +14,6 @@ interface CalorieCalculatorPageProps {
   currentPath?: string;
 }
 
-interface CalorieCalculatorResult {
-  bmr: number;
-  tdee: number;
-  targetCalories: number;
-  calorieChange: number;
-  protein: number;
-  carbs: number;
-  fat: number;
-  proteinPercent: number;
-  carbsPercent: number;
-  fatPercent: number;
-}
-
 export default function CalorieCalculatorPage({ categoryGroups, currentPath }: CalorieCalculatorPageProps) {
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
@@ -34,7 +21,7 @@ export default function CalorieCalculatorPage({ categoryGroups, currentPath }: C
   const [weight, setWeight] = useState("");
   const [activity, setActivity] = useState("");
   const [goal, setGoal] = useState("");
-  const [results, setResults] = useState<CalorieCalculatorResult | null>(null);
+  const [results, setResults] = useState<any>(null);
 
   const calculateCalories = () => {
     if (!age || !gender || !height || !weight || !activity || !goal) return;
