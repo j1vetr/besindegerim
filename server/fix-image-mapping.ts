@@ -33,53 +33,143 @@ function turkishToSlug(text: string): string {
     .replace(/[^a-z0-9-]/g, "");
 }
 
-// Manuel eşleştirme tablosu - bilinen sorunlu eşleştirmeler
+// Manuel eşleştirme tablosu - Türkçe slug → İngilizce dosya base name (hash olmadan)
 const manualMappings: Record<string, string> = {
-  // İçecekler
-  "kola": "cola-can",
-  "fanta": "orange-soda",
-  "sprite": "lemon-lime-soda",
-  "gazoz": "sparkling-water",
-  "soda": "sparkling-water",
-  
-  // Ekmek & Unlu Mamuller
-  "ekmek": "white-bread",
-  "beyaz-ekmek": "white-bread",
-  "tam-tahilli-ekmek": "whole-wheat-bread",
+  // Meyveler
+  "kayisi": "fresh-apricots",
+  "avokado": "fresh-avocado",
+  "bogurtlen": "fresh-blackberries",
+  "yaban-mersini": "fresh-blueberries",
+  "kavun": "fresh-cantaloupe-melon",
+  "kizilcik": "fresh-cranberries",
+  "i-ncir": "fresh-figs",
+  "greyfurt": "fresh-grapefruit",
+  "uzum": "fresh-grapes",
+  "kivi": "fresh-green-kiwifruit",
+  "mango": "fresh-mango",
+  "seftali": "fresh-peach",
+  "ananas": "fresh-pineapple",
+  "erik": "fresh-plums",
+  "nar": "fresh-pomegranate",
+  "cilek": "fresh-strawberries",
+  "kiraz": "fresh-sweet-cherries",
+  "karpuz": "fresh-watermelon-slice",
+  "kuru-kayisi": "dried-apricots",
+  "kuru-i-ncir": "dried-figs",
+  "hurma": "medjool-dates",
+  "elma-suyu": "apple-juice-glass",
+  "portakal-suyu": "orange-juice-glass",
+  "kayisi-receli": "apricot-jam-jar",
+  "cilek-receli": "strawberry-jam-jar",
   
   // Sebzeler
-  "domates": "fresh-tomato",
+  "ceri-domates": "cherry-tomatoes",
+  "misir": "fresh-corn-cob",
   "domates-suyu": "tomato-juice-glass",
-  "salatalik": "fresh-cucumber",
-  "patlican": "fresh-eggplant",
-  "biber": "fresh-bell-pepper",
-  "sogan": "fresh-onion",
-  "sarimsak": "fresh-garlic",
-  "havuc": "fresh-carrot",
-  "ispanak": "fresh-spinach",
-  "brokoli": "fresh-broccoli",
-  "karnibahar": "fresh-cauliflower",
-  "kabak": "fresh-zucchini",
+  "mantar-beyaz": "white-mushrooms",
+  "mantar-shiitake": "shiitake-mushrooms",
+  "marul-romaine": "romaine-lettuce",
   
-  // Meyveler
-  "elma": "fresh-apple",
-  "portakal": "fresh-orange",
-  "muz": "fresh-banana",
-  "armut": "fresh-pear",
+  // Deniz Ürünleri
+  "hamsi": "fresh-anchovy-fish",
+  "alabalik": "fried-trout-fish",
+  "konserve-ton-baligi": "canned-tuna-fish",
+  "morina-baligi": "cod-fish",
+  "yengec": "fresh-crab",
+  "istakoz": "fresh-lobster",
+  "midye": "fresh-mussels",
+  "ahtapot": "fresh-octopus",
+  "i-stiridye": "fresh-oysters",
+  "kalamar": "fresh-squid",
+  "uskumru": "mackerel-fish",
+  "somon-baligi": "raw-salmon-fish",
+  "levrek": "raw-sea-bass",
+  "karides": "raw-shrimp",
+  "ton-baligi": "raw-tuna-fish",
+  "sardalya": "sardines-fish",
+  "cipura": "sea-bream-fish",
+  
+  // Et Ürünleri
+  "dana-cigeri": "beef-liver",
+  "sosis": "beef-sausage",
+  "dana-bonfile": "beef-tenderloin",
+  "dana-jambon": "bologna-ham",
+  "bacon": "cooked-beef-bacon",
+  "salam": "cooked-beef-salami",
+  "kiyma-dana": "ground-beef",
+  "kuzu-kiyma": "ground-lamb",
+  "tavuk-cigeri": "raw-chicken-liver",
+  "tavuk-kanat": "raw-chicken-wings",
+  "kuzu-eti": "raw-lamb-meat",
+  "dana-antrikot": "ribeye-steak",
+  "jambon": "sliced-restaurant-ham",
+  "pastirma": "pastrami-deli-meat",
   
   // Süt Ürünleri
-  "sut": "whole-milk-glass",
+  "ayran": "ayran-yogurt-drink",
+  "tereyagi": "butter-block",
+  "kasar-peyniri": "cheddar-cheese-slices",
+  "dondurma-cikolatali": "chocolate-ice-cream",
+  "lor-peyniri": "cottage-cheese",
+  "krem-peynir": "cream-cheese-spread",
+  "yagsiz-sut": "fat-free-skim-milk",
+  "beyaz-peynir": "feta-cheese",
+  "keci-peyniri": "goat-cheese",
+  "suzme-yogurt": "greek-yogurt",
+  "az-yagli-sut": "low-fat-milk",
+  "mozzarella": "mozzarella-cheese",
+  "yogurt-sade": "plain-nonfat-yogurt",
+  "dondurma-vanilyali": "vanilla-ice-cream",
   "tam-yagli-sut": "whole-milk-glass",
-  "yogurt": "plain-nonfat-yogurt",
+  "kefir": "kefir-yogurt-drink",
   
-  // Et & Balık
-  "tavuk": "raw-chicken-breast",
-  "tavuk-gogsu": "raw-chicken-breast",
-  "dana-eti": "ground-beef",
+  // Tahıllar & Bakliyat
+  "amarant": "amaranth-grains-bowl",
+  "esmer-pirinc": "brown-rice-grains",
+  "nohut-unu": "chickpea-flour-powder",
+  "misir-unu": "corn-flour-powder",
+  "barbunya": "cranberry-borlotti-beans",
+  "nohut": "dried-chickpeas-bowl",
+  "bakla-kuru": "dried-fava-beans",
+  "noodle-kuru": "dried-rice-noodles",
+  "kirmizi-mercimek": "dried-split-peas",
+  "jasmine-pirinc": "jasmine-rice-grains",
+  "pinto-fasulye": "pinto-beans-bowl",
+  "soya-unu": "soy-flour-powder",
+  "misir-taneni": "sweet-corn-kernels",
   
   // Yumurta
-  "yumurta": "whole-raw-egg",
   "yumurta-cig": "whole-raw-egg",
+  "yumurta-aki": "raw-egg-white",
+  "yumurta-sarisi": "raw-egg-yolk",
+  
+  // Fırın Ürünleri
+  "waffle": "belgian-waffle",
+  "muffin-yaban-mersinli": "blueberry-muffin",
+  "kraker": "crispy-crackers-stacked",
+  "lazanya": "lasagna-dish",
+  "pankek": "pancake-stack",
+  "makarna-spagetti": "spaghetti-pasta",
+  "tam-tahilli-ekmek": "whole-wheat-bread",
+  
+  // Yağlar & Tohumlar
+  "hindistan-cevizi-yagi": "coconut-oil-jar",
+  "hindistan-cevizi": "raw-coconut-meat",
+  "brezilya-fistigi": "brazil-nuts-photo",
+  "kaju": "cashew-nuts-photo",
+  "chia-tohumu": "chia-seeds-photo",
+  "ceviz": "english-walnuts-photo",
+  "keten-tohumu-yagi": "flaxseed-oil-photo",
+  "cam-fistigi": "pine-nuts-photo",
+  "antep-fistigi": "pistachio-nuts-photo",
+  "badem": "raw-almonds-photo",
+  "findik": "raw-hazelnuts-photo",
+  "susam": "sesame-seeds-photo",
+  "aycicek-tohumu": "sunflower-seeds-photo",
+  
+  // İçecekler
+  "sutlu-cikolata": "chocolate-almond-milk",
+  "elma-sirkesi": "apple-cider-vinegar",
 };
 
 // Benzerlik skorlama - Levenshtein mesafesi basit versiyonu
@@ -175,7 +265,7 @@ async function fixImageMapping() {
     if (!matchedImage) {
       let bestMatch: { file: string; score: number } | null = null;
       
-      for (const [imgSlug, imgFile] of imageSlugMap.entries()) {
+      for (const [imgSlug, imgFile] of Array.from(imageSlugMap.entries())) {
         const score = similarity(foodSlug, imgSlug);
         if (score > 0.7 && (!bestMatch || score > bestMatch.score)) {
           bestMatch = { file: imgFile, score };
