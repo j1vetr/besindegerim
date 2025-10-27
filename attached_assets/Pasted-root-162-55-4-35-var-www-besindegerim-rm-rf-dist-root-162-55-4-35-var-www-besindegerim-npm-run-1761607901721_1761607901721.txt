@@ -1,0 +1,67 @@
+root@162-55-4-35:/var/www/besindegerim# rm -rf dist
+root@162-55-4-35:/var/www/besindegerim# npm run build
+
+> rest-express@1.0.0 build
+> vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+
+vite v5.4.20 building for production...
+transforming (3) src/main.tsxBrowserslist: browsers data (caniuse-lite) is 12 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+A PostCSS plugin did not pass the `from` option to `postcss.parse`. This may cause imported assets to be incorrectly transformed. If you've recently added a PostCSS plugin that raised this warning, please contact the package author to fix the issue.
+✓ 1644 modules transformed.
+../dist/public/index.html                   2.06 kB │ gzip:  0.70 kB
+../dist/public/assets/index-DM6Thzju.css  131.38 kB │ gzip: 19.48 kB
+../dist/public/assets/index-XDM4LTy4.js   304.90 kB │ gzip: 87.84 kB
+✓ built in 3.61s
+
+  dist/index.js  61.2kb
+
+⚡ Done in 5ms
+root@162-55-4-35:/var/www/besindegerim# grep -A 15 "registerSSRRoutes(app2)" dist/index.js | head -20
+function registerSSRRoutes(app2) {
+  const templatePath = path.resolve(process.cwd(), "dist", "public", "index.html");
+  app2.get("/", async (req, res) => {
+    try {
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups = cache.get(categoryGroupsCacheKey);
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 36e5);
+      }
+      const popularCacheKey = "popular_foods";
+      let foods2 = cache.get(popularCacheKey);
+      if (!foods2) {
+        foods2 = await storage.getPopularFoods(12);
+        cache.set(popularCacheKey, foods2, 6e5);
+      }
+--
+    registerSSRRoutes(app2);
+  }
+  const httpServer = createServer(app2);
+root@162-55-4-35:/var/www/besindegerim# pm2 restart besindegerim
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [besindegerim](ids: [ 77 ])
+[PM2] [besindegerim](77) ✓
+┌────┬────────────────────┬──────────┬──────┬───────────┬──────────┬──────────┐
+│ id │ name               │ mode     │ ↺    │ status    │ cpu      │ memory   │
+├────┼────────────────────┼──────────┼──────┼───────────┼──────────┼──────────┤
+│ 77 │ besindegerim       │ cluster  │ 3    │ online    │ 0%       │ 39.2mb   │
+│ 9  │ maison-nomade-con… │ fork     │ 2    │ online    │ 0%       │ 61.6mb   │
+│ 19 │ nasiloldu          │ fork     │ 18   │ online    │ 0%       │ 95.4mb   │
+│ 12 │ postakod           │ fork     │ 7    │ online    │ 0%       │ 105.1mb  │
+│ 0  │ watermarktoo-back… │ cluster  │ 0    │ online    │ 0%       │ 89.7mb   │
+│ 1  │ yosun-restaurant   │ fork     │ 785… │ online    │ 0%       │ 54.7mb   │
+└────┴────────────────────┴──────────┴──────┴───────────┴──────────┴──────────┘
+root@162-55-4-35:/var/www/besindegerim# curl -I http://localhost:1453/sitemap.xml
+HTTP/1.1 404 Not Found
+X-Powered-By: Express
+Content-Type: text/html; charset=utf-8
+Content-Length: 9
+ETag: W/"9-0gXL1ngzMqISxa6S1zx3F4wtLyg"
+Date: Mon, 27 Oct 2025 23:31:32 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+root@162-55-4-35:/var/www/besindegerim#
