@@ -40,9 +40,19 @@ function MobileMenuPanel({
         data-testid="mobile-menu-panel"
       >
         <div className="p-6">
-          <h2 className="text-xl font-bold text-green-700 mb-4">Kategoriler</h2>
+          <h2 className="text-xl font-bold text-green-700 mb-4">Menü</h2>
           
           <div className="space-y-2">
+            {/* Hesaplayıcılar Link */}
+            <a
+              href="/hesaplayicilar"
+              onClick={onClose}
+              className="block px-4 py-3 rounded-xl font-semibold bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg"
+              data-testid="link-mobile-calculators"
+            >
+              🧮 Hesaplayıcılar
+            </a>
+
             {/* Tümü Link */}
             <a
               href="/tum-gidalar"
@@ -142,6 +152,15 @@ export function Header({ categoryGroups = [], currentPath = "/" }: HeaderProps) 
         {/* Categories - Desktop Only Horizontal Scroll with Dropdowns */}
         <div className="hidden lg:block relative -mx-4 px-4 mt-3">
           <div className="flex items-center gap-2 overflow-x-auto overflow-y-visible pb-2 scrollbar-hide snap-x snap-mandatory">
+            {/* Hesaplayıcılar Link - Desktop */}
+            <a 
+              href="/hesaplayicilar" 
+              data-testid="link-calculators"
+              className="flex-shrink-0 snap-start whitespace-nowrap rounded-full px-5 py-2 text-sm font-bold transition-all duration-300 bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 shadow-lg border-2 border-green-500"
+            >
+              🧮 Hesaplayıcılar
+            </a>
+
             <a 
               href="/tum-gidalar" 
               data-testid="link-category-all"
