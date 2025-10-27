@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Search, ChevronDown, Menu, X } from "lucide-react";
+import { Search, Menu, X } from "lucide-react";
 import type { CategoryGroup } from "@shared/schema";
 import { categoryToSlug } from "@shared/utils";
 import { SearchAutocomplete } from "./SearchAutocomplete";
@@ -40,14 +40,14 @@ function MobileMenu({ categoryGroups, currentPath }: { categoryGroups: CategoryG
         <>
           {/* Backdrop */}
           <div 
-            className="fixed inset-0 bg-black/50 z-40"
+            className="fixed inset-0 bg-black/50 z-[55]"
             onClick={() => setIsOpen(false)}
             data-testid="mobile-menu-backdrop"
           />
           
-          {/* Menu Panel */}
+          {/* Menu Panel - Full height, left aligned */}
           <div 
-            className="fixed top-0 left-0 bottom-0 w-[280px] sm:w-[350px] bg-white shadow-2xl z-50 overflow-y-auto"
+            className="fixed top-0 left-0 bottom-0 w-full max-w-[320px] bg-white shadow-2xl z-[60] overflow-y-auto"
             data-testid="mobile-menu-panel"
           >
             <div className="p-6">
@@ -68,34 +68,17 @@ function MobileMenu({ categoryGroups, currentPath }: { categoryGroups: CategoryG
                   Tümü
                 </a>
 
-                {/* Category Groups */}
+                {/* Main Categories Only (no subcategories) */}
                 {categoryGroups.map((group) => (
-                  <div key={group.mainCategory} className="space-y-1">
-                    {/* Main Category */}
-                    <a
-                      href={`/kategori/${categoryToSlug(group.mainCategory)}`}
-                      onClick={() => setIsOpen(false)}
-                      className="block px-4 py-3 rounded-xl font-semibold bg-green-100 text-green-700 hover:bg-green-200 transition-colors"
-                      data-testid={`link-mobile-category-${group.mainCategory}`}
-                    >
-                      {group.mainCategory}
-                    </a>
-                    
-                    {/* Subcategories */}
-                    <div className="pl-4 space-y-1">
-                      {group.subcategories.map((subcategory) => (
-                        <a
-                          key={subcategory}
-                          href={`/kategori/${categoryToSlug(group.mainCategory)}/${categoryToSlug(subcategory)}`}
-                          onClick={() => setIsOpen(false)}
-                          className="block px-4 py-2 text-sm text-slate-700 hover:bg-green-50 hover:text-green-700 rounded-lg transition-colors"
-                          data-testid={`link-mobile-subcategory-${subcategory}`}
-                        >
-                          {subcategory}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
+                  <a
+                    key={group.mainCategory}
+                    href={`/kategori/${categoryToSlug(group.mainCategory)}`}
+                    onClick={() => setIsOpen(false)}
+                    className="block px-4 py-3 rounded-xl font-semibold bg-green-100 text-green-700 hover:bg-green-200 transition-colors"
+                    data-testid={`link-mobile-category-${group.mainCategory}`}
+                  >
+                    {group.mainCategory}
+                  </a>
                 ))}
               </div>
             </div>
@@ -169,41 +152,16 @@ export function Header({ categoryGroups = [], currentPath = "/" }: HeaderProps) 
             </a>
             
             {categoryGroups.map((group) => (
-              <div key={group.mainCategory} className="relative flex-shrink-0 snap-start category-dropdown-wrapper">
-                {/* Main Category Button/Link */}
-                <a 
-                  href={`/kategori/${categoryToSlug(group.mainCategory)}`}
-                  className="whitespace-nowrap rounded-full px-5 py-2 text-sm font-semibold transition-all duration-300 bg-green-100 text-green-700 hover:bg-green-200 border-2 border-green-200/50 flex items-center gap-1"
-                  data-testid={`button-category-${group.mainCategory}`}
-                >
-                  {group.mainCategory}
-                  <ChevronDown className="w-3 h-3" />
-                </a>
-                
-                {/* Dropdown Menu */}
-                <div className="dropdown-menu absolute left-0 top-full mt-2 hidden min-w-[200px] bg-white rounded-2xl shadow-xl border-2 border-green-200/50 overflow-hidden z-[100]">
-                  {/* Subcategory Links */}
-                  {group.subcategories.map((subcategory) => (
-                    <a
-                      key={subcategory}
-                      href={`/kategori/${categoryToSlug(group.mainCategory)}/${categoryToSlug(subcategory)}`}
-                      className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-green-50 hover:text-green-700 transition-colors"
-                      data-testid={`link-subcategory-${subcategory}`}
-                    >
-                      {subcategory}
-                    </a>
-                  ))}
-                </div>
-              </div>
+              <a 
+                key={group.mainCategory}
+                href={`/kategori/${categoryToSlug(group.mainCategory)}`}
+                className="flex-shrink-0 snap-start whitespace-nowrap rounded-full px-5 py-2 text-sm font-semibold transition-all duration-300 bg-green-100 text-green-700 hover:bg-green-200 border-2 border-green-200/50"
+                data-testid={`link-category-${group.mainCategory}`}
+              >
+                {group.mainCategory}
+              </a>
             ))}
           </div>
-          
-          {/* CSS for dropdown hover */}
-          <style>{`
-            .category-dropdown-wrapper:hover .dropdown-menu {
-              display: block;
-            }
-          `}</style>
         </div>
 
       </div>
