@@ -126,15 +126,15 @@ besindegerim.com, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tama
 │   │       ├── HomePage.tsx           # Ana sayfa (arama + popüler gıdalar)
 │   │       ├── FoodDetailPage.tsx     # Gıda detay sayfası
 │   │       └── NotFoundPage.tsx       # 404 sayfası
-│   └── index.html                     # HTML template (lang="tr")
+│   └── index.html                     # HTML template (placeholder meta tag'lerle)
 ├── server/
 │   ├── seo/
-│   │   └── meta-inject.ts             # SEO meta tag yönetimi
+│   │   └── meta-inject.ts             # SEO meta tag yönetimi (REPLACE strategy)
 │   ├── cache.ts                       # In-memory cache
-│   ├── db.ts                          # PostgreSQL bağlantısı
-│   ├── render.ts                      # SSR rendering logic
+│   ├── db.ts                          # PostgreSQL bağlantısı (standard pg driver - NO NEON!)
+│   ├── render.ts                      # SSR rendering logic (Pure HTML strings)
 │   ├── routes.ts                      # API routes
-│   ├── ssr.ts                         # SSR routes (/, /:slug, /robots.txt, /sitemap.xml)
+│   ├── ssr.ts                         # SSR routes (/, /:slug, /kategori/:slug, /robots.txt, /sitemap.xml)
 │   ├── storage.ts                     # Database storage layer
 │   ├── usda-client.ts                 # USDA API client
 │   ├── seed.ts                        # Database seed script
@@ -143,6 +143,7 @@ besindegerim.com, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tama
 │   └── fix-image-mapping.ts           # Yeni akıllı görsel eşleştirme sistemi (manuel mapping)
 ├── attached_assets/
 │   └── generated_images/              # AI-generated ve optimize edilmiş görseller (WebP)
+├── ecosystem.config.js                # PM2 config (production deployment)
 └── shared/
     └── schema.ts                      # Database schema (Drizzle ORM)
 ```
@@ -151,12 +152,13 @@ besindegerim.com, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tama
 
 - **Frontend**: React (SSR), Tailwind CSS
 - **Backend**: Express.js, Node.js
-- **Database**: PostgreSQL (Neon)
+- **Database**: PostgreSQL (standard `pg` driver - both Replit & Production)
 - **ORM**: Drizzle ORM
-- **API**: USDA FoodData Central, Pexels API
+- **API**: USDA FoodData Central
 - **Cache**: In-memory cache (process-based)
 - **Image Processing**: Sharp (PNG → WebP optimizasyon)
-- **AI Images**: OpenAI DALL-E 3 (generate_image_tool)
+- **AI Images**: OpenAI DALL-E 3 (326 professional food photos)
+- **Deployment**: PM2 (process manager), Nginx (reverse proxy), Ubuntu 22
 
 ## Ortam Değişkenleri
 
