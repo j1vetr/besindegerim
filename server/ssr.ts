@@ -10,6 +10,7 @@ import {
   renderFoodDetailPage,
   render404Page,
   renderAllFoodsPage,
+  renderCategoryPage,
 } from "./render";
 import {
   buildMetaForHome,
@@ -19,6 +20,7 @@ import {
 import { storage } from "./storage";
 import { cache } from "./cache";
 import type { Food, CategoryGroup } from "@shared/schema";
+import { findMainCategoryBySlug, findSubcategoryBySlug, categoryToSlug } from "@shared/utils";
 
 /**
  * HTML template'ini oku ve meta + body inject et
@@ -121,6 +123,109 @@ export function registerSSRRoutes(app: Express): void {
     }
   });
 
+  // Kategori sayfası: /kategori/:categorySlug/:subcategorySlug
+  app.get("/kategori/:categorySlug/:subcategorySlug", async (req: Request, res: Response) => {
+    try {
+      const { categorySlug, subcategorySlug } = req.params;
+
+      // Get category groups
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
+      }
+
+      // Find original category names from slugs
+      const mainCategory = findMainCategoryBySlug(categorySlug, categoryGroups);
+      const subcategory = findSubcategoryBySlug(subcategorySlug, categoryGroups);
+
+      if (!mainCategory || !subcategory) {
+        const renderResult = await render404Page(categoryGroups);
+        const meta = {
+          title: "Kategori Bulunamadı - besindegerim.com",
+          description: "Aradığınız kategori bulunamadı.",
+          keywords: "besin değerleri",
+          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${req.path}`,
+        };
+        return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+      }
+
+      // Get foods by subcategory
+      const cacheKey = `subcategory_${subcategory}`;
+      let foods: Food[] | undefined = cache.get<Food[]>(cacheKey);
+      if (!foods) {
+        foods = await storage.getFoodsBySubcategory(subcategory);
+        cache.set(cacheKey, foods, 3600000);
+      }
+
+      // Render
+      const renderResult = await renderCategoryPage(foods, categoryGroups, mainCategory, subcategory);
+      const meta = {
+        title: `${subcategory} - ${mainCategory} | besindegerim.com`,
+        description: `${subcategory} kategorisindeki gıdaların besin değerleri. ${foods.length} gıda bulundu.`,
+        keywords: `${subcategory}, ${mainCategory}, besin değerleri, kalori`,
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${req.path}`,
+      };
+
+      await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+    } catch (error) {
+      console.error("[SSR /kategori/:categorySlug/:subcategorySlug] Error:", error);
+      res.status(500).send("Server Error");
+    }
+  });
+
+  // Ana kategori sayfası: /kategori/:categorySlug
+  app.get("/kategori/:categorySlug", async (req: Request, res: Response) => {
+    try {
+      const { categorySlug } = req.params;
+
+      // Get category groups
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
+      }
+
+      // Find original category name from slug
+      const categoryName = findMainCategoryBySlug(categorySlug, categoryGroups);
+
+      if (!categoryName) {
+        const renderResult = await render404Page(categoryGroups);
+        const meta = {
+          title: "Kategori Bulunamadı - besindegerim.com",
+          description: "Aradığınız kategori bulunamadı.",
+          keywords: "besin değerleri",
+          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${req.path}`,
+        };
+        return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+      }
+
+      // Get foods by category
+      const cacheKey = `category_${categoryName}`;
+      let foods: Food[] | undefined = cache.get<Food[]>(cacheKey);
+      if (!foods) {
+        foods = await storage.getFoodsByCategory(categoryName);
+        cache.set(cacheKey, foods, 3600000);
+      }
+
+      // Render
+      const renderResult = await renderCategoryPage(foods, categoryGroups, categoryName);
+      const meta = {
+        title: `${categoryName} | besindegerim.com`,
+        description: `${categoryName} kategorisindeki gıdaların besin değerleri. ${foods.length} gıda bulundu.`,
+        keywords: `${categoryName}, besin değerleri, kalori`,
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${req.path}`,
+      };
+
+      await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+    } catch (error) {
+      console.error("[SSR /kategori/:categorySlug] Error:", error);
+      res.status(500).send("Server Error");
+    }
+  });
+
   // Gıda detay: /:slug (catch-all route - EN SONDA)
   app.get("/:slug", async (req: Request, res: Response) => {
     try {
@@ -132,6 +237,7 @@ export function registerSSRRoutes(app: Express): void {
         slug === "robots.txt" ||
         slug === "sitemap.xml" ||
         slug === "hesaplayicilar" ||
+        slug === "kategori" ||
         slug.startsWith("api")
       ) {
         return res.status(404).send("Not Found");

@@ -247,3 +247,61 @@ export async function renderAllFoodsPage(
 
   return { html, statusCode: 200 };
 }
+
+/**
+ * Kategori Sayfası SSR
+ */
+export async function renderCategoryPage(
+  foods: Food[],
+  categoryGroups: CategoryGroup[],
+  categoryName: string,
+  subcategoryName?: string
+): Promise<RenderResult> {
+  const title = subcategoryName 
+    ? `${subcategoryName} - ${categoryName}` 
+    : categoryName;
+
+  const foodsHTML = foods.map(food => `
+    <a href="/${food.slug}" class="group block rounded-lg border border-border bg-card p-4 hover:shadow-lg transition-all">
+      ${food.imageUrl ? `
+        <img 
+          src="${food.imageUrl}" 
+          alt="${food.name}"
+          class="w-full h-48 object-cover rounded-md mb-3"
+          loading="lazy"
+        />
+      ` : `
+        <div class="w-full h-48 bg-muted rounded-md mb-3 flex items-center justify-center">
+          <span class="text-4xl">🍽️</span>
+        </div>
+      `}
+      <h3 class="font-semibold text-lg mb-2">${food.name}</h3>
+      <p class="text-sm text-muted-foreground">${food.servingLabel || `${food.servingSize}g`}</p>
+      <p class="text-2xl font-bold text-green-600 mt-2">${Math.round(parseFloat(food.calories))} kcal</p>
+    </a>
+  `).join('');
+
+  const html = `
+    ${renderHeader(categoryGroups)}
+    <main class="min-h-screen py-12">
+      <div class="container mx-auto px-4">
+        <h1 class="text-4xl font-bold mb-8">${title}</h1>
+        ${foods.length > 0 ? `
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            ${foodsHTML}
+          </div>
+        ` : `
+          <div class="text-center py-12">
+            <p class="text-xl text-muted-foreground">Bu kategoride henüz gıda bulunmuyor.</p>
+            <a href="/" class="inline-flex items-center gap-2 px-6 py-3 mt-6 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors">
+              Ana Sayfaya Dön
+            </a>
+          </div>
+        `}
+      </div>
+    </main>
+    ${renderFooter()}
+  `;
+
+  return { html, statusCode: 200 };
+}
