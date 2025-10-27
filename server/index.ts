@@ -101,18 +101,18 @@ app.use((req, res, next) => {
     // 2️⃣ SONRA: Vite middleware (Catch-all SPA routing)
     await setupVite(app, server);
   } else {
-    // Production Mode: Static → SSR
+    // Production Mode: SSR → Static
     const { registerSSRRoutes } = await import("./ssr");
     const distPath = path.resolve(process.cwd(), "dist", "public");
     
-    // 1️⃣ ÖNCE: Serve static assets (CSS, JS, images)
+    // 1️⃣ ÖNCE: SSR routes (sitemap.xml, robots.txt, dynamic pages)
+    registerSSRRoutes(app);
+    
+    // 2️⃣ SONRA: Serve static assets (CSS, JS, images) - catch-all için
     app.use(express.static(distPath, {
       maxAge: "1y",
       immutable: true,
     }));
-    
-    // 2️⃣ SONRA: SSR routes (catch-all HTML routes)
-    registerSSRRoutes(app);
   }
 
   // ALWAYS serve the app on the port specified in the environment variable PORT
