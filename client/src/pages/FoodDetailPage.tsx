@@ -490,7 +490,7 @@ export function FoodDetailPage({ food, alternatives, categoryGroups, currentPath
           <a
             href="/"
             className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#22c55e] to-[#16a34a] text-white font-bold rounded-2xl hover:shadow-2xl active:scale-95 transition-all shadow-lg"
-            data-testid="link-home"
+            data-testid="link-back-home"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />

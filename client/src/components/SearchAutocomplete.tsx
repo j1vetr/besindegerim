@@ -80,8 +80,6 @@ export function SearchAutocomplete({
       try {
         const response = await fetch(`/api/foods/search?q=${encodeURIComponent(query)}`);
         const data = await response.json();
-        console.log("Search API response:", data); // DEBUG
-        console.log("Search results count:", data.foods?.length); // DEBUG
         setResults(data.foods || []);
         setShowResults(true);
       } catch (error) {

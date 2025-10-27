@@ -151,6 +151,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   /**
+   * API: Search foods in local database
+   * GET /api/foods/search?q=query
+   */
+  app.get("/api/foods/search", async (req, res) => {
+    try {
+      const query = req.query.q as string;
+      
+      if (!query || query.length < 2) {
+        return res.json({ foods: [] });
+      }
+
+      // Search in local database
+      const foods = await storage.searchFoods(query, 8);
+      res.json({ foods });
+    } catch (error) {
+      console.error("Foods Search API Error:", error);
+      res.status(500).json({ error: "Failed to search foods" });
+    }
+  });
+
+  /**
    * API: Get food by slug
    * GET /api/foods/:slug
    */
