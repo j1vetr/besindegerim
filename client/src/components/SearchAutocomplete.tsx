@@ -21,8 +21,8 @@ export function SearchAutocomplete({
   const [showResults, setShowResults] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   
-  // Animated placeholder with random food names
-  const [animatedPlaceholder, setAnimatedPlaceholder] = useState("Ara... (ör: domates)");
+  // Typing effect placeholder with random food names
+  const [animatedPlaceholder, setAnimatedPlaceholder] = useState("Ara...");
   const [placeholderFoods, setPlaceholderFoods] = useState<string[]>([]);
 
   // Fetch random foods for placeholder animation
@@ -43,17 +43,58 @@ export function SearchAutocomplete({
     fetchRandomFoods();
   }, []);
 
-  // Animate placeholder with random food names
+  // Typing effect animation for placeholder
   useEffect(() => {
     if (placeholderFoods.length === 0 || query.length > 0) return;
 
-    let currentIndex = 0;
-    const interval = setInterval(() => {
-      currentIndex = (currentIndex + 1) % placeholderFoods.length;
-      setAnimatedPlaceholder(`Ara... (ör: ${placeholderFoods[currentIndex]})`);
-    }, 3000); // Change every 3 seconds
+    let currentFoodIndex = 0;
+    let currentCharIndex = 0;
+    let isDeleting = false;
+    let timeoutId: NodeJS.Timeout;
 
-    return () => clearInterval(interval);
+    const typeEffect = () => {
+      const currentFood = placeholderFoods[currentFoodIndex];
+      const prefix = "Ara... (ör: ";
+      const suffix = ")";
+
+      if (!isDeleting) {
+        // Typing
+        currentCharIndex++;
+        const displayText = currentFood.substring(0, currentCharIndex);
+        setAnimatedPlaceholder(prefix + displayText + suffix);
+
+        if (currentCharIndex === currentFood.length) {
+          // Wait before deleting
+          timeoutId = setTimeout(() => {
+            isDeleting = true;
+            typeEffect();
+          }, 1500);
+        } else {
+          // Continue typing
+          timeoutId = setTimeout(typeEffect, 100);
+        }
+      } else {
+        // Deleting
+        currentCharIndex--;
+        const displayText = currentFood.substring(0, currentCharIndex);
+        setAnimatedPlaceholder(prefix + displayText + suffix);
+
+        if (currentCharIndex === 0) {
+          // Move to next food
+          isDeleting = false;
+          currentFoodIndex = (currentFoodIndex + 1) % placeholderFoods.length;
+          timeoutId = setTimeout(typeEffect, 500);
+        } else {
+          // Continue deleting
+          timeoutId = setTimeout(typeEffect, 50);
+        }
+      }
+    };
+
+    // Start animation
+    timeoutId = setTimeout(typeEffect, 500);
+
+    return () => clearTimeout(timeoutId);
   }, [placeholderFoods, query]);
 
   // Close dropdown when clicking outside
