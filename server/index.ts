@@ -1,8 +1,18 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import path from "path";
 
 const app = express();
+
+// Serve attached_assets as static files with cache headers
+app.use("/attached_assets", express.static(path.join(process.cwd(), "attached_assets"), {
+  maxAge: "1y",
+  immutable: true,
+  setHeaders: (res) => {
+    res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+  }
+}));
 
 declare module 'http' {
   interface IncomingMessage {
