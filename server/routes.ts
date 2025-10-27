@@ -311,7 +311,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Register SSR routes only in production (must be last to catch all non-API routes)
   // In development, Vite dev server handles all page rendering
-  if (app.get("env") !== "development") {
+  if (process.env.NODE_ENV === "production") {
     registerSSRRoutes(app);
   }
 
