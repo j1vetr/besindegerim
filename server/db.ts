@@ -11,11 +11,11 @@ let pool: any;
 
 if (isReplit) {
   // Replit: Neon WebSocket driver
-  const { Pool: NeonPool, neonConfig } = require('@neondatabase/serverless');
-  const ws = require('ws');
-  const { drizzle: neonDrizzle } = require('drizzle-orm/neon-serverless');
+  const { Pool: NeonPool, neonConfig } = await import('@neondatabase/serverless');
+  const ws = await import('ws');
+  const { drizzle: neonDrizzle } = await import('drizzle-orm/neon-serverless');
   
-  neonConfig.webSocketConstructor = ws;
+  neonConfig.webSocketConstructor = ws.default || ws;
   
   if (!process.env.DATABASE_URL) {
     throw new Error("DATABASE_URL must be set. Did you forget to provision a database?");
@@ -27,14 +27,14 @@ if (isReplit) {
   console.log("[DB] Using Neon WebSocket driver (Replit)");
 } else {
   // Production: Standard pg driver
-  const pg = require('pg');
-  const { drizzle: pgDrizzle } = require('drizzle-orm/node-postgres');
+  const pg = await import('pg');
+  const { drizzle: pgDrizzle } = await import('drizzle-orm/node-postgres');
   
   if (!process.env.DATABASE_URL) {
     throw new Error("DATABASE_URL must be set. Check your .env file.");
   }
   
-  pool = new pg.Pool({ 
+  pool = new pg.default.Pool({ 
     connectionString: process.env.DATABASE_URL,
     // Local PostgreSQL için SSL kapalı
     ssl: false
