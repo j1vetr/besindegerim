@@ -8,7 +8,10 @@ interface FoodCardProps {
 }
 
 export function FoodCard({ food, compact = false }: FoodCardProps) {
-  const imageUrl = food.imageUrl || "https://via.placeholder.com/300";
+  // Ensure absolute path for images
+  const imageUrl = food.imageUrl 
+    ? (food.imageUrl.startsWith('/') ? food.imageUrl : `/${food.imageUrl}`)
+    : "https://via.placeholder.com/300";
 
   if (compact) {
     // Compact mode: horizontal layout - light futuristic

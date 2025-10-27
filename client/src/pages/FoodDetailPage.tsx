@@ -16,6 +16,11 @@ interface FoodDetailPageProps {
 }
 
 export function FoodDetailPage({ food, alternatives, categoryGroups, currentPath }: FoodDetailPageProps) {
+  // Ensure absolute path for image
+  const imageUrl = food.imageUrl 
+    ? (food.imageUrl.startsWith('/') ? food.imageUrl : `/${food.imageUrl}`)
+    : null;
+
   // Calculate macro percentages for visual bars
   const totalMacros = Number(food.protein || 0) + Number(food.carbs || 0) + Number(food.fat || 0);
   const proteinPercent = totalMacros > 0 ? (Number(food.protein || 0) / totalMacros) * 100 : 0;
@@ -29,10 +34,10 @@ export function FoodDetailPage({ food, alternatives, categoryGroups, currentPath
         {/* Hero Section - Stunning Visual with Image */}
         <section className="relative min-h-[60vh] md:min-h-[70vh] flex items-center overflow-hidden bg-gradient-to-br from-[#22c55e] via-[#16a34a] to-[#15803d]">
           {/* Background Image with Overlay */}
-          {food.imageUrl && (
+          {imageUrl && (
             <div className="absolute inset-0 hidden md:block">
               <img
-                src={food.imageUrl}
+                src={imageUrl}
                 alt={food.name}
                 className="w-full h-full object-cover opacity-20"
                 data-testid="img-food-detail-bg"
@@ -45,10 +50,10 @@ export function FoodDetailPage({ food, alternatives, categoryGroups, currentPath
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
               {/* Left: Food Image Card */}
               <div className="order-2 lg:order-1">
-                {food.imageUrl ? (
+                {imageUrl ? (
                   <div className="relative overflow-hidden rounded-3xl shadow-2xl group border-4 border-white/30 backdrop-blur-sm">
                     <img
-                      src={food.imageUrl}
+                      src={imageUrl}
                       alt={food.name}
                       className="w-full h-[400px] md:h-[500px] object-cover group-hover:scale-105 transition-transform duration-500"
                       data-testid="img-food-detail"

@@ -122,7 +122,11 @@ export function SearchAutocomplete({
               {/* Food Image */}
               <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-green-100 to-emerald-100 rounded-xl overflow-hidden">
                 <img
-                  src={food.imageUrl || "https://via.placeholder.com/64"}
+                  src={
+                    food.imageUrl 
+                      ? (food.imageUrl.startsWith('/') ? food.imageUrl : `/${food.imageUrl}`)
+                      : "https://via.placeholder.com/64"
+                  }
                   alt={food.name}
                   className="w-full h-full object-cover"
                   loading="lazy"
