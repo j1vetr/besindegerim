@@ -174,10 +174,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   /**
    * API: Get food by slug
    * GET /api/foods/:slug
+   * 
+   * GUARD: Skip non-food slugs (sitemap.xml, robots.txt, etc.)
    */
-  app.get("/api/foods/:slug", async (req, res) => {
+  app.get("/api/foods/:slug", async (req, res, next) => {
     try {
       const { slug } = req.params;
+      
+      // Guard: Skip sitemap.xml, robots.txt, and other non-food slugs
+      if (slug.includes('.') || slug === 'sitemap' || slug === 'robots') {
+        return next(); // Pass to SSR routes
+      }
+      
       const cacheKey = `food_${slug}`;
       let food = cache.get<any>(cacheKey);
 

@@ -60,6 +60,45 @@ app.use((req, res, next) => {
 import { registerSSRRoutes, handleSSRRequest } from "./ssr";
 
 (async () => {
+  // Always register sitemap.xml and robots.txt routes (both dev and prod)
+  // These MUST be before API routes to prevent /api/foods/:slug catching them
+  app.get("/sitemap.xml", async (_req: Request, res: Response) => {
+    try {
+      const { storage } = await import("./storage");
+      const foods = await storage.getAllFoods();
+      const baseUrl = process.env.BASE_URL || "https://besindegerim.com";
+      const urls = [
+        { loc: baseUrl, priority: "1.0" },
+        { loc: `${baseUrl}/tum-gidalar`, priority: "0.9" },
+        ...foods.map((food: any) => ({
+          loc: `${baseUrl}/${food.slug}`,
+          priority: "0.8",
+        })),
+      ];
+
+      const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map((url) => `  <url>
+    <loc>${url.loc}</loc>
+    <priority>${url.priority}</priority>
+  </url>`).join("\n")}
+</urlset>`;
+
+      res.type("application/xml").send(sitemap);
+    } catch (error) {
+      console.error("[sitemap.xml] Error:", error);
+      res.status(500).send("Server Error");
+    }
+  });
+
+  app.get("/robots.txt", (_req: Request, res: Response) => {
+    const robotsTxt = `User-agent: *
+Allow: /
+
+Sitemap: ${process.env.BASE_URL || "https://besindegerim.com"}/sitemap.xml`;
+    res.type("text/plain").send(robotsTxt);
+  });
+
   // Production modda SSR routes'u API routes'tan ÖNCE register et
   if (process.env.NODE_ENV !== "development") {
     // Production Mode: SSR routes FIRST (prevent /api/foods/:slug catching sitemap/robots)
