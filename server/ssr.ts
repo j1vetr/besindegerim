@@ -20,23 +20,7 @@ import {
 import { storage } from "./storage";
 import { cache } from "./cache";
 import type { Food, CategoryGroup } from "@shared/schema";
-
-// Convert category name to URL-friendly slug
-function categoryToSlug(category: string): string {
-  return category
-    .toLowerCase()
-    .replace(/ğ/g, "g")
-    .replace(/ü/g, "u")
-    .replace(/ş/g, "s")
-    .replace(/ı/g, "i")
-    .replace(/ö/g, "o")
-    .replace(/ç/g, "c")
-    .replace(/\s+ve\s+/g, "-") // "ve" kelimesini "-" ile değiştir
-    .replace(/&/g, "") // "&" karakterini kaldır
-    .replace(/\s+/g, "-") // Boşlukları "-" ile değiştir
-    .replace(/-+/g, "-") // Çift tire varsa tek tire yap
-    .replace(/^-|-$/g, ""); // Başta ve sonda tire varsa kaldır
-}
+import { categoryToSlug } from "@shared/utils";
 
 // Find original category name from slug
 function findCategoryBySlug(slug: string, categoryGroups: CategoryGroup[]): string | null {

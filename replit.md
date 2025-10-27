@@ -43,12 +43,13 @@ besindegerim.com, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tama
    - 2-4 alt kategori per ana kategori
    - Dropdown menü navigasyonu
    - **SEO-dostu slug URL'leri**: /kategori/hayvansal-urunler/et-tavuk
-     - Türkçe karakterler ASCII'ye dönüştürülür (ğ→g, ü→u, ş→s, ı→i, ö→o, ç→c)
+     - Türkçe karakterler ASCII'ye dönüştürülür (ğ→g, ü→u, ş→s, ı→i, ö→o, ç→c, İ→i)
+     - Unicode normalization + combining diacritics kaldırma
      - "ve" kelimesi tire ile değiştirilir
      - "&" karakteri kaldırılır
-     - Encoded URL'ler yerine temiz slug'lar (%C3%9C yerine "u")
+     - Encoded URL'ler yerine temamen ASCII slug'lar (%C3%9C yerine "u")
    - SSR route'ları: /kategori/:categorySlug ve /kategori/:categorySlug/:subcategorySlug
-   - categoryToSlug() fonksiyonu: Header.tsx ve server/ssr.ts
+   - categoryToSlug() fonksiyonu: shared/utils.ts (centralized)
    - findCategoryBySlug(): Slug'dan orijinal kategori adını bulur
    - Otomatik kategorilendirme (251/266 gıda)
    - CategoryGroup type shared/schema.ts'den export ediliyor
@@ -57,13 +58,16 @@ besindegerim.com, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tama
    - Yeni hero section: "Besin Değeri Anında" kısa başlık
    - Gradient hero arka plan + CSS-only animasyonlar
    - Glassmorphic arama çubuğu
-   - Stats pills (14+ Gıda, Gerçek Porsiyon, USDA Verisi)
+   - Stats pills (266 Gıda, Gerçek Porsiyon, USDA Verisi)
    - Shadcn Card components ile modern value props
    - Alternating layout "Neden Besin Değerim?" bölümü
-   - Mobil öncelikli, responsive tasarım
+   - **Responsive Navigation:**
+     - Desktop (≥lg): Horizontal kategori scroll + hover dropdown menü
+     - Mobile (<lg): Hamburger menü (CSS-based slide-in panel)
+   - Logo responsive boyutları: h-14 (mobile) → h-16 (sm) → h-20 (lg)
+   - Kompakt arama çubuğu mobil için optimize
    - Yeşil gradient tema (from-[#22c55e] to-[#16a34a])
    - Touch-friendly controls
-   - Kategorize dropdown menü (horizontal scroll)
 
 8. **AI-Generated Görseller & Optimizasyon**
    - **326 AI-generated profesyonel ürün fotoğrafları (DALL-E 3)**
