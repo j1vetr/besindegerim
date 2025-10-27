@@ -70,20 +70,48 @@ app.use((req, res, next) => {
   });
 
   if (process.env.NODE_ENV === "development") {
+    // Dev Mode: SSR → Vite
+    
+    // 1️⃣ ÖNCE: SSR middleware (Bot detection)
+    app.use("*", async (req, res, next) => {
+      // API ve static dosyaları skip et → Vite'a bırak
+      if (
+        req.path.startsWith('/api/') || 
+        req.path.startsWith('/@') ||
+        req.path.startsWith('/src/') ||
+        req.path.match(/\.(js|css|png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|ttf|eot)$/)
+      ) {
+        return next(); // ⏩ Vite'a geç
+      }
+      
+      // Bot detection (basit user-agent check)
+      const userAgent = req.headers['user-agent'] || '';
+      const isBot = /bot|crawler|spider|crawling|googlebot|bingbot/i.test(userAgent);
+      
+      if (isBot) {
+        // 🤖 Bot ise SSR render → STOP
+        const { handleSSRRequest } = await import("./ssr");
+        return await handleSSRRequest(req, res);
+      }
+      
+      // 👤 Normal kullanıcı → next() → Vite SPA
+      next();
+    });
+    
     // 2️⃣ SONRA: Vite middleware (Catch-all SPA routing)
     await setupVite(app, server);
   } else {
-    // Production: SSR routes + Static files
+    // Production Mode: Static → SSR
     const { registerSSRRoutes } = await import("./ssr");
     const distPath = path.resolve(process.cwd(), "dist", "public");
     
-    // 1. Serve static assets (CSS, JS, images)
+    // 1️⃣ ÖNCE: Serve static assets (CSS, JS, images)
     app.use(express.static(distPath, {
       maxAge: "1y",
       immutable: true,
     }));
     
-    // 2. SSR routes (catch-all)
+    // 2️⃣ SONRA: SSR routes (catch-all HTML routes)
     registerSSRRoutes(app);
   }
 

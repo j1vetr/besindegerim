@@ -1,0 +1,165 @@
+1️⃣ server/index.ts (Middleware Sıralaması)
+Satır 87-117 → Development Mode:
+
+if (app.get("env") === "development") {
+  // ✅ ÖNCE SSR middleware
+  app.use("*", async (req, res, next) => {
+    const isCrawler = /* bot detection */;
+    
+    if (isCrawler) {
+      // 🤖 Bot → SSR render
+      return await renderHTMLWithMeta(req, res, clientTemplate);
+    }
+    
+    // 👤 Normal kullanıcı → Vite'a geç
+    next();
+  });
+  
+  // ✅ SONRA Vite middleware
+  await setupVite(app, server);
+}
+Satır 118-148 → Production Mode:
+
+else {
+  // ✅ ÖNCE static files
+  app.use(express.static(distPath));
+  
+  // ✅ SONRA SSR catch-all
+  app.use("*", async (req, res, next) => {
+    // Static dosyaları skip et
+    if (req.path.match(/\.(js|css|png)$/)) {
+      return next();
+    }
+    
+    // 📄 HTML route'ları SSR ile render et
+    await renderHTMLWithMeta(req, res, templatePath);
+  });
+}
+2️⃣ server/ssr.ts (SSR Orchestration)
+renderHTMLWithMeta() (Satır 24-131):
+
+export async function renderHTMLWithMeta(req, res, templatePath) {
+  // 1. URL'i parse et
+  const url = req.originalUrl.split("?")[0];
+  
+  // 2. Hangi sayfayı render edeceğine karar ver
+  if (url === "/") {
+    const result = await renderHomePage(); // ← Pure HTML string
+  } else if (url.match(/^\/nasil-oldu\/([^/]+)/)) {
+    const result = await renderPersonDetailPage(slug); // ← Pure HTML string
+  }
+  
+  // 3. Meta tag'leri oluştur
+  const meta = await generateMetaTags(url);
+  
+  // 4. HTML template'ini oku
+  let html = await fs.promises.readFile(templatePath, "utf-8");
+  
+  // 5. Meta tag'leri inject et (REPLACE strategy)
+  html = injectMetaTagsWithPlaceholders(html, meta);
+  
+  // 6. Body content'i inject et
+  html = html.replace(
+    '<div id="root"></div>',
+    `<div id="root">${renderedContent}</div>`
+  );
+  
+  // 7. Gönder
+  res.status(statusCode).send(html);
+}
+injectMetaTagsWithPlaceholders() (Satır 136-232):
+
+// REPLACE strategy (duplicate önler)
+result = result.replace(/<title>.*?<\/title>/, `<title>${meta.title}</title>`);
+result = result.replace(/<meta name="description"[^>]*>/, `<meta name="description" content="${meta.description}" />`);
+result = result.replace(/<meta property="og:title"[^>]*>/, `<meta property="og:title" content="${meta.title}" />`);
+3️⃣ server/render.ts (Pure HTML Rendering)
+renderHomePage() (Satır 112-180):
+
+export async function renderHomePage(): Promise<RenderResult> {
+  const stats = await storage.getStats();
+  const recentPersons = await storage.getRecentPersons(6);
+  
+  // ✅ Pure HTML string (React component değil!)
+  const html = `
+    <div class="container mx-auto px-4 py-8">
+      <h1 class="text-5xl font-bold">${stats.totalPersons}+ Ünlü</h1>
+      <div class="grid grid-cols-3 gap-6">
+        ${recentPersons.map(p => `
+          <article>
+            <img src="${p.imageUrl}" alt="${p.name}" />
+            <h3>${p.name}</h3>
+          </article>
+        `).join('')}
+      </div>
+    </div>
+    ${renderFooter()}
+  `;
+  
+  return { html, statusCode: 200 };
+}
+renderPersonDetailPage() (Satır 185-330+):
+
+export async function renderPersonDetailPage(slug): Promise<RenderResult> {
+  const person = await storage.getPersonBySlug(slug);
+  
+  if (!person) {
+    return { 
+      html: '<h1>404</h1>', 
+      statusCode: 404 
+    };
+  }
+  
+  // ✅ Pure HTML string
+  const html = `
+    <div class="container">
+      <h1>${person.name}</h1>
+      <img src="${person.imageUrl}" />
+      <p>${person.description}</p>
+    </div>
+    ${renderFooter()}
+  `;
+  
+  return { html, statusCode: 200 };
+}
+renderFooter() (Satır 17-107):
+
+// ✅ Reusable HTML component (helper function)
+function renderFooter(): string {
+  return `
+    <footer class="border-t bg-card">
+      <div class="container">
+        <p>&copy; ${new Date().getFullYear()} nasiloldu.net</p>
+      </div>
+    </footer>
+  `;
+}
+4️⃣ server/seo/meta-inject.ts (Meta Tag Generation)
+generateMetaTags() (Satır 24-314):
+
+export async function generateMetaTags(url: string): Promise<MetaTags | null> {
+  // Ana sayfa
+  if (url === '/') {
+    return {
+      title: 'Ünlü Kişiler Nasıl Öldü? | nasiloldu.net',
+      description: '236+ ünlü kişinin ölüm nedenleri...',
+      canonical: 'https://nasiloldu.net',
+      ogType: 'website',
+      keywords: 'ünlü ölümler, ...',
+      schema: { '@type': 'WebSite', ... }
+    };
+  }
+  
+  // Kişi detay
+  const personMatch = url.match(/^\/nasil-oldu\/([^/]+)/);
+  if (personMatch) {
+    const person = await db.query.persons.findFirst(...);
+    return {
+      title: `${person.name} Nasıl Öldü? | nasiloldu.net`,
+      description: generateDeathStory(person),
+      ogImage: person.imageUrl,
+      keywords: `${person.name} nasıl öldü, ...`,
+      schema: { '@type': 'Person', ... }
+    };
+  }
+}
