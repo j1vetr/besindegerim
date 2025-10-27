@@ -1,4 +1,5 @@
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
 import { type Food, type CategoryGroup } from "@shared/schema";
 import { FoodCard } from "@/components/FoodCard";
 import { SearchForm } from "@/components/SearchForm";
@@ -19,9 +20,15 @@ export default function HomePage({
   popularFoods = [],
   currentPath = "/"
 }: HomePageProps) {
-  // Use SSR-provided popularFoods (no client-side fetching needed)
-  const displayFoods = popularFoods;
-  const isLoading = false;
+  // Client-side data fetching for development mode (CSR)
+  // Only fetch if popularFoods prop is empty (not from SSR)
+  const { data: foodsData, isLoading: isFetching } = useQuery<{ items: Food[] }>({
+    queryKey: ['/api/foods'],
+    enabled: popularFoods.length === 0,
+  });
+
+  const displayFoods = popularFoods.length > 0 ? popularFoods : (foodsData?.items || []).slice(0, 8);
+  const isLoading = popularFoods.length === 0 && isFetching;
 
   return (
     <div className="min-h-screen bg-white">

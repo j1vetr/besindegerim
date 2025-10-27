@@ -4,7 +4,6 @@ import { renderToString } from "react-dom/server";
 import type { ReactElement } from "react";
 import { readFileSync } from "fs";
 import { join } from "path";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Read the compiled CSS for SSR
 let cssContent: string = "";
@@ -35,24 +34,7 @@ export function renderComponentToHTML(
   component: ReactElement,
   pageProps?: any
 ): string {
-  // Create a QueryClient for SSR
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: Infinity, // Prevent refetching during SSR
-        retry: false, // Don't retry failed queries during SSR
-      },
-    },
-  });
-
-  // Wrap component with QueryClientProvider for SSR
-  const wrappedComponent = React.createElement(
-    QueryClientProvider,
-    { client: queryClient },
-    component
-  );
-
-  const reactHtml = renderToString(wrappedComponent);
+  const reactHtml = renderToString(component);
   
   // Inject compiled CSS or dev server link
   const isDev = process.env.NODE_ENV !== "production";

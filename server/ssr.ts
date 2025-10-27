@@ -1,6 +1,5 @@
 // SSR Routes - Server-side rendering for all pages
 import type { Express, Request, Response } from "express";
-import React from "react";
 import HomePage from "../client/src/pages/HomePage";
 import AllFoodsPage from "../client/src/pages/AllFoodsPage";
 import { FoodDetailPage } from "../client/src/pages/FoodDetailPage";
@@ -8,6 +7,8 @@ import { NotFoundPage } from "../client/src/pages/NotFoundPage";
 import { SearchResultsPage } from "../client/src/pages/SearchResultsPage";
 import { CategoryPage } from "../client/src/pages/CategoryPage";
 import { LegalPage } from "../client/src/pages/LegalPage";
+import CalculatorsHubPage from "../client/src/pages/CalculatorsHubPage";
+import CalorieCalculatorPage from "../client/src/pages/CalorieCalculatorPage";
 import { renderComponentToHTML } from "./render";
 import {
   buildMetaForHome,
@@ -268,7 +269,7 @@ export function registerSSRRoutes(app: Express): void {
       // Render homepage component
       const pageProps = { popularFoods, categoryGroups, currentPath: req.path };
       const htmlBody = renderComponentToHTML(
-        React.createElement(HomePage, pageProps),
+        HomePage(pageProps),
         pageProps
       );
 
@@ -488,8 +489,98 @@ export function registerSSRRoutes(app: Express): void {
   });
 
 
-  // Calculators are handled by client-side routing (see App.tsx)
-  // No SSR needed for interactive calculators
+  // Calculators Hub Page
+  app.get("/hesaplayicilar", async (req: Request, res: Response) => {
+    try {
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
+      }
+
+      const htmlBody = renderComponentToHTML(
+        CalculatorsHubPage({ categoryGroups, currentPath: req.path })
+      );
+
+      const meta = {
+        title: "Beslenme Hesaplayıcıları - 7 Ücretsiz Araç | besindegerim.com",
+        description: "Günlük kalori, BMI, ideal kilo, protein, su ihtiyacı ve porsiyon çevirici. Bilimsel formüllerle desteklenen ücretsiz beslenme hesaplayıcıları.",
+        keywords: "kalori hesaplama, bmi hesaplama, günlük kalori ihtiyacı, protein hesaplama, makro hesaplama, tdee hesaplama",
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/hesaplayicilar`,
+      };
+
+      const jsonLd = [buildOrganizationJsonLd()];
+      const fullHTML = injectHead(htmlBody, meta, jsonLd);
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.send(fullHTML);
+    } catch (error) {
+      console.error("SSR Error (calculators hub):", error);
+      res.status(500).send("Server Error");
+    }
+  });
+
+  // Calorie Calculator Page
+  app.get("/hesaplayicilar/gunluk-kalori-ihtiyaci", async (req: Request, res: Response) => {
+    try {
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
+      }
+
+      const htmlBody = renderComponentToHTML(
+        CalorieCalculatorPage({ categoryGroups, currentPath: req.path })
+      );
+
+      const meta = {
+        title: "Günlük Kalori İhtiyacı Hesaplama | BMR, TDEE ve Makro Hesaplayıcı",
+        description: "Günlük kalori ihtiyacınızı hesaplayın. BMR, TDEE ve hedef bazlı kalori hesaplama. Protein, karbonhidrat ve yağ dağılımınızı öğrenin. Mifflin-St Jeor formülü.",
+        keywords: "günlük kalori ihtiyacı, bmr hesaplama, tdee hesaplama, makro hesaplama, kalori hesaplama, günlük kalori",
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/hesaplayicilar/gunluk-kalori-ihtiyaci`,
+      };
+
+      const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "Günde kaç kalori almalıyım?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "TDEE hesaplama ile başlayın. Kilo vermek için 300-750 kalori açık, kas kazanmak için 300-500 kalori fazla verin. Kadınlar minimum 1200, erkekler minimum 1500 kalori tüketmelidir."
+            }
+          },
+          {
+            "@type": "Question",
+            name: "BMR nedir?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "BMR (Basal Metabolic Rate), vücudunuzun dinlenme halindeyken yaklaşık 24 saatte yaktığı kalori miktarıdır. Nefes almak, kan pompalaması, hücre üretimi gibi temel yaşam fonksiyonları için gerekli enerjidir."
+            }
+          },
+          {
+            "@type": "Question",
+            name: "TDEE nasıl hesaplanır?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "TDEE, BMR'inizi aktivite seviyenizle çarparak bulunur. Aktivite çarpanları: Hareketsiz (1.2), Az Aktif (1.375), Orta Aktif (1.55), Çok Aktif (1.725), Aşırı Aktif (1.9)."
+            }
+          }
+        ]
+      };
+
+      const jsonLd = [buildOrganizationJsonLd(), faqJsonLd];
+      const fullHTML = injectHead(htmlBody, meta, jsonLd);
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.send(fullHTML);
+    } catch (error) {
+      console.error("SSR Error (calorie calculator):", error);
+      res.status(500).send("Server Error");
+    }
+  });
 
   // robots.txt
   app.get("/robots.txt", (req: Request, res: Response) => {
