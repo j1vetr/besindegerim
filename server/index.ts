@@ -56,6 +56,9 @@ app.use((req, res, next) => {
   next();
 });
 
+// Import SSR module at top level (prevent esbuild tree-shaking)
+import { registerSSRRoutes, handleSSRRequest } from "./ssr";
+
 (async () => {
   const server = await registerRoutes(app);
 
@@ -90,7 +93,6 @@ app.use((req, res, next) => {
       
       if (isBot) {
         // 🤖 Bot ise SSR render → STOP
-        const { handleSSRRequest } = await import("./ssr");
         return await handleSSRRequest(req, res);
       }
       
@@ -102,7 +104,6 @@ app.use((req, res, next) => {
     await setupVite(app, server);
   } else {
     // Production Mode: SSR → Static
-    const { registerSSRRoutes } = await import("./ssr");
     const distPath = path.resolve(process.cwd(), "dist", "public");
     
     // 1️⃣ ÖNCE: SSR routes (sitemap.xml, robots.txt, dynamic pages)
