@@ -1,356 +1,143 @@
-// SSR Routes - Server-side rendering for all pages
+/**
+ * SSR Routes - Server-side rendering
+ * Pure HTML rendering (React component yok)
+ */
 import type { Express, Request, Response } from "express";
-import HomePage from "../client/src/pages/HomePage";
-import AllFoodsPage from "../client/src/pages/AllFoodsPage";
-import { FoodDetailPage } from "../client/src/pages/FoodDetailPage";
-import { NotFoundPage } from "../client/src/pages/NotFoundPage";
-import { SearchResultsPage } from "../client/src/pages/SearchResultsPage";
-import { CategoryPage } from "../client/src/pages/CategoryPage";
-import { LegalPage } from "../client/src/pages/LegalPage";
-import CalculatorsHubPage from "../client/src/pages/CalculatorsHubPage";
-import CalorieCalculatorPage from "../client/src/pages/CalorieCalculatorPage";
-import { renderComponentToHTML } from "./render";
+import fs from "fs";
+import path from "path";
+import {
+  renderHomePage,
+  renderFoodDetailPage,
+  render404Page,
+  renderAllFoodsPage,
+} from "./render";
 import {
   buildMetaForHome,
   buildMetaForFood,
-  buildFoodJsonLd,
-  buildBreadcrumbJsonLd,
-  buildOrganizationJsonLd,
-  buildFAQJsonLd,
-  buildArticleJsonLd,
   injectHead,
 } from "./seo/meta-inject";
 import { storage } from "./storage";
 import { cache } from "./cache";
 import type { Food, CategoryGroup } from "@shared/schema";
-import { categoryToSlug } from "@shared/utils";
 
-// Find original category name from slug
-function findCategoryBySlug(slug: string, categoryGroups: CategoryGroup[]): string | null {
-  for (const group of categoryGroups) {
-    // Check main category
-    if (categoryToSlug(group.mainCategory) === slug) {
-      return group.mainCategory;
-    }
-    // Check subcategories
-    for (const sub of group.subcategories) {
-      if (categoryToSlug(sub) === slug) {
-        return sub;
-      }
-    }
+/**
+ * HTML template'ini oku ve meta + body inject et
+ */
+async function renderHTMLWithMeta(
+  req: Request,
+  res: Response,
+  templatePath: string,
+  renderResult: { html: string; statusCode: number },
+  meta: any
+) {
+  try {
+    let template = await fs.promises.readFile(templatePath, "utf-8");
+    
+    // Meta tag'leri inject et
+    template = injectHead(template, meta);
+    
+    // Body içeriğini inject et
+    template = template.replace(
+      '<div id="root"></div>',
+      `<div id="root">${renderResult.html}</div>`
+    );
+    
+    res.status(renderResult.statusCode).set({ "Content-Type": "text/html" }).send(template);
+  } catch (error) {
+    console.error("HTML render error:", error);
+    res.status(500).send("Server Error");
   }
-  return null;
 }
 
 /**
- * Register SSR routes
+ * SSR Route'larını kaydet
  */
 export function registerSSRRoutes(app: Express): void {
-  // Category routes - MUST come before /:slug catch-all route
-  app.get("/kategori/:category/:subcategory?", async (req: Request, res: Response) => {
-    try {
-      const { category: categorySlug, subcategory: subcategorySlug } = req.params;
-
-      // Get categories from cache
-      const categoryGroupsCacheKey = "all_categories";
-      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
-      if (!categoryGroups) {
-        categoryGroups = await storage.getCategoryGroups();
-        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
-      }
-
-      // Convert slugs to original category names
-      const category = findCategoryBySlug(categorySlug, categoryGroups);
-      const subcategory = subcategorySlug ? findCategoryBySlug(subcategorySlug, categoryGroups) : null;
-
-      // If category not found, show 404
-      if (!category) {
-        const htmlBody = renderComponentToHTML(NotFoundPage({ categoryGroups, currentPath: req.path }));
-        const meta = {
-          title: "Kategori Bulunamadı - besindegerim.com",
-          description: "Bu kategori bulunamadı.",
-          keywords: "kategori, besin değerleri",
-          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${req.path}`,
-        };
-        const fullHTML = injectHead(htmlBody, meta);
-        return res.status(404).send(fullHTML);
-      }
-
-      // Get foods based on category or subcategory
-      let foods: Food[];
-      let displayCategory: string;
-      
-      if (subcategorySlug && subcategory) {
-        // Get by subcategory
-        const cacheKey = `subcategory_${subcategory}`;
-        let cachedFoods = cache.get<Food[]>(cacheKey);
-        if (!cachedFoods) {
-          cachedFoods = await storage.getFoodsBySubcategory(subcategory, 100);
-          cache.set(cacheKey, cachedFoods, 3600000);
-        }
-        foods = cachedFoods;
-        displayCategory = subcategory;
-      } else {
-        // Get by main category
-        const cacheKey = `category_${category}`;
-        let cachedFoods = cache.get<Food[]>(cacheKey);
-        if (!cachedFoods) {
-          cachedFoods = await storage.getFoodsByCategory(category, 100);
-          cache.set(cacheKey, cachedFoods, 3600000);
-        }
-        foods = cachedFoods;
-        displayCategory = category;
-      }
-
-      // If no foods found, show 404
-      if (!foods || foods.length === 0) {
-        const htmlBody = renderComponentToHTML(NotFoundPage({ categoryGroups, currentPath: req.path }));
-        const meta = {
-          title: "Kategori Bulunamadı - besindegerim.com",
-          description: "Bu kategoride henüz gıda bulunmamaktadır.",
-          keywords: "kategori, besin değerleri",
-          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/kategori/${categorySlug}${subcategorySlug ? `/${subcategorySlug}` : ""}`,
-        };
-        const fullHTML = injectHead(htmlBody, meta);
-        return res.status(404).send(fullHTML);
-      }
-
-      // Render category page
-      const htmlBody = renderComponentToHTML(
-        CategoryPage({ 
-          category: displayCategory, 
-          foods, 
-          categoryGroups, 
-          currentPath: req.path 
-        })
-      );
-
-      // Build meta tags (use slugs for canonical URL)
-      const meta = {
-        title: `${displayCategory} Besin Değerleri - besindegerim.com`,
-        description: `${displayCategory} kategorisindeki gıdaların detaylı besin değerleri, kalori, protein, karbonhidrat ve yağ oranları.`,
-        keywords: `${displayCategory}, besin değeri, kalori, protein, karbonhidrat`,
-        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/kategori/${categorySlug}${subcategorySlug ? `/${subcategorySlug}` : ""}`,
-      };
-
-      const jsonLd = [buildOrganizationJsonLd()];
-
-      // Inject head and send response
-      const fullHTML = injectHead(htmlBody, meta, jsonLd);
-      res.setHeader("Content-Type", "text/html; charset=utf-8");
-      res.send(fullHTML);
-    } catch (error) {
-      console.error("SSR Error (category):", error);
-      res.status(500).send("Server Error");
-    }
-  });
-
-  // Legal pages routes - MUST come before /:slug catch-all route
-  const legalPages = [
-    "gizlilik-politikasi",
-    "kullanim-kosullari",
-    "kvkk",
-    "cerez-politikasi",
-    "hakkimizda",
-    "iletisim",
-  ];
-
-  legalPages.forEach((slug) => {
-    app.get(`/${slug}`, async (req: Request, res: Response) => {
-      try {
-        // Get categories from cache
-        const categoryGroupsCacheKey = "all_categories";
-        let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
-        if (!categoryGroups) {
-          categoryGroups = await storage.getCategoryGroups();
-          cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
-        }
-
-        // Render legal page
-        const htmlBody = renderComponentToHTML(LegalPage({ slug, categoryGroups, currentPath: req.path }));
-
-        // Title mapping
-        const titles: Record<string, string> = {
-          "gizlilik-politikasi": "Gizlilik Politikası",
-          "kullanim-kosullari": "Kullanım Koşulları",
-          "kvkk": "KVKK Aydınlatma Metni",
-          "cerez-politikasi": "Çerez Politikası",
-          "hakkimizda": "Hakkımızda",
-          "iletisim": "İletişim",
-        };
-
-        const meta = {
-          title: `${titles[slug]} | besindegerim.com`,
-          description: `besindegerim.com ${titles[slug]} sayfası.`,
-          keywords: `${titles[slug]}, besin değerleri`,
-          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/${slug}`,
-        };
-
-        const jsonLd = [buildOrganizationJsonLd()];
-
-        // Inject head and send response
-        const fullHTML = injectHead(htmlBody, meta, jsonLd);
-        res.setHeader("Content-Type", "text/html; charset=utf-8");
-        res.send(fullHTML);
-      } catch (error) {
-        console.error(`SSR Error (${slug}):`, error);
-        res.status(500).send("Server Error");
-      }
-    });
-  });
-
-  // Search results route
-  app.get("/ara", async (req: Request, res: Response) => {
-    try {
-      const query = (req.query.q as string) || "";
-
-      // If no query, redirect to homepage
-      if (!query) {
-        return res.redirect("/");
-      }
-
-      // Search in database
-      const results = await storage.searchFoods(query, 50);
-
-      // Get categories from cache
-      const categoryGroupsCacheKey = "all_categories";
-      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
-      if (!categoryGroups) {
-        categoryGroups = await storage.getCategoryGroups();
-        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
-      }
-
-      // Render search results page
-      const htmlBody = renderComponentToHTML(
-        SearchResultsPage({ query, results, categoryGroups, currentPath: req.path })
-      );
-
-      // Build meta tags for search
-      const meta = {
-        title: `"${query}" Arama Sonuçları - besindegerim.com`,
-        description: `${query} için besin değerleri arama sonuçları. ${results.length} gıda bulundu.`,
-        keywords: `${query}, kalori, besin değeri, arama`,
-        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/ara?q=${encodeURIComponent(query)}`,
-      };
-
-      const jsonLd = [buildOrganizationJsonLd()];
-
-      // Inject head and send response
-      const fullHTML = injectHead(htmlBody, meta, jsonLd);
-      res.setHeader("Content-Type", "text/html; charset=utf-8");
-      res.send(fullHTML);
-    } catch (error) {
-      console.error("SSR Error (search):", error);
-      res.status(500).send("Server Error");
-    }
-  });
-
-  // Homepage route
+  const templatePath = path.resolve(process.cwd(), "dist", "public", "index.html");
+  
+  // Ana sayfa: /
   app.get("/", async (req: Request, res: Response) => {
     try {
-      // Get popular foods from cache or database
-      const cacheKey = "popular_foods";
-      let popularFoods: Food[] | undefined = cache.get<Food[]>(cacheKey);
-
-      if (!popularFoods) {
-        popularFoods = await storage.getAllFoods(8); // Get 8 popular foods
-        cache.set(cacheKey, popularFoods, 600000); // Cache for 10 minutes
-      }
-
-      // Get categories from cache or database
+      // Get category groups
       const categoryGroupsCacheKey = "all_categories";
       let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
-
       if (!categoryGroups) {
         categoryGroups = await storage.getCategoryGroups();
-        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000); // Cache for 1 hour
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
       }
 
-      // Render homepage component
-      const pageProps = { popularFoods, categoryGroups, currentPath: req.path };
-      const htmlBody = renderComponentToHTML(
-        HomePage(pageProps),
-        pageProps
-      );
+      // Get popular foods
+      const popularCacheKey = "popular_foods";
+      let foods: Food[] | undefined = cache.get<Food[]>(popularCacheKey);
+      if (!foods) {
+        foods = await storage.getPopularFoods(12);
+        cache.set(popularCacheKey, foods, 600000);
+      }
 
-      // Build meta tags
+      // Render (foods guaranteed to exist)
+      const renderResult = await renderHomePage(foods || [], categoryGroups);
       const meta = buildMetaForHome();
-      const jsonLd = [buildOrganizationJsonLd()];
-
-      // Inject head and send response
-      const fullHTML = injectHead(htmlBody, meta, jsonLd);
-      res.setHeader("Content-Type", "text/html; charset=utf-8");
-      res.send(fullHTML);
+      
+      await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
     } catch (error) {
-      console.error("SSR Error (homepage):", error);
+      console.error("[SSR /] Error:", error);
       res.status(500).send("Server Error");
     }
   });
 
-  // All Foods page route
+  // Tüm gıdalar: /tum-gidalar
   app.get("/tum-gidalar", async (req: Request, res: Response) => {
     try {
       const page = parseInt(req.query.page as string) || 1;
       const limit = 30;
+      const offset = (page - 1) * limit;
 
-      // Get paginated foods
-      const result = await storage.getAllFoodsPaginated(page, limit);
-
-      // Get categories from cache
+      // Get category groups
       const categoryGroupsCacheKey = "all_categories";
       let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
-
       if (!categoryGroups) {
         categoryGroups = await storage.getCategoryGroups();
         cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
       }
 
-      // Render All Foods page
-      const pageProps = {
-        categoryGroups,
-        currentPath: req.path,
-        initialFoods: result.items,
-        initialPage: result.page,
-        initialTotalPages: result.totalPages,
-        initialTotal: result.total,
-      };
+      // Get all foods with pagination
+      const allFoods = await storage.getAllFoods();
+      const totalPages = Math.ceil(allFoods.length / limit);
+      const foods = allFoods.slice(offset, offset + limit);
 
-      const htmlBody = renderComponentToHTML(
-        AllFoodsPage(pageProps),
-        pageProps
-      );
-
-      // Build meta tags
+      // Render
+      const renderResult = await renderAllFoodsPage(foods, categoryGroups, page, totalPages);
       const meta = {
-        title: `Tüm Gıdalar ${page > 1 ? `- Sayfa ${page}` : ''} | besindegerim.com`,
-        description: `${result.total} gıdanın tamamı. Gerçek porsiyon bazlı kalori ve besin değerleri. USDA verileriyle desteklenen kapsamlı besin değerleri rehberi.`,
-        keywords: "tüm gıdalar, besin değerleri, kalori tablosu, USDA, porsiyon bazlı",
-        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/tum-gidalar${page > 1 ? `?page=${page}` : ''}`,
+        title: `Tüm Gıdalar - Sayfa ${page} | besindegerim.com`,
+        description: `${allFoods.length} gıdanın besin değerlerini keşfedin`,
+        keywords: "besin değerleri, kalori, gıdalar",
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/tum-gidalar?page=${page}`,
       };
 
-      const jsonLd = [buildOrganizationJsonLd()];
-
-      // Inject head and send response
-      const fullHTML = injectHead(htmlBody, meta, jsonLd);
-      res.setHeader("Content-Type", "text/html; charset=utf-8");
-      res.send(fullHTML);
+      await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
     } catch (error) {
-      console.error("SSR Error (all foods page):", error);
+      console.error("[SSR /tum-gidalar] Error:", error);
       res.status(500).send("Server Error");
     }
   });
 
-  // Food detail route
+  // Gıda detay: /:slug (catch-all route - EN SONDA)
   app.get("/:slug", async (req: Request, res: Response) => {
     try {
       const { slug } = req.params;
 
-      // Skip if it looks like a static asset
-      if (slug.includes(".")) {
+      // Skip static files and special routes
+      if (
+        slug.includes(".") ||
+        slug === "robots.txt" ||
+        slug === "sitemap.xml" ||
+        slug === "hesaplayicilar" ||
+        slug.startsWith("api")
+      ) {
         return res.status(404).send("Not Found");
       }
 
-      // Get categories from cache
+      // Get category groups
       const categoryGroupsCacheKey = "all_categories";
       let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
       if (!categoryGroups) {
@@ -358,284 +145,84 @@ export function registerSSRRoutes(app: Express): void {
         cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
       }
 
-      // Get food from cache or database
+      // Get food by slug
       const cacheKey = `food_${slug}`;
       let food: Food | undefined = cache.get<Food>(cacheKey);
-
       if (!food) {
         food = await storage.getFoodBySlug(slug);
         if (food) {
-          cache.set(cacheKey, food, 3600000); // Cache for 1 hour
+          cache.set(cacheKey, food, 3600000);
         }
       }
 
       if (!food) {
-        // Food not found - render 404 page
-        const htmlBody = renderComponentToHTML(NotFoundPage({ categoryGroups, currentPath: req.path }));
+        // 404
+        const renderResult = await render404Page(categoryGroups);
         const meta = {
-          title: "Sayfa Bulunamadı - besindegerim.com",
+          title: "Gıda Bulunamadı - besindegerim.com",
           description: "Aradığınız gıda bulunamadı.",
-          keywords: "404, bulunamadı",
-          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/${slug}`,
+          keywords: "besin değerleri",
+          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${req.path}`,
         };
-        const fullHTML = injectHead(htmlBody, meta);
-        return res.status(404).send(fullHTML);
+        return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
       }
 
-      // Get 6 random alternative foods
-      const alternativesCacheKey = `alternatives_${food.id}`;
-      let alternatives: Food[] | undefined = cache.get<Food[]>(alternativesCacheKey);
-
-      if (!alternatives) {
-        alternatives = await storage.getRandomFoods(6, food.id);
-        cache.set(alternativesCacheKey, alternatives, 600000); // Cache for 10 minutes
-      }
-
-      // Render food detail page
-      const htmlBody = renderComponentToHTML(
-        FoodDetailPage({ food, alternatives, categoryGroups, currentPath: req.path })
-      );
-
-      // Build meta tags
+      // Render food detail
+      const renderResult = await renderFoodDetailPage(food, categoryGroups);
       const meta = buildMetaForFood({
         name: food.name,
-        servingLabel: food.servingLabel,
-        kcalPerServing: Number(food.calories),
+        servingLabel: food.servingLabel || `${food.servingSize}g`,
+        kcalPerServing: parseFloat(food.calories),
         slug: food.slug,
       });
 
-      // Build JSON-LD schemas (NutritionInformation, FAQ, Article, Breadcrumb, Organization)
-      const jsonLd = [
-        buildFoodJsonLd({
-          name: food.name,
-          slug: food.slug,
-          servingLabel: food.servingLabel,
-          servingSize: Number(food.servingSize),
-          calories: Number(food.calories),
-          protein: food.protein ? Number(food.protein) : undefined,
-          carbs: food.carbs ? Number(food.carbs) : undefined,
-          fat: food.fat ? Number(food.fat) : undefined,
-          fiber: food.fiber ? Number(food.fiber) : undefined,
-          sugar: food.sugar ? Number(food.sugar) : undefined,
-        }),
-        buildFAQJsonLd({
-          name: food.name,
-          servingLabel: food.servingLabel,
-          calories: Number(food.calories),
-          protein: food.protein ? Number(food.protein) : undefined,
-          carbs: food.carbs ? Number(food.carbs) : undefined,
-          fat: food.fat ? Number(food.fat) : undefined,
-          fiber: food.fiber ? Number(food.fiber) : undefined,
-        }),
-        buildArticleJsonLd({
-          name: food.name,
-          slug: food.slug,
-          calories: Number(food.calories),
-          servingLabel: food.servingLabel,
-        }),
-        buildBreadcrumbJsonLd(food.name, food.slug),
-        buildOrganizationJsonLd(),
-      ];
-
-      // Inject head and send response
-      const fullHTML = injectHead(htmlBody, meta, jsonLd);
-      res.setHeader("Content-Type", "text/html; charset=utf-8");
-      res.send(fullHTML);
+      await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
     } catch (error) {
-      console.error("SSR Error (food detail):", error);
-      res.status(500).send("Server Error");
-    }
-  });
-
-  // Category routes
-  app.get("/kategori/:category", async (req: Request, res: Response) => {
-    try {
-      const category = decodeURIComponent(req.params.category);
-      
-      // Get foods in this category
-      const foods = await storage.getFoodsByCategory(category);
-
-      // Get categories from cache
-      const categoryGroupsCacheKey = "all_categories";
-      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
-      if (!categoryGroups) {
-        categoryGroups = await storage.getCategoryGroups();
-        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
-      }
-
-      // Render category page
-      const htmlBody = renderComponentToHTML(
-        CategoryPage({ category, foods, categoryGroups, currentPath: req.path })
-      );
-
-      // Build meta tags
-      const meta = {
-        title: `${category} - Besin Değerleri | besindegerim.com`,
-        description: `${category} kategorisindeki gıdaların besin değerleri, kalori ve makro bilgileri. ${foods.length} gıda bulundu.`,
-        keywords: `${category}, besin değerleri, kalori, protein, karbonhidrat`,
-        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/kategori/${encodeURIComponent(category)}`,
-      };
-
-      const jsonLd = [buildOrganizationJsonLd()];
-
-      // Inject head and send response
-      const fullHTML = injectHead(htmlBody, meta, jsonLd);
-      res.setHeader("Content-Type", "text/html; charset=utf-8");
-      res.send(fullHTML);
-    } catch (error) {
-      console.error("SSR Error (category):", error);
-      res.status(500).send("Server Error");
-    }
-  });
-
-
-  // Calculators Hub Page
-  app.get("/hesaplayicilar", async (req: Request, res: Response) => {
-    try {
-      const categoryGroupsCacheKey = "all_categories";
-      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
-      if (!categoryGroups) {
-        categoryGroups = await storage.getCategoryGroups();
-        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
-      }
-
-      const htmlBody = renderComponentToHTML(
-        CalculatorsHubPage({ categoryGroups, currentPath: req.path })
-      );
-
-      const meta = {
-        title: "Beslenme Hesaplayıcıları - 7 Ücretsiz Araç | besindegerim.com",
-        description: "Günlük kalori, BMI, ideal kilo, protein, su ihtiyacı ve porsiyon çevirici. Bilimsel formüllerle desteklenen ücretsiz beslenme hesaplayıcıları.",
-        keywords: "kalori hesaplama, bmi hesaplama, günlük kalori ihtiyacı, protein hesaplama, makro hesaplama, tdee hesaplama",
-        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/hesaplayicilar`,
-      };
-
-      const jsonLd = [buildOrganizationJsonLd()];
-      const fullHTML = injectHead(htmlBody, meta, jsonLd);
-      res.setHeader("Content-Type", "text/html; charset=utf-8");
-      res.send(fullHTML);
-    } catch (error) {
-      console.error("SSR Error (calculators hub):", error);
-      res.status(500).send("Server Error");
-    }
-  });
-
-  // Calorie Calculator Page
-  app.get("/hesaplayicilar/gunluk-kalori-ihtiyaci", async (req: Request, res: Response) => {
-    try {
-      const categoryGroupsCacheKey = "all_categories";
-      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
-      if (!categoryGroups) {
-        categoryGroups = await storage.getCategoryGroups();
-        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
-      }
-
-      const htmlBody = renderComponentToHTML(
-        CalorieCalculatorPage({ categoryGroups, currentPath: req.path })
-      );
-
-      const meta = {
-        title: "Günlük Kalori İhtiyacı Hesaplama | BMR, TDEE ve Makro Hesaplayıcı",
-        description: "Günlük kalori ihtiyacınızı hesaplayın. BMR, TDEE ve hedef bazlı kalori hesaplama. Protein, karbonhidrat ve yağ dağılımınızı öğrenin. Mifflin-St Jeor formülü.",
-        keywords: "günlük kalori ihtiyacı, bmr hesaplama, tdee hesaplama, makro hesaplama, kalori hesaplama, günlük kalori",
-        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/hesaplayicilar/gunluk-kalori-ihtiyaci`,
-      };
-
-      const faqJsonLd = {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        mainEntity: [
-          {
-            "@type": "Question",
-            name: "Günde kaç kalori almalıyım?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "TDEE hesaplama ile başlayın. Kilo vermek için 300-750 kalori açık, kas kazanmak için 300-500 kalori fazla verin. Kadınlar minimum 1200, erkekler minimum 1500 kalori tüketmelidir."
-            }
-          },
-          {
-            "@type": "Question",
-            name: "BMR nedir?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "BMR (Basal Metabolic Rate), vücudunuzun dinlenme halindeyken yaklaşık 24 saatte yaktığı kalori miktarıdır. Nefes almak, kan pompalaması, hücre üretimi gibi temel yaşam fonksiyonları için gerekli enerjidir."
-            }
-          },
-          {
-            "@type": "Question",
-            name: "TDEE nasıl hesaplanır?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "TDEE, BMR'inizi aktivite seviyenizle çarparak bulunur. Aktivite çarpanları: Hareketsiz (1.2), Az Aktif (1.375), Orta Aktif (1.55), Çok Aktif (1.725), Aşırı Aktif (1.9)."
-            }
-          }
-        ]
-      };
-
-      const jsonLd = [buildOrganizationJsonLd(), faqJsonLd];
-      const fullHTML = injectHead(htmlBody, meta, jsonLd);
-      res.setHeader("Content-Type", "text/html; charset=utf-8");
-      res.send(fullHTML);
-    } catch (error) {
-      console.error("SSR Error (calorie calculator):", error);
+      console.error("[SSR /:slug] Error:", error);
       res.status(500).send("Server Error");
     }
   });
 
   // robots.txt
-  app.get("/robots.txt", (req: Request, res: Response) => {
+  app.get("/robots.txt", (_req: Request, res: Response) => {
     const robotsTxt = `User-agent: *
 Allow: /
-Disallow: /api/*
 
 Sitemap: ${process.env.BASE_URL || "https://besindegerim.com"}/sitemap.xml`;
-
-    res.setHeader("Content-Type", "text/plain");
-    res.send(robotsTxt);
+    res.type("text/plain").send(robotsTxt);
   });
 
-  // Dynamic sitemap.xml
-  app.get("/sitemap.xml", async (req: Request, res: Response) => {
+  // sitemap.xml
+  app.get("/sitemap.xml", async (_req: Request, res: Response) => {
     try {
-      const baseUrl = process.env.BASE_URL || "https://besindegerim.com";
-      
-      // Get all foods for sitemap
       const cacheKey = "sitemap_foods";
-      let allFoods: Food[] | undefined = cache.get<Food[]>(cacheKey);
-
-      if (!allFoods) {
-        allFoods = await storage.getAllFoods(1000); // Get up to 1000 foods
-        cache.set(cacheKey, allFoods, 3600000); // Cache for 1 hour
+      let foods: Food[] | undefined = cache.get<Food[]>(cacheKey);
+      if (!foods) {
+        foods = await storage.getAllFoods();
+        cache.set(cacheKey, foods, 3600000);
       }
 
-      // Build sitemap XML
+      const baseUrl = process.env.BASE_URL || "https://besindegerim.com";
       const urls = [
-        // Homepage
-        `  <url>
-    <loc>${baseUrl}/</loc>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>`,
-        // Food pages
-        ...allFoods.map(
-          (food) => `  <url>
-    <loc>${baseUrl}/${food.slug}</loc>
-    <lastmod>${food.updatedAt.toISOString()}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>`
-        ),
+        { loc: baseUrl, priority: "1.0" },
+        { loc: `${baseUrl}/tum-gidalar`, priority: "0.9" },
+        ...foods.map((food) => ({
+          loc: `${baseUrl}/${food.slug}`,
+          priority: "0.8",
+        })),
       ];
 
       const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.join("\n")}
+${urls.map((url) => `  <url>
+    <loc>${url.loc}</loc>
+    <priority>${url.priority}</priority>
+  </url>`).join("\n")}
 </urlset>`;
 
-      res.setHeader("Content-Type", "application/xml");
-      res.send(sitemap);
+      res.type("application/xml").send(sitemap);
     } catch (error) {
-      console.error("Sitemap Error:", error);
+      console.error("[SSR /sitemap.xml] Error:", error);
       res.status(500).send("Server Error");
     }
   });

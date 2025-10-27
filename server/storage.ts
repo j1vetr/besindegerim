@@ -20,6 +20,7 @@ export interface IStorage {
   updateFood(id: string, food: Partial<InsertFood>): Promise<Food | undefined>;
   getAllFoods(limit?: number): Promise<Food[]>;
   getAllFoodsPaginated(page: number, limit: number): Promise<PaginatedResult<Food>>;
+  getPopularFoods(limit: number): Promise<Food[]>;
   getRandomFoods(count: number, excludeId?: string): Promise<Food[]>;
   searchFoods(query: string, limit?: number): Promise<Food[]>;
   getFoodsByCategory(category: string, limit?: number): Promise<Food[]>;
@@ -98,6 +99,15 @@ export class DatabaseStorage implements IStorage {
       total,
       totalPages,
     };
+  }
+
+  async getPopularFoods(limit: number): Promise<Food[]> {
+    // Return most recently cached foods (or by calories desc)
+    return db
+      .select()
+      .from(foods)
+      .orderBy(desc(foods.cachedAt))
+      .limit(limit);
   }
 
   async getRandomFoods(count: number, excludeId?: string): Promise<Food[]> {

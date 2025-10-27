@@ -75,7 +75,18 @@ app.use((req, res, next) => {
   if (process.env.NODE_ENV === "development") {
     await setupVite(app, server);
   } else {
-    serveStatic(app);
+    // Production: Static files + SSR
+    const { registerSSRRoutes } = await import("./ssr");
+    const distPath = path.resolve(process.cwd(), "dist", "public");
+    
+    // 1. Serve static assets (CSS, JS, images)
+    app.use(express.static(distPath, {
+      maxAge: "1y",
+      immutable: true,
+    }));
+    
+    // 2. SSR routes (catch-all)
+    registerSSRRoutes(app);
   }
 
   // ALWAYS serve the app on the port specified in the environment variable PORT
