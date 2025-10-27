@@ -44,8 +44,319 @@ function findCategoryBySlug(slug: string, categoryGroups: CategoryGroup[]): stri
 
 /**
  * Register SSR routes
+ * IMPORTANT: Specific routes MUST come before catch-all /:slug route
  */
 export function registerSSRRoutes(app: Express): void {
+  // robots.txt
+  app.get("/robots.txt", (req: Request, res: Response) => {
+    const robotsTxt = `User-agent: *
+Allow: /
+Disallow: /api/*
+
+Sitemap: ${process.env.BASE_URL || "https://besindegerim.com"}/sitemap.xml`;
+
+    res.setHeader("Content-Type", "text/plain");
+    res.send(robotsTxt);
+  });
+
+  // Dynamic sitemap.xml
+  app.get("/sitemap.xml", async (req: Request, res: Response) => {
+    try {
+      const baseUrl = process.env.BASE_URL || "https://besindegerim.com";
+      
+      // Get all foods for sitemap
+      const cacheKey = "sitemap_foods";
+      let allFoods: Food[] | undefined = cache.get<Food[]>(cacheKey);
+
+      if (!allFoods) {
+        allFoods = await storage.getAllFoods(1000); // Get up to 1000 foods
+        cache.set(cacheKey, allFoods, 3600000); // Cache for 1 hour
+      }
+
+      // Build sitemap XML
+      const urls = [
+        // Homepage
+        `  <url>
+    <loc>${baseUrl}/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>`,
+        // Calculators Hub
+        `  <url>
+    <loc>${baseUrl}/hesaplayicilar</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>`,
+        // Calorie Calculator
+        `  <url>
+    <loc>${baseUrl}/hesaplayicilar/gunluk-kalori-ihtiyaci</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>`,
+        // All Foods Page
+        `  <url>
+    <loc>${baseUrl}/tum-gidalar</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>`,
+        // Food pages
+        ...allFoods.map(
+          (food) => `  <url>
+    <loc>${baseUrl}/${food.slug}</loc>
+    <lastmod>${food.updatedAt.toISOString()}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>`
+        ),
+      ];
+
+      const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.join("\n")}
+</urlset>`;
+
+      res.setHeader("Content-Type", "application/xml");
+      res.send(sitemap);
+    } catch (error) {
+      console.error("Sitemap Error:", error);
+      res.status(500).send("Server Error");
+    }
+  });
+
+  // Homepage route
+  app.get("/", async (req: Request, res: Response) => {
+    try {
+      // Get popular foods from cache or database
+      const cacheKey = "popular_foods";
+      let popularFoods: Food[] | undefined = cache.get<Food[]>(cacheKey);
+
+      if (!popularFoods) {
+        popularFoods = await storage.getAllFoods(8); // Get 8 popular foods
+        cache.set(cacheKey, popularFoods, 600000); // Cache for 10 minutes
+      }
+
+      // Get categories from cache or database
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000); // Cache for 1 hour
+      }
+
+      // Render homepage component
+      const pageProps = { popularFoods, categoryGroups, currentPath: req.path };
+      const htmlBody = renderComponentToHTML(
+        HomePage(pageProps),
+        pageProps
+      );
+
+      // Build meta tags
+      const meta = buildMetaForHome();
+      const jsonLd = [buildOrganizationJsonLd()];
+
+      // Inject head and send response
+      const fullHTML = injectHead(htmlBody, meta, jsonLd);
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.send(fullHTML);
+    } catch (error) {
+      console.error("SSR Error (homepage):", error);
+      res.status(500).send("Server Error");
+    }
+  });
+
+  // Search results route
+  app.get("/ara", async (req: Request, res: Response) => {
+    try {
+      const query = (req.query.q as string) || "";
+
+      // If no query, redirect to homepage
+      if (!query) {
+        return res.redirect("/");
+      }
+
+      // Search in database
+      const results = await storage.searchFoods(query, 50);
+
+      // Get categories from cache
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
+      }
+
+      // Render search results page
+      const htmlBody = renderComponentToHTML(
+        SearchResultsPage({ query, results, categoryGroups, currentPath: req.path })
+      );
+
+      // Build meta tags for search
+      const meta = {
+        title: `"${query}" Arama Sonuçları - besindegerim.com`,
+        description: `${query} için besin değerleri arama sonuçları. ${results.length} gıda bulundu.`,
+        keywords: `${query}, kalori, besin değeri, arama`,
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/ara?q=${encodeURIComponent(query)}`,
+      };
+
+      const jsonLd = [buildOrganizationJsonLd()];
+
+      // Inject head and send response
+      const fullHTML = injectHead(htmlBody, meta, jsonLd);
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.send(fullHTML);
+    } catch (error) {
+      console.error("SSR Error (search):", error);
+      res.status(500).send("Server Error");
+    }
+  });
+
+  // All Foods page route
+  app.get("/tum-gidalar", async (req: Request, res: Response) => {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = 30;
+
+      // Get paginated foods
+      const result = await storage.getAllFoodsPaginated(page, limit);
+
+      // Get categories from cache
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
+      }
+
+      // Render All Foods page
+      const pageProps = {
+        categoryGroups,
+        currentPath: req.path,
+        initialFoods: result.items,
+        initialPage: result.page,
+        initialTotalPages: result.totalPages,
+        initialTotal: result.total,
+      };
+
+      const htmlBody = renderComponentToHTML(
+        AllFoodsPage(pageProps),
+        pageProps
+      );
+
+      // Build meta tags
+      const meta = {
+        title: `Tüm Gıdalar ${page > 1 ? `- Sayfa ${page}` : ''} | besindegerim.com`,
+        description: `${result.total} gıdanın tamamı. Gerçek porsiyon bazlı kalori ve besin değerleri. USDA verileriyle desteklenen kapsamlı besin değerleri rehberi.`,
+        keywords: "tüm gıdalar, besin değerleri, kalori tablosu, USDA, porsiyon bazlı",
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/tum-gidalar${page > 1 ? `?page=${page}` : ''}`,
+      };
+
+      const jsonLd = [buildOrganizationJsonLd()];
+
+      // Inject head and send response
+      const fullHTML = injectHead(htmlBody, meta, jsonLd);
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.send(fullHTML);
+    } catch (error) {
+      console.error("SSR Error (all foods page):", error);
+      res.status(500).send("Server Error");
+    }
+  });
+
+  // Calculators Hub Page
+  app.get("/hesaplayicilar", async (req: Request, res: Response) => {
+    try {
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
+      }
+
+      const htmlBody = renderComponentToHTML(
+        CalculatorsHubPage({ categoryGroups, currentPath: req.path })
+      );
+
+      const meta = {
+        title: "Beslenme Hesaplayıcıları - 7 Ücretsiz Araç | besindegerim.com",
+        description: "Günlük kalori, BMI, ideal kilo, protein, su ihtiyacı ve porsiyon çevirici. Bilimsel formüllerle desteklenen ücretsiz beslenme hesaplayıcıları.",
+        keywords: "kalori hesaplama, bmi hesaplama, günlük kalori ihtiyacı, protein hesaplama, makro hesaplama, tdee hesaplama",
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/hesaplayicilar`,
+      };
+
+      const jsonLd = [buildOrganizationJsonLd()];
+      const fullHTML = injectHead(htmlBody, meta, jsonLd);
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.send(fullHTML);
+    } catch (error) {
+      console.error("SSR Error (calculators hub):", error);
+      res.status(500).send("Server Error");
+    }
+  });
+
+  // Calorie Calculator Page
+  app.get("/hesaplayicilar/gunluk-kalori-ihtiyaci", async (req: Request, res: Response) => {
+    try {
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
+      }
+
+      const htmlBody = renderComponentToHTML(
+        CalorieCalculatorPage({ categoryGroups, currentPath: req.path })
+      );
+
+      const meta = {
+        title: "Günlük Kalori İhtiyacı Hesaplama | BMR, TDEE ve Makro Hesaplayıcı",
+        description: "Günlük kalori ihtiyacınızı hesaplayın. BMR, TDEE ve hedef bazlı kalori hesaplama. Protein, karbonhidrat ve yağ dağılımınızı öğrenin. Mifflin-St Jeor formülü.",
+        keywords: "günlük kalori ihtiyacı, bmr hesaplama, tdee hesaplama, makro hesaplama, kalori hesaplama, günlük kalori",
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/hesaplayicilar/gunluk-kalori-ihtiyaci`,
+      };
+
+      const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "Günde kaç kalori almalıyım?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "TDEE hesaplama ile başlayın. Kilo vermek için 300-750 kalori açık, kas kazanmak için 300-500 kalori fazla verin. Kadınlar minimum 1200, erkekler minimum 1500 kalori tüketmelidir."
+            }
+          },
+          {
+            "@type": "Question",
+            name: "BMR nedir?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "BMR (Basal Metabolic Rate), vücudunuzun dinlenme halindeyken yaklaşık 24 saatte yaktığı kalori miktarıdır. Nefes almak, kan pompalaması, hücre üretimi gibi temel yaşam fonksiyonları için gerekli enerjidir."
+            }
+          },
+          {
+            "@type": "Question",
+            name: "TDEE nasıl hesaplanır?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "TDEE, BMR'inizi aktivite seviyenizle çarparak bulunur. Aktivite çarpanları: Hareketsiz (1.2), Az Aktif (1.375), Orta Aktif (1.55), Çok Aktif (1.725), Aşırı Aktif (1.9)."
+            }
+          }
+        ]
+      };
+
+      const jsonLd = [buildOrganizationJsonLd(), faqJsonLd];
+      const fullHTML = injectHead(htmlBody, meta, jsonLd);
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.send(fullHTML);
+    } catch (error) {
+      console.error("SSR Error (calorie calculator):", error);
+      res.status(500).send("Server Error");
+    }
+  });
+
   // Category routes - MUST come before /:slug catch-all route
   app.get("/kategori/:category/:subcategory?", async (req: Request, res: Response) => {
     try {
@@ -199,8 +510,8 @@ export function registerSSRRoutes(app: Express): void {
     });
   });
 
-  // Search results route
-  app.get("/ara", async (req: Request, res: Response) => {
+  // Food detail route - CATCH-ALL (MUST be last)
+  app.get("/:slug", async (req: Request, res: Response) => {
     try {
       const query = (req.query.q as string) || "";
 
