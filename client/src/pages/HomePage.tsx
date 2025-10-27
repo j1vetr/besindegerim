@@ -21,14 +21,17 @@ export default function HomePage({
   currentPath = "/"
 }: HomePageProps) {
   // Client-side data fetching for development mode (CSR)
-  // Only fetch if popularFoods prop is empty (not from SSR)
+  // Only fetch if popularFoods prop is empty (not from SSR) AND we're on client-side
+  const isClient = typeof window !== 'undefined';
+  const shouldFetch = isClient && popularFoods.length === 0;
+  
   const { data: foodsData, isLoading: isFetching } = useQuery<{ items: Food[] }>({
     queryKey: ['/api/foods'],
-    enabled: popularFoods.length === 0,
+    enabled: shouldFetch,
   });
 
   const displayFoods = popularFoods.length > 0 ? popularFoods : (foodsData?.items || []).slice(0, 8);
-  const isLoading = popularFoods.length === 0 && isFetching;
+  const isLoading = shouldFetch && isFetching;
 
   return (
     <div className="min-h-screen bg-white">
