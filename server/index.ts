@@ -70,7 +70,7 @@ app.use((req, res, next) => {
   });
 
   if (process.env.NODE_ENV === "development") {
-    // Development: Vite middleware (React SPA)
+    // 2️⃣ SONRA: Vite middleware (Catch-all SPA routing)
     await setupVite(app, server);
   } else {
     // Production: SSR routes + Static files

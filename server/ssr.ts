@@ -52,6 +52,169 @@ async function renderHTMLWithMeta(
 }
 
 /**
+ * Development modda tek bir request'i handle et (Vite'ın önünde)
+ */
+export async function handleSSRRequest(req: Request, res: Response): Promise<void> {
+  const templatePath = path.resolve(process.cwd(), "client", "index.html");
+  
+  try {
+    // Get category groups (cache)
+    const categoryGroupsCacheKey = "all_categories";
+    let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+    if (!categoryGroups) {
+      categoryGroups = await storage.getCategoryGroups();
+      cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
+    }
+
+    // Ana sayfa
+    if (req.path === "/") {
+      const popularCacheKey = "popular_foods";
+      let foods: Food[] | undefined = cache.get<Food[]>(popularCacheKey);
+      if (!foods) {
+        foods = await storage.getPopularFoods(12);
+        cache.set(popularCacheKey, foods, 600000);
+      }
+      const renderResult = await renderHomePage(foods || [], categoryGroups);
+      const meta = buildMetaForHome();
+      return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+    }
+
+    // Tüm gıdalar
+    if (req.path === "/tum-gidalar") {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = 30;
+      const offset = (page - 1) * limit;
+      const allFoods = await storage.getAllFoods();
+      const totalPages = Math.ceil(allFoods.length / limit);
+      const foods = allFoods.slice(offset, offset + limit);
+      const renderResult = await renderAllFoodsPage(foods, categoryGroups, page, totalPages);
+      const meta = {
+        title: `Tüm Gıdalar - Sayfa ${page} | besindegerim.com`,
+        description: `${allFoods.length} gıdanın besin değerlerini keşfedin`,
+        keywords: "besin değerleri, kalori, gıdalar",
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/tum-gidalar?page=${page}`,
+      };
+      return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+    }
+
+    // Kategori: /kategori/:categorySlug/:subcategorySlug
+    const categoryMatch = req.path.match(/^\/kategori\/([^/]+)\/([^/]+)$/);
+    if (categoryMatch) {
+      const [, categorySlug, subcategorySlug] = categoryMatch;
+      const mainCategory = findMainCategoryBySlug(categorySlug, categoryGroups);
+      const subcategory = findSubcategoryBySlug(subcategorySlug, categoryGroups);
+
+      if (!mainCategory || !subcategory) {
+        const renderResult = await render404Page(categoryGroups);
+        const meta = {
+          title: "Kategori Bulunamadı - besindegerim.com",
+          description: "Aradığınız kategori bulunamadı.",
+          keywords: "besin değerleri",
+          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${req.path}`,
+        };
+        return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+      }
+
+      const cacheKey = `subcategory_${subcategory}`;
+      let foods: Food[] | undefined = cache.get<Food[]>(cacheKey);
+      if (!foods) {
+        foods = await storage.getFoodsBySubcategory(subcategory);
+        cache.set(cacheKey, foods, 3600000);
+      }
+
+      const renderResult = await renderCategoryPage(foods, categoryGroups, mainCategory, subcategory);
+      const meta = {
+        title: `${subcategory} - ${mainCategory} | besindegerim.com`,
+        description: `${subcategory} kategorisindeki gıdaların besin değerleri. ${foods.length} gıda bulundu.`,
+        keywords: `${subcategory}, ${mainCategory}, besin değerleri, kalori`,
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${req.path}`,
+      };
+      return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+    }
+
+    // Ana kategori: /kategori/:categorySlug
+    const mainCategoryMatch = req.path.match(/^\/kategori\/([^/]+)$/);
+    if (mainCategoryMatch) {
+      const [, categorySlug] = mainCategoryMatch;
+      const categoryName = findMainCategoryBySlug(categorySlug, categoryGroups);
+
+      if (!categoryName) {
+        const renderResult = await render404Page(categoryGroups);
+        const meta = {
+          title: "Kategori Bulunamadı - besindegerim.com",
+          description: "Aradığınız kategori bulunamadı.",
+          keywords: "besin değerleri",
+          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${req.path}`,
+        };
+        return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+      }
+
+      const cacheKey = `category_${categoryName}`;
+      let foods: Food[] | undefined = cache.get<Food[]>(cacheKey);
+      if (!foods) {
+        foods = await storage.getFoodsByCategory(categoryName);
+        cache.set(cacheKey, foods, 3600000);
+      }
+
+      const renderResult = await renderCategoryPage(foods, categoryGroups, categoryName);
+      const meta = {
+        title: `${categoryName} | besindegerim.com`,
+        description: `${categoryName} kategorisindeki gıdaların besin değerleri. ${foods.length} gıda bulundu.`,
+        keywords: `${categoryName}, besin değerleri, kalori`,
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${req.path}`,
+      };
+      return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+    }
+
+    // Gıda detay: /:slug
+    const slug = req.path.slice(1);
+    if (slug && !slug.includes(".")) {
+      const cacheKey = `food_${slug}`;
+      let food: Food | undefined = cache.get<Food>(cacheKey);
+      if (!food) {
+        food = await storage.getFoodBySlug(slug);
+        if (food) {
+          cache.set(cacheKey, food, 3600000);
+        }
+      }
+
+      if (!food) {
+        const renderResult = await render404Page(categoryGroups);
+        const meta = {
+          title: "Gıda Bulunamadı - besindegerim.com",
+          description: "Aradığınız gıda bulunamadı.",
+          keywords: "besin değerleri",
+          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${req.path}`,
+        };
+        return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+      }
+
+      const renderResult = await renderFoodDetailPage(food, categoryGroups);
+      const meta = buildMetaForFood({
+        name: food.name,
+        servingLabel: food.servingLabel || `${food.servingSize}g`,
+        kcalPerServing: parseFloat(food.calories),
+        slug: food.slug,
+      });
+      return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+    }
+
+    // 404
+    const renderResult = await render404Page(categoryGroups);
+    const meta = {
+      title: "Sayfa Bulunamadı - besindegerim.com",
+      description: "Aradığınız sayfa bulunamadı.",
+      keywords: "besin değerleri",
+      canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${req.path}`,
+    };
+    await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+  } catch (error) {
+    console.error("[SSR handleSSRRequest] Error:", error);
+    res.status(500).send("Server Error");
+  }
+}
+
+/**
  * SSR Route'larını kaydet
  */
 export function registerSSRRoutes(app: Express): void {
