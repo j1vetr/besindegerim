@@ -22,7 +22,7 @@ export function SearchAutocomplete({
   const wrapperRef = useRef<HTMLDivElement>(null);
   
   // Typing effect placeholder with random food names
-  const [animatedPlaceholder, setAnimatedPlaceholder] = useState("Ara...");
+  const [animatedPlaceholder, setAnimatedPlaceholder] = useState("");
   const [placeholderFoods, setPlaceholderFoods] = useState<string[]>([]);
 
   // Fetch random foods for placeholder animation
@@ -33,6 +33,9 @@ export function SearchAutocomplete({
         const data = await response.json();
         if (data.foods && data.foods.length > 0) {
           setPlaceholderFoods(data.foods.map((f: Food) => f.name.toLowerCase()));
+        } else {
+          // API returned empty array - use fallback
+          setPlaceholderFoods(["domates", "tavuk", "elma", "yumurta", "süt", "ekmek", "muz", "portakal", "dana eti", "peynir"]);
         }
       } catch (error) {
         console.error("Failed to fetch random foods for placeholder:", error);
@@ -54,30 +57,28 @@ export function SearchAutocomplete({
 
     const typeEffect = () => {
       const currentFood = placeholderFoods[currentFoodIndex];
-      const prefix = "Ara... (ör: ";
-      const suffix = ")";
 
       if (!isDeleting) {
         // Typing
         currentCharIndex++;
         const displayText = currentFood.substring(0, currentCharIndex);
-        setAnimatedPlaceholder(prefix + displayText + suffix);
+        setAnimatedPlaceholder(displayText);
 
         if (currentCharIndex === currentFood.length) {
           // Wait before deleting
           timeoutId = setTimeout(() => {
             isDeleting = true;
             typeEffect();
-          }, 1500);
+          }, 2000);
         } else {
           // Continue typing
-          timeoutId = setTimeout(typeEffect, 100);
+          timeoutId = setTimeout(typeEffect, 80);
         }
       } else {
         // Deleting
         currentCharIndex--;
         const displayText = currentFood.substring(0, currentCharIndex);
-        setAnimatedPlaceholder(prefix + displayText + suffix);
+        setAnimatedPlaceholder(displayText);
 
         if (currentCharIndex === 0) {
           // Move to next food
@@ -86,7 +87,7 @@ export function SearchAutocomplete({
           timeoutId = setTimeout(typeEffect, 500);
         } else {
           // Continue deleting
-          timeoutId = setTimeout(typeEffect, 50);
+          timeoutId = setTimeout(typeEffect, 40);
         }
       }
     };
