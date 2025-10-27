@@ -59,23 +59,37 @@ besindegerim.com, gerçek porsiyon bazlı kalori ve besin değerleri sunan, tama
    - Kategorize dropdown menü (horizontal scroll)
 
 8. **AI-Generated Görseller & Optimizasyon**
-   - **213 gıda için AI-generated profesyonel ürün fotoğrafları (DALL-E 3)**
+   - **326 AI-generated profesyonel ürün fotoğrafları (DALL-E 3)**
+   - **266/266 ürün görsel coverage (%100)** 🎉
    - Akıllı görsel eşleştirme sistemi (fix-image-mapping.ts)
-   - Manuel mapping tablosu: Türkçe slug → İngilizce dosya adı (177 eşleşme)
+   - Manuel mapping tablosu: 289 slug eşleştirmesi (slug varyasyonları dahil)
    - Toplu görsel optimizasyonu: PNG → WebP dönüşümü
    - Ortalama %94-98 boyut azalması (Sharp library)
    - 800x800px boyut, quality 85, effort 6
    - Express.static ile /attached_assets serving
    - Cache headers: public, max-age=1y, immutable
-   - **174/266 ürün görsel coverage (%65.4)** - Kritik gıdalar %100 kapsanıyor
-   - Kola bug'ı düzeltildi: Artık doğru kola görseli gösteriliyor
-   - **Yeni eklenen görseller (Ekim 2025 - İkinci Batch):**
+   
+   - **Birinci Batch (Ekim 2025):**
+     - 213 AI görsel (initial coverage: 65.4%)
+     
+   - **İkinci Batch (Ekim 2025):**
      - 60 yeni AI görsel (4 grup x 15)
      - Sebze/Meyveler: brokoli, havuç, ıspanak, karnabahar, marul, roka, patates, soğan, sarımsak, limon, armut, mandalina, pancar, kabak
      - Tahıllar/Baklagiller: buğday, arpa, kinoa, darı, pirinç, beyaz fasulye, siyah fasulye, kırmızı fasulye, soya fasulyesi, edamame
      - Fırın/İçecekler: kruvasan, kuskus, mısır tortilla, limonata, bamya, kuşkonmaz, donut, köfte, bal, hardal, bitter çikolata
      - Diğer: kale, brüksel lahanası, tatlı patates, kuru üzüm, yer fıstığı, yeşil zeytin, siyah zeytin, turşu, yulaf ezmesi, çavdar, pırasa
      - Toplam optimizasyon: 49.85 MB tasarruf (%95.3 azalma)
+     
+   - **Üçüncü Batch (Ocak 2025):**
+     - 92 yeni AI görsel (6 grup)
+     - Grup 1 - Sebzeler & Baharatlar (15): enginar, bambu filizi, fesleğen, çin lahanası, kereviz sapı, tere, kişniş, dereotu, zencefil, yeşil fasulye, yeşil soğan, bezelye taze, nane, maydanoz, biberiye
+     - Grup 2 - Meyveler & Tatlılar (15): ahududu, turp, ayva, trabzon hurması, papaya, nektarin, kekik, zerdeçal, şalgam, kuru erik, marshmallow, meyve jellisi, pekmez, pizza, donut sade
+     - Grup 3 - Tahıllar & Baklagiller (16): nohut kuru, bezelye kuru, yeşil mercimek, basmati pirinç, irmik, tef, darı, lima fasulyesi, mung fasulyesi, lupin fasulyesi, naan ekmeği, pide ekmeği, tam tahıllı ekmek, kereviz kökü, mısır koçanı, kırmızı lahana
+     - Grup 4 - Et & Süt Ürünleri (15): dana eti (genç), tavuk but, ördek eti, hindi göğsü, hindi kıyma, krema, az yağlı yoğurt, ekşi krema, beyaz lahana, beyaz şeker, beyaz çikolata, esmer şeker, nori, wakame, tempeh
+     - Grup 5 - Yağlar & Tohumlar (16): ayçiçek yağı, kanola yağı, mısır yağı, zeytinyağı, sızma zeytinyağı, susam yağı, keten tohumu, ayçiçek çekirdeği, kabak çekirdeği, tahin, pekan cevizi, makadamya, mayonez, balzamik sirke, haşhaş, akçaağaç şurubu
+     - Grup 6 - İçecekler & Diğer (15): kahve, yeşil çay, siyah çay, enerji içeceği, protein tozu, ketçap, acı sos, fındık kreması, mantar portobello, jalapeno biber, kuru domates, cips, kuru oregan
+     - Toplam optimizasyon: 92 görsel (%92-98 azalma)
+     - Final coverage: %100 (266/266 ürün)
 
 ## Proje Yapısı
 
