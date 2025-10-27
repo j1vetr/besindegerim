@@ -1,0 +1,337 @@
+68|besinde | 2025-10-27 22:43:49 +03:00: 10:43:49 PM [express] serving on port 1453
+68|besinde | 2025-10-27 22:43:49 +03:00: 10:43:49 PM [express] serving on port 1453
+68|besinde | 2025-10-27 22:43:49 +03:00: 10:43:49 PM [express] serving on port 1453
+68|besinde | 2025-10-27 22:43:49 +03:00: 10:43:49 PM [express] serving on port 1453
+68|besinde | 2025-10-27 22:45:16 +03:00: 10:45:16 PM [express] serving on port 1453
+68|besinde | 2025-10-27 22:45:16 +03:00: 10:45:16 PM [express] serving on port 1453
+68|besinde | 2025-10-27 22:45:16 +03:00: 10:45:16 PM [express] serving on port 1453
+68|besinde | 2025-10-27 22:45:16 +03:00: 10:45:16 PM [express] serving on port 1453
+68|besinde | 2025-10-27 22:46:39 +03:00: 10:46:39 PM [express] serving on port 1453
+68|besinde | 2025-10-27 22:46:39 +03:00: 10:46:39 PM [express] serving on port 1453
+68|besinde | 2025-10-27 22:46:39 +03:00: 10:46:39 PM [express] serving on port 1453
+68|besinde | 2025-10-27 22:46:39 +03:00: 10:46:39 PM [express] serving on port 1453
+68|besinde | 2025-10-27 22:50:17 +03:00: 10:50:17 PM [express] serving on port 1453
+68|besinde | 2025-10-27 22:50:17 +03:00: 10:50:17 PM [express] serving on port 1453
+68|besinde | 2025-10-27 22:50:17 +03:00: 10:50:17 PM [express] serving on port 1453
+68|besinde | 2025-10-27 22:50:17 +03:00: 10:50:17 PM [express] serving on port 1453
+68|besinde | 2025-10-27 22:53:13 +03:00: [dotenv@17.2.3] injecting env (9) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+68|besinde | 2025-10-27 22:53:13 +03:00: [dotenv@17.2.3] injecting env (9) from .env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
+68|besinde | 2025-10-27 22:53:13 +03:00: [dotenv@17.2.3] injecting env (9) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+68|besinde | 2025-10-27 22:53:13 +03:00: [dotenv@17.2.3] injecting env (9) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+
+/var/www/besindegerim/logs/err.log last 20 lines:
+68|besinde |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+68|besinde |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+68|besinde |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+68|besinde |     at Module.require (node:internal/modules/cjs/loader:1289:19)
+68|besinde |     at Hook._require.Module.require (/usr/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+68|besinde |     at require (node:internal/modules/helpers:182:18)
+68|besinde | You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+68|besinde | Error [ERR_REQUIRE_ASYNC_MODULE]: require() cannot be used on an ESM graph with top-level await. Use import() instead. To see where the top-level await comes from, use --experimental-print-required-tla.
+68|besinde |   From /var/www/besindegerim/start.cjs
+68|besinde |   Requiring /var/www/besindegerim/dist/index.js
+68|besinde |     at ModuleJobSync.runSync (node:internal/modules/esm/module_job:433:13)
+68|besinde |     at ModuleLoader.importSyncForRequire (node:internal/modules/esm/loader:389:47)
+68|besinde |     at loadESMFromCJS (node:internal/modules/cjs/loader:1363:24)
+68|besinde |     at Module._compile (node:internal/modules/cjs/loader:1503:5)
+68|besinde |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+68|besinde |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+68|besinde |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+68|besinde |     at Module.require (node:internal/modules/cjs/loader:1289:19)
+68|besinde |     at Hook._require.Module.require (/usr/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+68|besinde |     at require (node:internal/modules/helpers:182:18)
+
+69|besindegerim  | /usr/bin/node:1
+69|besindegerim  |ELF
+69|besindegerim  | ^
+69|besindegerim  | SyntaxError: Invalid or unexpected token
+69|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+69|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+69|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+69|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+69|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+69|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+69|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+69|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+69|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+69|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)
+71|besindegerim  | /usr/bin/node:1
+71|besindegerim  |ELF
+71|besindegerim  | ^
+71|besindegerim  | SyntaxError: Invalid or unexpected token
+71|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+71|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+71|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+71|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+71|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+71|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+71|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+71|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+71|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+71|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)
+68|besindegerim  | /usr/bin/node:1
+68|besindegerim  |ELF
+68|besindegerim  | ^
+68|besindegerim  | SyntaxError: Invalid or unexpected token
+68|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+68|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+68|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+68|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+68|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+68|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+68|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+68|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+68|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+68|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)
+70|besindegerim  | /usr/bin/node:1
+70|besindegerim  |ELF
+70|besindegerim  | ^
+70|besindegerim  | SyntaxError: Invalid or unexpected token
+70|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+70|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+70|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+70|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+70|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+70|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+70|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+70|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+70|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+70|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)
+69|besindegerim  | /usr/bin/node:1
+69|besindegerim  |ELF
+69|besindegerim  | ^
+69|besindegerim  | SyntaxError: Invalid or unexpected token
+69|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+69|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+69|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+69|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+69|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+69|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+69|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+69|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+69|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+69|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)
+68|besindegerim  | /usr/bin/node:1
+68|besindegerim  |ELF
+68|besindegerim  | ^
+68|besindegerim  | SyntaxError: Invalid or unexpected token
+68|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+68|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+68|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+68|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+68|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+68|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+68|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+68|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+68|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+68|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)
+71|besindegerim  | /usr/bin/node:1
+71|besindegerim  |ELF
+71|besindegerim  | ^
+71|besindegerim  | SyntaxError: Invalid or unexpected token
+71|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+71|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+71|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+71|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+71|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+71|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+71|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+71|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+71|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+71|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)
+70|besindegerim  | /usr/bin/node:1
+70|besindegerim  |ELF
+70|besindegerim  | ^
+70|besindegerim  | SyntaxError: Invalid or unexpected token
+70|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+70|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+70|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+70|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+70|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+70|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+70|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+70|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+70|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+70|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)
+69|besindegerim  | /usr/bin/node:1
+69|besindegerim  |ELF
+69|besindegerim  | ^
+69|besindegerim  | SyntaxError: Invalid or unexpected token
+69|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+69|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+69|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+69|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+69|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+69|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+69|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+69|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+69|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+69|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)
+68|besindegerim  | /usr/bin/node:1
+68|besindegerim  |ELF
+68|besindegerim  | ^
+68|besindegerim  | SyntaxError: Invalid or unexpected token
+68|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+68|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+68|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+68|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+68|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+68|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+68|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+68|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+68|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+68|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)
+71|besindegerim  | /usr/bin/node:1
+71|besindegerim  |ELF
+71|besindegerim  | ^
+71|besindegerim  | SyntaxError: Invalid or unexpected token
+71|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+71|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+71|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+71|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+71|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+71|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+71|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+71|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+71|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+71|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)
+70|besindegerim  | /usr/bin/node:1
+70|besindegerim  |ELF
+70|besindegerim  | ^
+70|besindegerim  | SyntaxError: Invalid or unexpected token
+70|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+70|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+70|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+70|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+70|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+70|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+70|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+70|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+70|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+70|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)
+69|besindegerim  | /usr/bin/node:1
+69|besindegerim  |ELF
+69|besindegerim  | ^
+69|besindegerim  | SyntaxError: Invalid or unexpected token
+69|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+69|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+69|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+69|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+69|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+69|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+69|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+69|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+69|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+69|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)
+71|besindegerim  | /usr/bin/node:1
+71|besindegerim  |ELF
+71|besindegerim  | ^
+71|besindegerim  | SyntaxError: Invalid or unexpected token
+71|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+71|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+71|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+71|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+71|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+71|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+71|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+71|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+71|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+71|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)
+68|besindegerim  | /usr/bin/node:1
+68|besindegerim  |ELF
+68|besindegerim  | ^
+68|besindegerim  | SyntaxError: Invalid or unexpected token
+68|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+68|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+68|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+68|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+68|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+68|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+68|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+68|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+68|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+68|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)
+70|besindegerim  | /usr/bin/node:1
+70|besindegerim  |ELF
+70|besindegerim  | ^
+70|besindegerim  | SyntaxError: Invalid or unexpected token
+70|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+70|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+70|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+70|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+70|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+70|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+70|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+70|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+70|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+70|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)
+71|besindegerim  | /usr/bin/node:1
+71|besindegerim  |ELF
+71|besindegerim  | ^
+71|besindegerim  | SyntaxError: Invalid or unexpected token
+71|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+71|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+71|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+71|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+71|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+71|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+71|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+71|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+71|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+71|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)
+68|besindegerim  | /usr/bin/node:1
+68|besindegerim  |ELF
+68|besindegerim  | ^
+68|besindegerim  | SyntaxError: Invalid or unexpected token
+68|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+68|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+68|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+68|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+68|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+68|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+68|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+68|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+68|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+68|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)
+69|besindegerim  | /usr/bin/node:1
+69|besindegerim  |ELF
+69|besindegerim  | ^
+69|besindegerim  | SyntaxError: Invalid or unexpected token
+69|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+69|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+69|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+69|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+69|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+69|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+69|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+69|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+69|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+69|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)
+70|besindegerim  | /usr/bin/node:1
+70|besindegerim  |ELF
+70|besindegerim  | ^
+70|besindegerim  | SyntaxError: Invalid or unexpected token
+70|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+70|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+70|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+70|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+70|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+70|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+70|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+70|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+70|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+70|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)
+71|besindegerim  | /usr/bin/node:1
+71|besindegerim  |ELF
+71|besindegerim  | ^
+71|besindegerim  | SyntaxError: Invalid or unexpected token
+71|besindegerim  |     at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+71|besindegerim  |     at Module._compile (node:internal/modules/cjs/loader:1495:20)
+71|besindegerim  |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+71|besindegerim  |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+71|besindegerim  |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+71|besindegerim  |     at /usr/lib/node_modules/pm2/lib/ProcessContainer.js:292:27
+71|besindegerim  |     at wrapper (/usr/lib/node_modules/pm2/node_modules/async/internal/once.js:12:16)
+71|besindegerim  |     at next (/usr/lib/node_modules/pm2/node_modules/async/waterfall.js:96:20)
+71|besindegerim  |     at /usr/lib/node_modules/pm2/node_modules/async/internal/onlyOnce.js:12:16
+71|besindegerim  |     at WriteStream.<anonymous> (/usr/lib/node_modules/pm2/lib/Utility.js:186:13)

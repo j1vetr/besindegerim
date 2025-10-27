@@ -1,0 +1,88 @@
+64|besinde | 2025-10-27 22:34:43 +03:00: 10:34:43 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:34:43 +03:00: 10:34:43 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:34:43 +03:00: 10:34:43 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:34:43 +03:00: 10:34:43 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:38:23 +03:00: 10:38:23 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:38:23 +03:00: 10:38:23 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:38:23 +03:00: 10:38:23 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:38:23 +03:00: 10:38:23 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:38:39 +03:00: 10:38:39 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:38:39 +03:00: 10:38:39 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:38:39 +03:00: 10:38:39 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:38:39 +03:00: 10:38:39 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:39:20 +03:00: 10:39:20 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:39:20 +03:00: 10:39:20 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:39:20 +03:00: 10:39:20 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:39:20 +03:00: 10:39:20 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:43:49 +03:00: 10:43:49 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:43:49 +03:00: 10:43:49 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:43:49 +03:00: 10:43:49 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:43:49 +03:00: 10:43:49 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:45:16 +03:00: 10:45:16 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:45:16 +03:00: 10:45:16 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:45:16 +03:00: 10:45:16 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:45:16 +03:00: 10:45:16 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:46:39 +03:00: 10:46:39 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:46:39 +03:00: 10:46:39 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:46:39 +03:00: 10:46:39 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:46:39 +03:00: 10:46:39 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:50:17 +03:00: 10:50:17 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:50:17 +03:00: 10:50:17 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:50:17 +03:00: 10:50:17 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:50:17 +03:00: 10:50:17 PM [express] serving on port 1453
+64|besinde | 2025-10-27 22:53:13 +03:00: [dotenv@17.2.3] injecting env (9) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+64|besinde | 2025-10-27 22:53:13 +03:00: [dotenv@17.2.3] injecting env (9) from .env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
+64|besinde | 2025-10-27 22:53:13 +03:00: [dotenv@17.2.3] injecting env (9) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+64|besinde | 2025-10-27 22:53:13 +03:00: [dotenv@17.2.3] injecting env (9) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+
+/var/www/besindegerim/logs/err.log last 50 lines:
+64|besinde |     at loadESMFromCJS (node:internal/modules/cjs/loader:1363:24)
+64|besinde |     at Module._compile (node:internal/modules/cjs/loader:1503:5)
+64|besinde |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+64|besinde |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+64|besinde |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+64|besinde |     at Module.require (node:internal/modules/cjs/loader:1289:19)
+64|besinde |     at Hook._require.Module.require (/usr/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+64|besinde |     at require (node:internal/modules/helpers:182:18)
+64|besinde | You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+64|besinde | Error [ERR_REQUIRE_ASYNC_MODULE]: require() cannot be used on an ESM graph with top-level await. Use import() instead. To see where the top-level await comes from, use --experimental-print-required-tla.
+64|besinde |   From /var/www/besindegerim/start.cjs
+64|besinde |   Requiring /var/www/besindegerim/dist/index.js
+64|besinde |     at ModuleJobSync.runSync (node:internal/modules/esm/module_job:433:13)
+64|besinde |     at ModuleLoader.importSyncForRequire (node:internal/modules/esm/loader:389:47)
+64|besinde |     at loadESMFromCJS (node:internal/modules/cjs/loader:1363:24)
+64|besinde |     at Module._compile (node:internal/modules/cjs/loader:1503:5)
+64|besinde |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+64|besinde |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+64|besinde |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+64|besinde |     at Module.require (node:internal/modules/cjs/loader:1289:19)
+64|besinde |     at Hook._require.Module.require (/usr/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+64|besinde |     at require (node:internal/modules/helpers:182:18)
+64|besinde | You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+64|besinde | Error [ERR_REQUIRE_ASYNC_MODULE]: require() cannot be used on an ESM graph with top-level await. Use import() instead. To see where the top-level await comes from, use --experimental-print-required-tla.
+64|besinde |   From /var/www/besindegerim/start.cjs
+64|besinde |   Requiring /var/www/besindegerim/dist/index.js
+64|besinde |     at ModuleJobSync.runSync (node:internal/modules/esm/module_job:433:13)
+64|besinde |     at ModuleLoader.importSyncForRequire (node:internal/modules/esm/loader:389:47)
+64|besinde |     at loadESMFromCJS (node:internal/modules/cjs/loader:1363:24)
+64|besinde |     at Module._compile (node:internal/modules/cjs/loader:1503:5)
+64|besinde |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+64|besinde |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+64|besinde |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+64|besinde |     at Module.require (node:internal/modules/cjs/loader:1289:19)
+64|besinde |     at Hook._require.Module.require (/usr/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+64|besinde |     at require (node:internal/modules/helpers:182:18)
+64|besinde | You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+64|besinde | Error [ERR_REQUIRE_ASYNC_MODULE]: require() cannot be used on an ESM graph with top-level await. Use import() instead. To see where the top-level await comes from, use --experimental-print-required-tla.
+64|besinde |   From /var/www/besindegerim/start.cjs
+64|besinde |   Requiring /var/www/besindegerim/dist/index.js
+64|besinde |     at ModuleJobSync.runSync (node:internal/modules/esm/module_job:433:13)
+64|besinde |     at ModuleLoader.importSyncForRequire (node:internal/modules/esm/loader:389:47)
+64|besinde |     at loadESMFromCJS (node:internal/modules/cjs/loader:1363:24)
+64|besinde |     at Module._compile (node:internal/modules/cjs/loader:1503:5)
+64|besinde |     at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+64|besinde |     at Module.load (node:internal/modules/cjs/loader:1266:32)
+64|besinde |     at Module._load (node:internal/modules/cjs/loader:1091:12)
+64|besinde |     at Module.require (node:internal/modules/cjs/loader:1289:19)
+64|besinde |     at Hook._require.Module.require (/usr/lib/node_modules/pm2/node_modules/require-in-the-middle/index.js:101:39)
+64|besinde |     at require (node:internal/modules/helpers:182:18)

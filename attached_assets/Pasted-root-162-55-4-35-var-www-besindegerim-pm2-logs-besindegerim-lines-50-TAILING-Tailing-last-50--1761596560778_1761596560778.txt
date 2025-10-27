@@ -1,0 +1,137 @@
+root@162-55-4-35:/var/www/besindegerim# pm2 logs besindegerim --lines 50
+[TAILING] Tailing last 50 lines for [besindegerim] process (change the value with --lines option)
+/var/www/besindegerim/logs/out.log last 50 lines:
+73|besinde | 2025-10-27 23:16:33 +03:00: 11:16:33 PM [express] serving on port 1453
+73|besinde | 2025-10-27 23:20:19 +03:00: 11:20:19 PM [express] POST /api 200 in 1ms
+73|besinde | 2025-10-27 23:20:19 +03:00: 11:20:19 PM [express] POST /api/graphql 200 in 1ms
+73|besinde | 2025-10-27 23:20:19 +03:00: 11:20:19 PM [express] POST /api/gql 200 in 0ms
+73|besinde | 2025-10-27 23:20:19 +03:00: 11:20:19 PM [express] GET /api-docs/swagger.json 200 in 1ms
+73|besinde | 2025-10-27 23:20:19 +03:00: 11:20:19 PM [express] GET /api/swagger.json 200 in 1ms
+
+/var/www/besindegerim/logs/err.log last 50 lines:
+73|besinde | 2025-10-27 23:20:39 +03:00:     _errorEmitted: true,
+73|besinde | 2025-10-27 23:20:39 +03:00:     _extensions: {},
+73|besinde | 2025-10-27 23:20:39 +03:00:     _paused: false,
+73|besinde | 2025-10-27 23:20:39 +03:00:     _protocol: '',
+73|besinde | 2025-10-27 23:20:39 +03:00:     _readyState: 3,
+73|besinde | 2025-10-27 23:20:39 +03:00:     _receiver: null,
+73|besinde | 2025-10-27 23:20:39 +03:00:     _sender: null,
+73|besinde | 2025-10-27 23:20:39 +03:00:     _socket: null,
+73|besinde | 2025-10-27 23:20:39 +03:00:     _bufferedAmount: 0,
+73|besinde | 2025-10-27 23:20:39 +03:00:     _isServer: false,
+73|besinde | 2025-10-27 23:20:39 +03:00:     _redirects: 0,
+73|besinde | 2025-10-27 23:20:39 +03:00:     _autoPong: true,
+73|besinde | 2025-10-27 23:20:39 +03:00:     _url: 'wss://localhost/v2',
+73|besinde | 2025-10-27 23:20:39 +03:00:     _req: null,
+73|besinde | 2025-10-27 23:20:39 +03:00:     [Symbol(shapeMode)]: false,
+73|besinde | 2025-10-27 23:20:39 +03:00:     [Symbol(kCapture)]: false
+73|besinde | 2025-10-27 23:20:39 +03:00:   },
+73|besinde | 2025-10-27 23:20:39 +03:00:   [Symbol(kType)]: 'error',
+73|besinde | 2025-10-27 23:20:39 +03:00:   [Symbol(kError)]: Error [ERR_TLS_CERT_ALTNAME_INVALID]: Hostname/IP does not match certificate's altnames: Host: localhost. is not in the cert's altnames: DNS:besindegerim.com, DNS:www.besindegerim.com
+73|besinde | 2025-10-27 23:20:39 +03:00:       at Object.checkServerIdentity (node:tls:316:12)
+73|besinde | 2025-10-27 23:20:39 +03:00:       at TLSSocket.onConnectSecure (node:_tls_wrap:1687:27)
+73|besinde | 2025-10-27 23:20:39 +03:00:       at TLSSocket.emit (node:events:524:28)
+73|besinde | 2025-10-27 23:20:39 +03:00:       at TLSSocket._finishInit (node:_tls_wrap:1076:8)
+73|besinde | 2025-10-27 23:20:39 +03:00:       at ssl.onhandshakedone (node:_tls_wrap:862:12) {
+73|besinde | 2025-10-27 23:20:39 +03:00:     code: 'ERR_TLS_CERT_ALTNAME_INVALID',
+73|besinde | 2025-10-27 23:20:39 +03:00:     reason: "Host: localhost. is not in the cert's altnames: DNS:besindegerim.com, DNS:www.besindegerim.com",
+73|besinde | 2025-10-27 23:20:39 +03:00:     host: 'localhost',
+73|besinde | 2025-10-27 23:20:39 +03:00:     cert: {
+73|besinde | 2025-10-27 23:20:39 +03:00:       subject: [Object: null prototype],
+73|besinde | 2025-10-27 23:20:39 +03:00:       issuer: [Object: null prototype],
+73|besinde | 2025-10-27 23:20:39 +03:00:       subjectaltname: 'DNS:besindegerim.com, DNS:www.besindegerim.com',
+73|besinde | 2025-10-27 23:20:39 +03:00:       infoAccess: [Object: null prototype],
+73|besinde | 2025-10-27 23:20:39 +03:00:       ca: false,
+73|besinde | 2025-10-27 23:20:39 +03:00:       modulus: 'DD1278D6F9DAE13D5D56F3A1D953D0EA4FAA7249F3B4EFA6DAAE5CB1616304A4B2C52270D905D622427FD67F315B9123533921C93F0EB1718EA0E33026067804554F239BC921459CB7A0BFD6E8C4A201476A52246860C1D03F6DC4A999540DF3EC60E11A6E73A0CAB7B3013A61CE3CDB6D29759BEEF62052BB699CE1BD6C07872E6C054E96F10838C5990A44639094F5A12398FD475C9B66BB90B13F22F26EDAC9BD78F8A1D93C49295707CA3F07DC63FA643BD6B653E754BC5692333CF7129D6A6594055922FE0B9CE810F643DCF3D63331B3D8359393AC3F1C94A0F8D491B45CF637FD88967329E5178BA1D9062D756D7BB7C0A57899F8897317136DF16099',
+73|besinde | 2025-10-27 23:20:39 +03:00:       bits: 2048,
+73|besinde | 2025-10-27 23:20:39 +03:00:       exponent: '0x10001',
+73|besinde | 2025-10-27 23:20:39 +03:00:       pubkey: <Buffer 30 82 01 22 30 0d 06 09 2a 86 48 86 f7 0d 01 01 01 05 00 03 82 01 0f 00 30 82 01 0a 02 82 01 01 00 dd 12 78 d6 f9 da e1 3d 5d 56 f3 a1 d9 53 d0 ea 4f ... 244 more bytes>,
+73|besinde | 2025-10-27 23:20:39 +03:00:       valid_from: 'Oct 27 19:21:37 2025 GMT',
+73|besinde | 2025-10-27 23:20:39 +03:00:       valid_to: 'Jan 25 19:21:36 2026 GMT',
+73|besinde | 2025-10-27 23:20:39 +03:00:       fingerprint: '92:DD:B9:96:8C:35:29:D0:36:51:79:C3:65:09:D8:C2:E4:89:63:54',
+73|besinde | 2025-10-27 23:20:39 +03:00:       fingerprint256: '69:09:56:54:B3:00:14:EE:80:31:21:8A:C5:72:0A:31:3A:4D:E0:D3:0F:8D:44:4A:60:29:B4:B0:3A:3A:48:46',
+73|besinde | 2025-10-27 23:20:39 +03:00:       fingerprint512: '10:DE:75:83:07:07:F8:DC:45:15:A2:BF:26:A4:36:B6:BB:79:7C:18:C8:E5:A3:8C:03:2F:AA:9E:23:CF:E5:C8:BB:1B:D2:07:71:07:B6:1C:26:CD:3F:AC:C4:6D:E7:AF:1F:9A:EF:2B:83:D3:6D:A8:99:12:77:03:80:AB:33:97',
+73|besinde | 2025-10-27 23:20:39 +03:00:       ext_key_usage: [Array],
+73|besinde | 2025-10-27 23:20:39 +03:00:       serialNumber: '05130D6CAC18680C2EA5653C97627A58E4D4',
+73|besinde | 2025-10-27 23:20:39 +03:00:       raw: <Buffer 30 82 05 12 30 82 03 fa a0 03 02 01 02 02 12 05 13 0d 6c ac 18 68 0c 2e a5 65 3c 97 62 7a 58 e4 d4 30 0d 06 09 2a 86 48 86 f7 0d 01 01 0b 05 00 30 33 ... 1252 more bytes>,
+73|besinde | 2025-10-27 23:20:39 +03:00:       issuerCertificate: [Object]
+73|besinde | 2025-10-27 23:20:39 +03:00:     }
+73|besinde | 2025-10-27 23:20:39 +03:00:   },
+73|besinde | 2025-10-27 23:20:39 +03:00:   [Symbol(kMessage)]: "Hostname/IP does not match certificate's altnames: Host: localhost. is not in the cert's altnames: DNS:besindegerim.com, DNS:www.besindegerim.com"
+73|besinde | 2025-10-27 23:20:39 +03:00: }
+
+^C
+root@162-55-4-35:/var/www/besindegerim# sudo tail -50 /var/log/nginx/error.log
+2025/10/27 02:06:49 [crit] 1865981#1865981: *925278 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 62.210.90.176, server: 0.0.0.0:443
+2025/10/27 02:06:52 [crit] 1865981#1865981: *925290 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 62.210.90.176, server: 0.0.0.0:443
+2025/10/27 03:13:26 [crit] 1865981#1865981: *926789 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 152.32.211.69, server: 0.0.0.0:443
+2025/10/27 03:26:22 [crit] 1865981#1865981: *926994 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 20.64.104.143, server: 0.0.0.0:443
+2025/10/27 04:00:41 [crit] 1865981#1865981: *927613 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 159.89.92.252, server: 0.0.0.0:443
+2025/10/27 04:03:28 [crit] 1865981#1865981: *927666 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 64.23.183.133, server: 0.0.0.0:443
+2025/10/27 06:31:10 [crit] 1865981#1865981: *931215 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 146.70.197.214, server: 0.0.0.0:443
+2025/10/27 07:49:02 [error] 1865981#1865981: *932535 open() "/var/www/webpconverter/favicon.ico" failed (2: No such file or directory), client: 87.236.176.77, server: jpgpngtoowebp.com, request: "GET /favicon.ico HTTP/2.0", host: "jpgpngtoowebp.com"
+2025/10/27 07:49:03 [error] 1865981#1865981: *932536 open() "/var/www/webpconverter/favicon.ico" failed (2: No such file or directory), client: 107.170.65.169, server: jpgpngtoowebp.com, request: "GET /favicon.ico HTTP/2.0", host: "jpgpngtoowebp.com"
+2025/10/27 08:49:11 [error] 1865981#1865981: *936918 open() "/var/www/webpconverter/config.js" failed (2: No such file or directory), client: 195.178.110.201, server: jpgpngtoowebp.com, request: "GET /config.js HTTP/1.1", host: "www.jpgpngtoowebp.com"
+2025/10/27 08:49:11 [error] 1865981#1865981: *936918 open() "/var/www/webpconverter/aws-config.js" failed (2: No such file or directory), client: 195.178.110.201, server: jpgpngtoowebp.com, request: "GET /aws-config.js HTTP/1.1", host: "www.jpgpngtoowebp.com"
+2025/10/27 08:49:11 [error] 1865981#1865981: *936918 open() "/var/www/webpconverter/aws.config.js" failed (2: No such file or directory), client: 195.178.110.201, server: jpgpngtoowebp.com, request: "GET /aws.config.js HTTP/1.1", host: "www.jpgpngtoowebp.com"
+2025/10/27 09:55:14 [crit] 1865981#1865981: *938368 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 165.227.40.218, server: 0.0.0.0:443
+2025/10/27 10:25:19 [crit] 1865981#1865981: *939045 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 165.232.75.150, server: 0.0.0.0:443
+2025/10/27 10:33:54 [crit] 1865981#1865981: *939169 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 178.62.235.252, server: 0.0.0.0:443
+2025/10/27 10:41:26 [crit] 1865981#1865981: *939317 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 203.75.213.2, server: 0.0.0.0:443
+2025/10/27 11:09:53 [crit] 1865981#1865981: *940650 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 146.190.249.204, server: 0.0.0.0:443
+2025/10/27 11:18:28 [crit] 1865981#1865981: *940809 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 154.47.29.7, server: 0.0.0.0:443
+2025/10/27 11:43:56 [crit] 1865981#1865981: *941347 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 5.101.64.6, server: 0.0.0.0:443
+2025/10/27 12:10:33 [crit] 1865981#1865981: *941955 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 64.62.197.181, server: 0.0.0.0:443
+2025/10/27 12:52:05 [error] 1865981#1865981: *943793 open() "/var/www/webpconverter/cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" failed (2: No such file or directory), client: 3.238.57.161, server: jpgpngtoowebp.com, request: "GET //cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js HTTP/1.1", host: "jpgpngtoowebp.com"
+2025/10/27 13:18:15 [crit] 1865981#1865981: *944841 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 185.247.137.55, server: 0.0.0.0:443
+2025/10/27 14:47:57 [error] 1865981#1865981: *948449 open() "/var/www/webpconverter/config.js" failed (2: No such file or directory), client: 195.178.110.201, server: jpgpngtoowebp.com, request: "GET /config.js HTTP/1.1", host: "jpgpngtoowebp.com"
+2025/10/27 14:47:57 [error] 1865981#1865981: *948449 open() "/var/www/webpconverter/aws-config.js" failed (2: No such file or directory), client: 195.178.110.201, server: jpgpngtoowebp.com, request: "GET /aws-config.js HTTP/1.1", host: "jpgpngtoowebp.com"
+2025/10/27 14:47:57 [error] 1865981#1865981: *948449 open() "/var/www/webpconverter/aws.config.js" failed (2: No such file or directory), client: 195.178.110.201, server: jpgpngtoowebp.com, request: "GET /aws.config.js HTTP/1.1", host: "jpgpngtoowebp.com"
+2025/10/27 15:02:20 [crit] 1865981#1865981: *948692 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 64.227.134.74, server: 0.0.0.0:443
+2025/10/27 15:30:57 [crit] 1865981#1865981: *949496 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 159.203.80.36, server: 0.0.0.0:443
+2025/10/27 16:49:22 [crit] 1865981#1865981: *950963 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 104.131.186.150, server: 0.0.0.0:443
+2025/10/27 17:04:31 [crit] 1865981#1865981: *951259 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 165.22.181.48, server: 0.0.0.0:443
+2025/10/27 18:40:21 [error] 1865981#1865981: *956403 open() "/var/www/webpconverter/cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" failed (2: No such file or directory), client: 3.238.57.161, server: jpgpngtoowebp.com, request: "GET //cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js HTTP/1.1", host: "www.jpgpngtoowebp.com"
+2025/10/27 19:10:06 [crit] 1865981#1865981: *957950 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 34.96.46.69, server: 0.0.0.0:443
+2025/10/27 21:56:21 [crit] 1865981#1865981: *966188 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 157.245.77.56, server: 0.0.0.0:443
+2025/10/27 22:10:20 [crit] 1865981#1865981: *966755 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 119.12.166.6, server: 0.0.0.0:443
+2025/10/27 22:47:25 [crit] 1865981#1865981: *968369 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 164.92.143.127, server: 0.0.0.0:443
+2025/10/27 22:47:54 [crit] 1865981#1865981: *968395 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 14.194.11.238, server: 0.0.0.0:443
+2025/10/27 22:53:04 [crit] 1865981#1865981: *968616 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 64.23.237.173, server: 0.0.0.0:443
+2025/10/27 23:18:15 [crit] 1865981#1865981: *969795 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 165.22.10.67, server: 0.0.0.0:443
+2025/10/27 23:19:59 [notice] 1280186#1280186: signal process started
+2025/10/27 23:20:06 [notice] 1280332#1280332: signal process started
+2025/10/27 23:20:09 [notice] 1280384#1280384: signal process started
+2025/10/27 23:20:10 [notice] 1280412#1280412: signal process started
+2025/10/27 23:20:26 [notice] 1280785#1280785: signal process started
+2025/10/27 23:20:32 [notice] 1280929#1280929: signal process started
+2025/10/27 23:20:37 [notice] 1281052#1281052: signal process started
+2025/10/27 23:20:43 [notice] 1281195#1281195: signal process started
+2025/10/27 23:20:49 [notice] 1281319#1281319: signal process started
+2025/10/27 23:20:55 [notice] 1281466#1281466: signal process started
+2025/10/27 23:20:59 [notice] 1281544#1281544: signal process started
+2025/10/27 23:21:03 [notice] 1281641#1281641: signal process started
+root@162-55-4-35:/var/www/besindegerim# ^C
+root@162-55-4-35:/var/www/besindegerim# sudo tail -20 /var/log/nginx/access.log
+13.51.255.240 - - [27/Oct/2025:23:21:00 +0300] "GET /.well-known/acme-challenge/-Hmd_h9YqeX36IB-xAynnLpss1T3EChA9ugjfP9HNy4 HTTP/1.1" 200 87 "-" "Mozilla/5.0 (compatible; Let's Encrypt validation server; +https://www.letsencrypt.org)"
+3.142.235.119 - - [27/Oct/2025:23:21:00 +0300] "GET /.well-known/acme-challenge/-Hmd_h9YqeX36IB-xAynnLpss1T3EChA9ugjfP9HNy4 HTTP/1.1" 200 87 "-" "Mozilla/5.0 (compatible; Let's Encrypt validation server; +https://www.letsencrypt.org)"
+13.51.255.240 - - [27/Oct/2025:23:21:00 +0300] "GET /.well-known/acme-challenge/gHruQA1xGb5LkmRp5KpqpvyzQht9E98hJQSqc9cxr78 HTTP/1.1" 200 87 "-" "Mozilla/5.0 (compatible; Let's Encrypt validation server; +https://www.letsencrypt.org)"
+34.216.96.193 - - [27/Oct/2025:23:21:00 +0300] "GET /.well-known/acme-challenge/-Hmd_h9YqeX36IB-xAynnLpss1T3EChA9ugjfP9HNy4 HTTP/1.1" 200 87 "-" "Mozilla/5.0 (compatible; Let's Encrypt validation server; +https://www.letsencrypt.org)"
+3.142.235.119 - - [27/Oct/2025:23:21:01 +0300] "GET /.well-known/acme-challenge/gHruQA1xGb5LkmRp5KpqpvyzQht9E98hJQSqc9cxr78 HTTP/1.1" 200 87 "-" "Mozilla/5.0 (compatible; Let's Encrypt validation server; +https://www.letsencrypt.org)"
+54.254.188.120 - - [27/Oct/2025:23:21:01 +0300] "GET /.well-known/acme-challenge/-Hmd_h9YqeX36IB-xAynnLpss1T3EChA9ugjfP9HNy4 HTTP/1.1" 200 87 "-" "Mozilla/5.0 (compatible; Let's Encrypt validation server; +https://www.letsencrypt.org)"
+34.216.96.193 - - [27/Oct/2025:23:21:01 +0300] "GET /.well-known/acme-challenge/gHruQA1xGb5LkmRp5KpqpvyzQht9E98hJQSqc9cxr78 HTTP/1.1" 200 87 "-" "Mozilla/5.0 (compatible; Let's Encrypt validation server; +https://www.letsencrypt.org)"
+54.254.188.120 - - [27/Oct/2025:23:21:01 +0300] "GET /.well-known/acme-challenge/gHruQA1xGb5LkmRp5KpqpvyzQht9E98hJQSqc9cxr78 HTTP/1.1" 200 87 "-" "Mozilla/5.0 (compatible; Let's Encrypt validation server; +https://www.letsencrypt.org)"
+136.243.228.194 - - [27/Oct/2025:23:21:03 +0300] "GET /giresun/bulancak/guney-mah-tepecik-koyu HTTP/1.1" 200 3901 "-" "Mozilla/5.0 (compatible; DataForSeoBot/1.0; +https://dataforseo.com/dataforseo-bot)"
+136.243.228.194 - - [27/Oct/2025:23:21:07 +0300] "GET /giresun/bulancak/cerelli-mah-icilli-koyu HTTP/1.1" 200 3904 "-" "Mozilla/5.0 (compatible; DataForSeoBot/1.0; +https://dataforseo.com/dataforseo-bot)"
+136.243.228.194 - - [27/Oct/2025:23:21:11 +0300] "GET /giresun/bulancak/asagi-yatak-mah-tandir-koyu HTTP/1.1" 200 3904 "-" "Mozilla/5.0 (compatible; DataForSeoBot/1.0; +https://dataforseo.com/dataforseo-bot)"
+136.243.228.194 - - [27/Oct/2025:23:21:15 +0300] "GET /giresun/bulancak/kibarcar-mah-kayabasi-koyu HTTP/1.1" 200 3913 "-" "Mozilla/5.0 (compatible; DataForSeoBot/1.0; +https://dataforseo.com/dataforseo-bot)"
+136.243.228.194 - - [27/Oct/2025:23:21:19 +0300] "GET /giresun/bulancak/oksuzoglu-mah-bostanli-koyu HTTP/1.1" 200 3914 "-" "Mozilla/5.0 (compatible; DataForSeoBot/1.0; +https://dataforseo.com/dataforseo-bot)"
+104.23.221.49 - - [27/Oct/2025:23:21:21 +0300] "GET /wp-admin/setup-config.php HTTP/1.1" 301 178 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+104.23.221.49 - - [27/Oct/2025:23:21:22 +0300] "GET /wp-admin/setup-config.php HTTP/2.0" 404 1020 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+136.243.228.194 - - [27/Oct/2025:23:21:23 +0300] "GET /giresun/bulancak/hasandede-mah-tandir-koyu HTTP/1.1" 200 3896 "-" "Mozilla/5.0 (compatible; DataForSeoBot/1.0; +https://dataforseo.com/dataforseo-bot)"
+136.243.228.194 - - [27/Oct/2025:23:21:27 +0300] "GET /giresun/bulancak/ust-mah-tepecik-koyu HTTP/1.1" 200 3898 "-" "Mozilla/5.0 (compatible; DataForSeoBot/1.0; +https://dataforseo.com/dataforseo-bot)"
+136.243.228.194 - - [27/Oct/2025:23:21:31 +0300] "GET /giresun/bulancak/sandik-kaya-kirazlik-mah-pazarsuyu-koyu HTTP/1.1" 200 3943 "-" "Mozilla/5.0 (compatible; DataForSeoBot/1.0; +https://dataforseo.com/dataforseo-bot)"
+136.243.228.194 - - [27/Oct/2025:23:21:35 +0300] "GET /giresun/bulancak/alt-mah-kayabasi-koyu HTTP/1.1" 200 3900 "-" "Mozilla/5.0 (compatible; DataForSeoBot/1.0; +https://dataforseo.com/dataforseo-bot)"
+136.243.228.194 - - [27/Oct/2025:23:21:39 +0300] "GET /giresun/bulancak/merkez-mah-tepecik-koyu HTTP/1.1" 200 3901 "-" "Mozilla/5.0 (compatible; DataForSeoBot/1.0; +https://dataforseo.com/dataforseo-bot)"
+root@162-55-4-35:/var/www/besindegerim# ^C
+root@162-55-4-35:/var/www/besindegerim# curl http://localhost:1453

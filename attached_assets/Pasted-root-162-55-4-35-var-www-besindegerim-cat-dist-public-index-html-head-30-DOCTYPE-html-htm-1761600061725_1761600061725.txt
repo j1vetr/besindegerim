@@ -1,0 +1,168 @@
+root@162-55-4-35:/var/www/besindegerim# cat dist/public/index.html | head -30
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="/assets/index-XDM4LTy4.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DM6Thzju.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>root@162-55-4-35:/var/www/besindegerim# ls -la dist/public/
+total 68
+drwxr-xr-x 4 root root  4096 Oct 28 00:17 .
+drwxr-xr-x 3 root root  4096 Oct 27 21:18 ..
+drwxr-xr-x 2 root root  4096 Oct 28 00:17 assets
+-rw-r--r-- 1 root root  1145 Oct 28 00:17 favicon.png
+drwxr-xr-x 2 root root  4096 Oct 28 00:17 food-images
+-rw-r--r-- 1 root root   695 Oct 28 00:17 index.html
+-rw-r--r-- 1 root root 44061 Oct 28 00:17 logo.png
+root@162-55-4-35:/var/www/besindegerim# curl -v http://localhost:1453 2>&1 | head -100
+*   Trying 127.0.0.1:1453...
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Connected to localhost (127.0.0.1) port 1453 (#0)
+> GET / HTTP/1.1
+> Host: localhost:1453
+> User-Agent: curl/7.81.0
+> Accept: */*
+>
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 500 Internal Server Error
+< X-Powered-By: Express
+< Content-Type: text/html; charset=utf-8
+< Content-Length: 12
+< ETag: W/"c-B2qdEJw/GiOJ4xbkQ++kDY9431Q"
+< Date: Mon, 27 Oct 2025 21:19:51 GMT
+< Connection: keep-alive
+< Keep-Alive: timeout=5
+<
+{ [12 bytes data]
+100    12  100    12    0     0   1422      0 --:--:-- --:--:-- --:--:--  1500
+* Connection #0 to host localhost left intact
+Server Errorroot@162-55-4-35:/var/www/besindegerim# ^C
+root@162-55-4-35:/var/www/besindegerim# pm2 logs besindegerim --err --lines 100 | grep -A 20 "Error\|Cannot find\|MODULE_NOT_FOUND\|ENOENT"
+75|besinde | 2025-10-28 00:19:37 +03:00:   [Symbol(kError)]: Error [ERR_TLS_CERT_ALTNAME_INVALID]: Hostname/IP does not match certificate's altnames: Host: localhost. is not in the cert's altnames: DNS:besindegerim.com, DNS:www.besindegerim.com
+75|besinde | 2025-10-28 00:19:37 +03:00:       at Object.checkServerIdentity (node:tls:316:12)
+75|besinde | 2025-10-28 00:19:37 +03:00:       at TLSSocket.onConnectSecure (node:_tls_wrap:1687:27)
+75|besinde | 2025-10-28 00:19:37 +03:00:       at TLSSocket.emit (node:events:524:28)
+75|besinde | 2025-10-28 00:19:37 +03:00:       at TLSSocket._finishInit (node:_tls_wrap:1076:8)
+75|besinde | 2025-10-28 00:19:37 +03:00:       at ssl.onhandshakedone (node:_tls_wrap:862:12) {
+75|besinde | 2025-10-28 00:19:37 +03:00:     code: 'ERR_TLS_CERT_ALTNAME_INVALID',
+75|besinde | 2025-10-28 00:19:37 +03:00:     reason: "Host: localhost. is not in the cert's altnames: DNS:besindegerim.com, DNS:www.besindegerim.com",
+75|besinde | 2025-10-28 00:19:37 +03:00:     host: 'localhost',
+75|besinde | 2025-10-28 00:19:37 +03:00:     cert: {
+75|besinde | 2025-10-28 00:19:37 +03:00:       subject: [Object: null prototype],
+75|besinde | 2025-10-28 00:19:37 +03:00:       issuer: [Object: null prototype],
+75|besinde | 2025-10-28 00:19:37 +03:00:       subjectaltname: 'DNS:besindegerim.com, DNS:www.besindegerim.com',
+75|besinde | 2025-10-28 00:19:37 +03:00:       infoAccess: [Object: null prototype],
+75|besinde | 2025-10-28 00:19:37 +03:00:       ca: false,
+75|besinde | 2025-10-28 00:19:37 +03:00:       modulus: 'DD1278D6F9DAE13D5D56F3A1D953D0EA4FAA7249F3B4EFA6DAAE5CB1616304A4B2C52270D905D622427FD67F315B9123533921C93F0EB1718EA0E33026067804554F239BC921459CB7A0BFD6E8C4A201476A52246860C1D03F6DC4A999540DF3EC60E11A6E73A0CAB7B3013A61CE3CDB6D29759BEEF62052BB699CE1BD6C07872E6C054E96F10838C5990A44639094F5A12398FD475C9B66BB90B13F22F26EDAC9BD78F8A1D93C49295707CA3F07DC63FA643BD6B653E754BC5692333CF7129D6A6594055922FE0B9CE810F643DCF3D63331B3D8359393AC3F1C94A0F8D491B45CF637FD88967329E5178BA1D9062D756D7BB7C0A57899F8897317136DF16099',
+75|besinde | 2025-10-28 00:19:37 +03:00:       bits: 2048,
+75|besinde | 2025-10-28 00:19:37 +03:00:       exponent: '0x10001',
+75|besinde | 2025-10-28 00:19:37 +03:00:       pubkey: <Buffer 30 82 01 22 30 0d 06 09 2a 86 48 86 f7 0d 01 01 01 05 00 03 82 01 0f 00 30 82 01 0a 02 82 01 01 00 dd 12 78 d6 f9 da e1 3d 5d 56 f3 a1 d9 53 d0 ea 4f ... 244 more bytes>,
+75|besinde | 2025-10-28 00:19:37 +03:00:       valid_from: 'Oct 27 19:21:37 2025 GMT',
+75|besinde | 2025-10-28 00:19:37 +03:00:       valid_to: 'Jan 25 19:21:36 2026 GMT',
+--
+75|besinde | 2025-10-28 00:19:51 +03:00: [SSR /] Error: ErrorEvent {
+75|besinde | 2025-10-28 00:19:51 +03:00:   [Symbol(kTarget)]: WebSocket {
+75|besinde | 2025-10-28 00:19:51 +03:00:     _events: [Object: null prototype] {
+75|besinde | 2025-10-28 00:19:51 +03:00:       error: [Function],
+75|besinde | 2025-10-28 00:19:51 +03:00:       message: [Function],
+75|besinde | 2025-10-28 00:19:51 +03:00:       close: [Function],
+75|besinde | 2025-10-28 00:19:51 +03:00:       open: [Function]
+75|besinde | 2025-10-28 00:19:51 +03:00:     },
+75|besinde | 2025-10-28 00:19:51 +03:00:     _eventsCount: 4,
+75|besinde | 2025-10-28 00:19:51 +03:00:     _maxListeners: undefined,
+75|besinde | 2025-10-28 00:19:51 +03:00:     _binaryType: 'arraybuffer',
+75|besinde | 2025-10-28 00:19:51 +03:00:     _closeCode: 1006,
+75|besinde | 2025-10-28 00:19:51 +03:00:     _closeFrameReceived: false,
+75|besinde | 2025-10-28 00:19:51 +03:00:     _closeFrameSent: false,
+75|besinde | 2025-10-28 00:19:51 +03:00:     _closeMessage: <Buffer >,
+75|besinde | 2025-10-28 00:19:51 +03:00:     _closeTimer: null,
+75|besinde | 2025-10-28 00:19:51 +03:00:     _errorEmitted: true,
+75|besinde | 2025-10-28 00:19:51 +03:00:     _extensions: {},
+75|besinde | 2025-10-28 00:19:51 +03:00:     _paused: false,
+75|besinde | 2025-10-28 00:19:51 +03:00:     _protocol: '',
+75|besinde | 2025-10-28 00:19:51 +03:00:     _readyState: 3,
+--
+75|besinde | 2025-10-28 00:19:51 +03:00:   [Symbol(kError)]: Error [ERR_TLS_CERT_ALTNAME_INVALID]: Hostname/IP does not match certificate's altnames: Host: localhost. is not in the cert's altnames: DNS:besindegerim.com, DNS:www.besindegerim.com
+75|besinde | 2025-10-28 00:19:51 +03:00:       at Object.checkServerIdentity (node:tls:316:12)
+75|besinde | 2025-10-28 00:19:51 +03:00:       at TLSSocket.onConnectSecure (node:_tls_wrap:1687:27)
+75|besinde | 2025-10-28 00:19:51 +03:00:       at TLSSocket.emit (node:events:524:28)
+75|besinde | 2025-10-28 00:19:51 +03:00:       at TLSSocket._finishInit (node:_tls_wrap:1076:8)
+75|besinde | 2025-10-28 00:19:51 +03:00:       at ssl.onhandshakedone (node:_tls_wrap:862:12) {
+75|besinde | 2025-10-28 00:19:51 +03:00:     code: 'ERR_TLS_CERT_ALTNAME_INVALID',
+75|besinde | 2025-10-28 00:19:51 +03:00:     reason: "Host: localhost. is not in the cert's altnames: DNS:besindegerim.com, DNS:www.besindegerim.com",
+75|besinde | 2025-10-28 00:19:51 +03:00:     host: 'localhost',
+75|besinde | 2025-10-28 00:19:51 +03:00:     cert: {
+75|besinde | 2025-10-28 00:19:51 +03:00:       subject: [Object: null prototype],
+75|besinde | 2025-10-28 00:19:51 +03:00:       issuer: [Object: null prototype],
+75|besinde | 2025-10-28 00:19:51 +03:00:       subjectaltname: 'DNS:besindegerim.com, DNS:www.besindegerim.com',
+75|besinde | 2025-10-28 00:19:51 +03:00:       infoAccess: [Object: null prototype],
+75|besinde | 2025-10-28 00:19:51 +03:00:       ca: false,
+75|besinde | 2025-10-28 00:19:51 +03:00:       modulus: 'DD1278D6F9DAE13D5D56F3A1D953D0EA4FAA7249F3B4EFA6DAAE5CB1616304A4B2C52270D905D622427FD67F315B9123533921C93F0EB1718EA0E33026067804554F239BC921459CB7A0BFD6E8C4A201476A52246860C1D03F6DC4A999540DF3EC60E11A6E73A0CAB7B3013A61CE3CDB6D29759BEEF62052BB699CE1BD6C07872E6C054E96F10838C5990A44639094F5A12398FD475C9B66BB90B13F22F26EDAC9BD78F8A1D93C49295707CA3F07DC63FA643BD6B653E754BC5692333CF7129D6A6594055922FE0B9CE810F643DCF3D63331B3D8359393AC3F1C94A0F8D491B45CF637FD88967329E5178BA1D9062D756D7BB7C0A57899F8897317136DF16099',
+75|besinde | 2025-10-28 00:19:51 +03:00:       bits: 2048,
+75|besinde | 2025-10-28 00:19:51 +03:00:       exponent: '0x10001',
+75|besinde | 2025-10-28 00:19:51 +03:00:       pubkey: <Buffer 30 82 01 22 30 0d 06 09 2a 86 48 86 f7 0d 01 01 01 05 00 03 82 01 0f 00 30 82 01 0a 02 82 01 01 00 dd 12 78 d6 f9 da e1 3d 5d 56 f3 a1 d9 53 d0 ea 4f ... 244 more bytes>,
+75|besinde | 2025-10-28 00:19:51 +03:00:       valid_from: 'Oct 27 19:21:37 2025 GMT',
+75|besinde | 2025-10-28 00:19:51 +03:00:       valid_to: 'Jan 25 19:21:36 2026 GMT',
+^C
+root@162-55-4-35:/var/www/besindegerim# tail -100 /var/www/besindegerim/logs/err.log | grep -v "altnames" | grep -v "SSL\|TLS\|Certificate" | tail -50
+2025-10-28 00:19:51 +03:00:     _eventsCount: 4,
+2025-10-28 00:19:51 +03:00:     _maxListeners: undefined,
+2025-10-28 00:19:51 +03:00:     _binaryType: 'arraybuffer',
+2025-10-28 00:19:51 +03:00:     _closeCode: 1006,
+2025-10-28 00:19:51 +03:00:     _closeFrameReceived: false,
+2025-10-28 00:19:51 +03:00:     _closeFrameSent: false,
+2025-10-28 00:19:51 +03:00:     _closeMessage: <Buffer >,
+2025-10-28 00:19:51 +03:00:     _closeTimer: null,
+2025-10-28 00:19:51 +03:00:     _errorEmitted: true,
+2025-10-28 00:19:51 +03:00:     _extensions: {},
+2025-10-28 00:19:51 +03:00:     _paused: false,
+2025-10-28 00:19:51 +03:00:     _protocol: '',
+2025-10-28 00:19:51 +03:00:     _readyState: 3,
+2025-10-28 00:19:51 +03:00:     _receiver: null,
+2025-10-28 00:19:51 +03:00:     _sender: null,
+2025-10-28 00:19:51 +03:00:     _socket: null,
+2025-10-28 00:19:51 +03:00:     _bufferedAmount: 0,
+2025-10-28 00:19:51 +03:00:     _isServer: false,
+2025-10-28 00:19:51 +03:00:     _redirects: 0,
+2025-10-28 00:19:51 +03:00:     _autoPong: true,
+2025-10-28 00:19:51 +03:00:     _url: 'wss://localhost/v2',
+2025-10-28 00:19:51 +03:00:     _req: null,
+2025-10-28 00:19:51 +03:00:     [Symbol(shapeMode)]: false,
+2025-10-28 00:19:51 +03:00:     [Symbol(kCapture)]: false
+2025-10-28 00:19:51 +03:00:   },
+2025-10-28 00:19:51 +03:00:   [Symbol(kType)]: 'error',
+2025-10-28 00:19:51 +03:00:       at Object.checkServerIdentity (node:tls:316:12)
+2025-10-28 00:19:51 +03:00:       at ssl.onhandshakedone (node:_tls_wrap:862:12) {
+2025-10-28 00:19:51 +03:00:     host: 'localhost',
+2025-10-28 00:19:51 +03:00:     cert: {
+2025-10-28 00:19:51 +03:00:       subject: [Object: null prototype],
+2025-10-28 00:19:51 +03:00:       issuer: [Object: null prototype],
+2025-10-28 00:19:51 +03:00:       subjectaltname: 'DNS:besindegerim.com, DNS:www.besindegerim.com',
+2025-10-28 00:19:51 +03:00:       infoAccess: [Object: null prototype],
+2025-10-28 00:19:51 +03:00:       ca: false,
+2025-10-28 00:19:51 +03:00:       modulus: 'DD1278D6F9DAE13D5D56F3A1D953D0EA4FAA7249F3B4EFA6DAAE5CB1616304A4B2C52270D905D622427FD67F315B9123533921C93F0EB1718EA0E33026067804554F239BC921459CB7A0BFD6E8C4A201476A52246860C1D03F6DC4A999540DF3EC60E11A6E73A0CAB7B3013A61CE3CDB6D29759BEEF62052BB699CE1BD6C07872E6C054E96F10838C5990A44639094F5A12398FD475C9B66BB90B13F22F26EDAC9BD78F8A1D93C49295707CA3F07DC63FA643BD6B653E754BC5692333CF7129D6A6594055922FE0B9CE810F643DCF3D63331B3D8359393AC3F1C94A0F8D491B45CF637FD88967329E5178BA1D9062D756D7BB7C0A57899F8897317136DF16099',
+2025-10-28 00:19:51 +03:00:       bits: 2048,
+2025-10-28 00:19:51 +03:00:       exponent: '0x10001',
+2025-10-28 00:19:51 +03:00:       pubkey: <Buffer 30 82 01 22 30 0d 06 09 2a 86 48 86 f7 0d 01 01 01 05 00 03 82 01 0f 00 30 82 01 0a 02 82 01 01 00 dd 12 78 d6 f9 da e1 3d 5d 56 f3 a1 d9 53 d0 ea 4f ... 244 more bytes>,
+2025-10-28 00:19:51 +03:00:       valid_from: 'Oct 27 19:21:37 2025 GMT',
+2025-10-28 00:19:51 +03:00:       valid_to: 'Jan 25 19:21:36 2026 GMT',
+2025-10-28 00:19:51 +03:00:       fingerprint: '92:DD:B9:96:8C:35:29:D0:36:51:79:C3:65:09:D8:C2:E4:89:63:54',
+2025-10-28 00:19:51 +03:00:       fingerprint256: '69:09:56:54:B3:00:14:EE:80:31:21:8A:C5:72:0A:31:3A:4D:E0:D3:0F:8D:44:4A:60:29:B4:B0:3A:3A:48:46',
+2025-10-28 00:19:51 +03:00:       fingerprint512: '10:DE:75:83:07:07:F8:DC:45:15:A2:BF:26:A4:36:B6:BB:79:7C:18:C8:E5:A3:8C:03:2F:AA:9E:23:CF:E5:C8:BB:1B:D2:07:71:07:B6:1C:26:CD:3F:AC:C4:6D:E7:AF:1F:9A:EF:2B:83:D3:6D:A8:99:12:77:03:80:AB:33:97',
+2025-10-28 00:19:51 +03:00:       ext_key_usage: [Array],
+2025-10-28 00:19:51 +03:00:       serialNumber: '05130D6CAC18680C2EA5653C97627A58E4D4',
+2025-10-28 00:19:51 +03:00:       raw: <Buffer 30 82 05 12 30 82 03 fa a0 03 02 01 02 02 12 05 13 0d 6c ac 18 68 0c 2e a5 65 3c 97 62 7a 58 e4 d4 30 0d 06 09 2a 86 48 86 f7 0d 01 01 0b 05 00 30 33 ... 1252 more bytes>,
+2025-10-28 00:19:51 +03:00:     }
+2025-10-28 00:19:51 +03:00:   },
+2025-10-28 00:19:51 +03:00: }
+root@162-55-4-35:/var/www/besindegerim#

@@ -1,0 +1,49 @@
+root@162-55-4-35:/var/www/besindegerim# cat dist/public/index.html | head -30
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="/assets/index-XDM4LTy4.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DM6Thzju.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>root@162-55-4-35:/var/www/besindegerim# ls -la dist/public/
+total 68
+drwxr-xr-x 4 root root  4096 Oct 28 00:17 .
+drwxr-xr-x 3 root root  4096 Oct 27 21:18 ..
+drwxr-xr-x 2 root root  4096 Oct 28 00:17 assets
+-rw-r--r-- 1 root root  1145 Oct 28 00:17 favicon.png
+drwxr-xr-x 2 root root  4096 Oct 28 00:17 food-images
+-rw-r--r-- 1 root root   695 Oct 28 00:17 index.html
+-rw-r--r-- 1 root root 44061 Oct 28 00:17 logo.png
+root@162-55-4-35:/var/www/besindegerim# curl -v http://localhost:1453 2>&1 | head -100
+*   Trying 127.0.0.1:1453...
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Connected to localhost (127.0.0.1) port 1453 (#0)
+> GET / HTTP/1.1
+> Host: localhost:1453
+> User-Agent: curl/7.81.0
+> Accept: */*
+>
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 500 Internal Server Error
+< X-Powered-By: Express
+< Content-Type: text/html; charset=utf-8
+< Content-Length: 12
+< ETag: W/"c-B2qdEJw/GiOJ4xbkQ++kDY9431Q"
+< Date: Mon, 27 Oct 2025 21:19:51 GMT
+< Connection: keep-alive
+< Keep-Alive: timeout=5
+<
+{ [12 bytes data]
+100    12  100    12    0     0   1422      0 --:--:-- --:--:-- --:--:--  1500
+* Connection #0 to host localhost left intact
+Server Errorroot@162-55-4-35:/var/www/besindegerim#
