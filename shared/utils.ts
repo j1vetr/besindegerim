@@ -23,3 +23,48 @@ export function categoryToSlug(text: string): string {
     .replace(/-+/g, "-") // Çift tire varsa tek tire yap
     .replace(/^-|-$/g, ""); // Başta ve sonda tire varsa kaldır
 }
+
+/**
+ * Find original main category name from slug
+ * 
+ * @param slug - URL slug (e.g., "hayvansal-urunler")
+ * @param categoryGroups - Array of category groups
+ * @returns Original main category name or null
+ */
+export function findMainCategoryBySlug(slug: string, categoryGroups: any[]): string | null {
+  for (const group of categoryGroups) {
+    if (categoryToSlug(group.mainCategory) === slug) {
+      return group.mainCategory;
+    }
+  }
+  return null;
+}
+
+/**
+ * Find original subcategory name from slug
+ * 
+ * @param slug - URL slug (e.g., "sebzeler")
+ * @param categoryGroups - Array of category groups
+ * @returns Original subcategory name or null
+ */
+export function findSubcategoryBySlug(slug: string, categoryGroups: any[]): string | null {
+  for (const group of categoryGroups) {
+    for (const subcategory of group.subcategories) {
+      if (categoryToSlug(subcategory) === slug) {
+        return subcategory;
+      }
+    }
+  }
+  return null;
+}
+
+/**
+ * Find original category name from slug (checks both main and sub)
+ * 
+ * @param slug - URL slug (e.g., "hayvansal-urunler")
+ * @param categoryGroups - Array of category groups
+ * @returns Original category name or null
+ */
+export function findCategoryBySlug(slug: string, categoryGroups: any[]): string | null {
+  return findMainCategoryBySlug(slug, categoryGroups) || findSubcategoryBySlug(slug, categoryGroups);
+}

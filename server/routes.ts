@@ -187,12 +187,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
    */
   app.get("/api/foods/category/:category", async (req, res) => {
     try {
-      const category = decodeURIComponent(req.params.category);
-      const cacheKey = `category_${category}`;
+      const categorySlug = decodeURIComponent(req.params.category);
+      
+      // Get category groups to find original main category name from slug
+      const categoryGroups = await storage.getCategoryGroups();
+      const { findMainCategoryBySlug } = await import("../shared/utils");
+      const originalCategory = findMainCategoryBySlug(categorySlug, categoryGroups);
+      
+      if (!originalCategory) {
+        return res.json({ foods: [] });
+      }
+      
+      const cacheKey = `category_${originalCategory}`;
       let foods = cache.get<any[]>(cacheKey);
 
       if (!foods) {
-        foods = await storage.getFoodsByCategory(category);
+        foods = await storage.getFoodsByCategory(originalCategory);
         cache.set(cacheKey, foods, 600000); // Cache for 10 minutes
       }
 
@@ -209,12 +219,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
    */
   app.get("/api/foods/subcategory/:subcategory", async (req, res) => {
     try {
-      const subcategory = decodeURIComponent(req.params.subcategory);
-      const cacheKey = `subcategory_${subcategory}`;
+      const subcategorySlug = decodeURIComponent(req.params.subcategory);
+      
+      // Get category groups to find original subcategory name
+      const categoryGroups = await storage.getCategoryGroups();
+      const { findSubcategoryBySlug } = await import("../shared/utils");
+      const originalSubcategory = findSubcategoryBySlug(subcategorySlug, categoryGroups);
+      
+      if (!originalSubcategory) {
+        return res.json({ foods: [] });
+      }
+      
+      const cacheKey = `subcategory_${originalSubcategory}`;
       let foods = cache.get<any[]>(cacheKey);
 
       if (!foods) {
-        foods = await storage.getFoodsBySubcategory(subcategory);
+        foods = await storage.getFoodsBySubcategory(originalSubcategory);
         cache.set(cacheKey, foods, 600000); // Cache for 10 minutes
       }
 
