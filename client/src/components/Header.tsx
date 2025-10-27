@@ -35,52 +35,55 @@ function MobileMenu({ categoryGroups, currentPath }: { categoryGroups: CategoryG
         )}
       </button>
 
-      {/* Mobile Menu Overlay */}
-      {isOpen && (
-        <>
-          {/* Backdrop */}
-          <div 
-            className="fixed inset-0 bg-black/50 z-[55]"
-            onClick={() => setIsOpen(false)}
-            data-testid="mobile-menu-backdrop"
-          />
-          
-          {/* Menu Panel - Full height, left aligned */}
-          <div 
-            className="fixed top-0 left-0 bottom-0 w-full max-w-[320px] bg-white shadow-2xl z-[60] overflow-y-auto"
-            data-testid="mobile-menu-panel"
-          >
-            <div className="p-6">
-              <h2 className="text-xl font-bold text-green-700 mb-4">Kategoriler</h2>
-              
-              <div className="space-y-2">
-                {/* Tümü Link */}
-                <a
-                  href="/tum-gidalar"
-                  onClick={() => setIsOpen(false)}
-                  className="block px-4 py-3 rounded-xl font-semibold bg-green-50 text-green-700 hover:bg-green-100 transition-all"
-                  data-testid="link-mobile-category-all"
-                >
-                  Tümü
-                </a>
+      {/* Mobile Menu - ALWAYS render but translate off-screen when closed */}
+      <div className="lg:hidden">
+        {/* Backdrop */}
+        <div 
+          className={`fixed inset-0 bg-black/50 transition-opacity duration-300 ${
+            isOpen ? 'opacity-100 z-[55]' : 'opacity-0 pointer-events-none'
+          }`}
+          onClick={() => setIsOpen(false)}
+          data-testid="mobile-menu-backdrop"
+        />
+        
+        {/* Menu Panel - SLIDE FROM LEFT */}
+        <div 
+          className={`fixed top-0 left-0 bottom-0 w-[85vw] max-w-[320px] bg-white shadow-2xl z-[60] overflow-y-auto transform transition-transform duration-300 ease-out ${
+            isOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
+          style={{ willChange: 'transform' }}
+          data-testid="mobile-menu-panel"
+        >
+          <div className="p-6">
+            <h2 className="text-xl font-bold text-green-700 mb-4">Kategoriler</h2>
+            
+            <div className="space-y-2">
+              {/* Tümü Link */}
+              <a
+                href="/tum-gidalar"
+                onClick={() => setIsOpen(false)}
+                className="block px-4 py-3 rounded-xl font-semibold bg-green-50 text-green-700 hover:bg-green-100 transition-all"
+                data-testid="link-mobile-category-all"
+              >
+                Tümü
+              </a>
 
-                {/* Main Categories Only (no subcategories) */}
-                {categoryGroups.map((group) => (
-                  <a
-                    key={group.mainCategory}
-                    href={`/kategori/${categoryToSlug(group.mainCategory)}`}
-                    onClick={() => setIsOpen(false)}
-                    className="block px-4 py-3 rounded-xl font-semibold bg-green-100 text-green-700 hover:bg-green-200 transition-colors"
-                    data-testid={`link-mobile-category-${group.mainCategory}`}
-                  >
-                    {group.mainCategory}
-                  </a>
-                ))}
-              </div>
+              {/* Main Categories Only (no subcategories) */}
+              {categoryGroups.map((group) => (
+                <a
+                  key={group.mainCategory}
+                  href={`/kategori/${categoryToSlug(group.mainCategory)}`}
+                  onClick={() => setIsOpen(false)}
+                  className="block px-4 py-3 rounded-xl font-semibold bg-green-100 text-green-700 hover:bg-green-200 transition-colors"
+                  data-testid={`link-mobile-category-${group.mainCategory}`}
+                >
+                  {group.mainCategory}
+                </a>
+              ))}
             </div>
           </div>
-        </>
-      )}
+        </div>
+      </div>
     </>
   );
 }

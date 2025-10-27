@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useLocation, useSearch } from "wouter";
 import { type Food, type CategoryGroup } from "@shared/schema";
 import { FoodCard } from "@/components/FoodCard";
 import { Header } from "@/components/Header";
@@ -31,7 +32,17 @@ export default function AllFoodsPage({
   initialTotalPages = 1,
   initialTotal = 0
 }: AllFoodsPageProps) {
-  const [currentPage, setCurrentPage] = useState(initialPage);
+  const [, setLocation] = useLocation();
+  const search = useSearch();
+  
+  // Read page from URL query params
+  const urlPage = parseInt(new URLSearchParams(search).get("page") || "1");
+  const [currentPage, setCurrentPage] = useState(urlPage);
+
+  // Sync state with URL changes
+  useEffect(() => {
+    setCurrentPage(urlPage);
+  }, [urlPage]);
 
   // Client-side data fetching for pagination
   // Always fetch in development mode (when initialFoods is empty)
@@ -54,7 +65,13 @@ export default function AllFoodsPage({
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
-      setCurrentPage(newPage);
+      // Update URL with new page number
+      const newUrl = newPage === 1 
+        ? '/tum-gidalar' 
+        : `/tum-gidalar?page=${newPage}`;
+      setLocation(newUrl);
+      
+      // Scroll to top
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
