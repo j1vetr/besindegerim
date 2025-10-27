@@ -34,10 +34,13 @@ export default function AllFoodsPage({
   const [currentPage, setCurrentPage] = useState(initialPage);
 
   // Client-side data fetching for pagination
-  // Only fetch if not from SSR (initialFoods empty) or page changed
+  // Always fetch in development mode (when initialFoods is empty)
+  // In SSR mode, only fetch when page changes
+  const shouldFetch = initialFoods.length === 0 || currentPage !== initialPage;
+  
   const { data, isLoading } = useQuery<PaginatedFoodsResponse>({
-    queryKey: ['/api/foods', currentPage],
-    enabled: initialFoods.length === 0 || currentPage !== initialPage,
+    queryKey: [`/api/foods?page=${currentPage}&limit=30`],
+    enabled: shouldFetch,
   });
 
   // Use SSR data or API data
@@ -45,8 +48,9 @@ export default function AllFoodsPage({
     ? initialFoods 
     : (data?.items || []);
   
-  const totalPages = data?.totalPages || initialTotalPages;
-  const total = data?.total || initialTotal;
+  // Prefer API data over initial props (fixes development mode showing 0 total)
+  const totalPages = data?.totalPages || initialTotalPages || 1;
+  const total = data?.total || initialTotal || 0;
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {

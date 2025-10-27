@@ -92,10 +92,17 @@ function AllFoodsPageWrapper() {
   const page = parseInt(new URLSearchParams(search).get("page") || "1");
   const [location] = useLocation();
   const { data: categoryGroups = [] } = useQuery({ queryKey: ["/api/category-groups"] });
+  const { data: foodsData } = useQuery({ 
+    queryKey: [`/api/foods?page=${page}&limit=30`]
+  });
   
   return <AllFoodsPage 
     categoryGroups={categoryGroups}
     currentPath={location}
+    initialFoods={foodsData?.items}
+    initialPage={foodsData?.page}
+    initialTotalPages={foodsData?.totalPages}
+    initialTotal={foodsData?.total}
   />;
 }
 
