@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, ChevronDown, Menu, X } from "lucide-react";
 import type { CategoryGroup } from "@shared/schema";
 import { categoryToSlug } from "@shared/utils";
@@ -13,14 +13,31 @@ interface HeaderProps {
 // Client-side mobile menu component
 function MobileMenuInteractive({ categoryGroups, currentPath }: { categoryGroups: CategoryGroup[], currentPath: string }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const isHomeActive = currentPath === "/" || currentPath.startsWith("/?");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <button
+        className="p-2 rounded-lg bg-green-100"
+        disabled
+        aria-label="Menü"
+      >
+        <Menu className="w-6 h-6 text-green-700" />
+      </button>
+    );
+  }
 
   return (
     <>
       {/* Hamburger Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden p-2 hover:bg-green-100 rounded-lg transition-colors z-50"
+        className="p-2 hover:bg-green-100 rounded-lg transition-colors z-50 relative"
         data-testid="button-mobile-menu"
         aria-label={isOpen ? "Menüyü kapat" : "Menüyü aç"}
       >
@@ -36,14 +53,14 @@ function MobileMenuInteractive({ categoryGroups, currentPath }: { categoryGroups
         <>
           {/* Backdrop */}
           <div 
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            className="fixed inset-0 bg-black/50 z-40"
             onClick={() => setIsOpen(false)}
             data-testid="mobile-menu-backdrop"
           />
           
           {/* Menu Panel */}
           <div 
-            className="fixed top-0 left-0 bottom-0 w-[280px] sm:w-[350px] bg-white shadow-2xl z-50 overflow-y-auto lg:hidden"
+            className="fixed top-0 left-0 bottom-0 w-[280px] sm:w-[350px] bg-white shadow-2xl z-50 overflow-y-auto"
             data-testid="mobile-menu-panel"
           >
             <div className="p-6">
@@ -112,9 +129,7 @@ export function Header({ categoryGroups = [], currentPath = "/" }: HeaderProps) 
         <div className="flex items-center gap-2 sm:gap-4">
           {/* Mobile Menu - Client Side Only */}
           <div className="lg:hidden">
-            <ClientOnly>
-              <MobileMenuInteractive categoryGroups={categoryGroups} currentPath={currentPath} />
-            </ClientOnly>
+            <MobileMenuInteractive categoryGroups={categoryGroups} currentPath={currentPath} />
           </div>
 
           {/* Logo */}
