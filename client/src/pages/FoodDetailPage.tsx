@@ -31,138 +31,126 @@ export function FoodDetailPage({ food, alternatives, categoryGroups, currentPath
     <div className="min-h-screen flex flex-col">
       <Header categoryGroups={categoryGroups} currentPath={currentPath} />
       <main className="flex-1">
-        {/* Hero Section - Futuristic Holographic Design */}
-        <section className="relative min-h-[60vh] md:min-h-[70vh] flex items-center overflow-hidden particle-bg">
-          {/* Holographic Animated Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#22c55e] via-[#10b981] to-[#14b8a6] opacity-95"></div>
-          <div className="absolute inset-0 holographic-bg opacity-20"></div>
+        {/* Hero Section - Enhanced Readability */}
+        <section className="relative min-h-[60vh] md:min-h-[70vh] flex items-center overflow-hidden">
+          {/* Background with Dark Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a1a] via-[#0f4c2e] to-[#0a3d2c]"></div>
           
-          {/* Background Image with Overlay */}
+          {/* Background Image with Strong Dark Overlay */}
           {imageUrl && (
-            <div className="absolute inset-0 hidden md:block">
+            <div className="absolute inset-0">
               <img
                 src={imageUrl}
                 alt={food.name}
-                className="w-full h-full object-cover opacity-15"
+                className="w-full h-full object-cover opacity-25"
                 data-testid="img-food-detail-bg"
               />
-              <div className="absolute inset-0 bg-gradient-to-br from-[#22c55e]/85 via-[#10b981]/90 to-[#14b8a6]/85"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-[#0f4c2e]/80 to-black/70"></div>
             </div>
           )}
           
-          {/* Scan Line Effect */}
-          <div className="absolute inset-0 scan-effect opacity-30"></div>
+          {/* Subtle Glow Effect */}
+          <div className="absolute inset-0 bg-gradient-to-t from-transparent via-green-500/5 to-transparent"></div>
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-12 md:py-16 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
-              {/* Left: 3D Food Image Card with Neon Glow */}
+              {/* Left: Food Image Card */}
               <div className="order-2 lg:order-1">
                 {imageUrl ? (
-                  <div className="relative overflow-hidden rounded-3xl shadow-2xl group card-3d neon-glow-static">
+                  <div className="relative overflow-hidden rounded-3xl shadow-2xl group neon-glow-static border-2 border-green-500/30">
                     <img
                       src={imageUrl}
                       alt={food.name}
-                      className="w-full h-[400px] md:h-[500px] object-cover group-hover:scale-110 transition-transform duration-700"
+                      className="w-full h-[400px] md:h-[500px] object-cover group-hover:scale-105 transition-transform duration-500"
                       data-testid="img-food-detail"
                     />
-                    {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent group-hover:from-black/30 transition-all duration-500"></div>
+                    {/* Dark Gradient Overlay for Better Badge Visibility */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                     
-                    {/* Shimmer Effect on Hover */}
-                    <div className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    
-                    {/* Calorie Badge with Neon Glow */}
-                    <div className="absolute bottom-6 right-6 glass-morph rounded-2xl px-6 py-4 neon-glow shadow-2xl pulse-scale">
+                    {/* Calorie Badge - Enhanced Visibility */}
+                    <div className="absolute bottom-6 right-6 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl px-6 py-4 shadow-2xl border-2 border-white/20">
                       <div className="flex items-center gap-3">
-                        <div className="relative">
-                          <Flame className="w-8 h-8 text-orange-500" />
-                          <div className="absolute inset-0 blur-lg bg-orange-500 opacity-50"></div>
-                        </div>
+                        <Flame className="w-8 h-8 text-white drop-shadow-lg" />
                         <div>
-                          <div className="text-3xl font-black holographic-text counter-animated">{Number(food.calories).toFixed(0)}</div>
-                          <div className="text-sm font-semibold text-white/90">kalori</div>
+                          <div className="text-4xl font-black text-white drop-shadow-lg">{Number(food.calories).toFixed(0)}</div>
+                          <div className="text-sm font-bold text-white/95">kalori</div>
                         </div>
                       </div>
                     </div>
                   </div>
                 ) : (
-                  <div className="w-full h-[400px] md:h-[500px] rounded-3xl bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md flex items-center justify-center shadow-2xl border-4 border-white/30">
-                    <Flame className="w-32 h-32 text-white/50" />
+                  <div className="w-full h-[400px] md:h-[500px] rounded-3xl bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center shadow-2xl border-2 border-green-500/30">
+                    <Flame className="w-32 h-32 text-white/30" />
                   </div>
                 )}
               </div>
 
-              {/* Right: Food Info with Holographic Text */}
+              {/* Right: Food Info - Enhanced Readability */}
               <div className="order-1 lg:order-2 text-center lg:text-left">
-                <div className="inline-block mb-3 md:mb-4 px-4 py-2 glass-morph rounded-full ripple-effect">
-                  <span className="text-white font-semibold text-sm">{food.category}</span>
+                <div className="inline-block mb-4 md:mb-6 px-5 py-2 bg-gradient-to-r from-green-500/90 to-emerald-600/90 rounded-full border border-white/20 shadow-lg">
+                  <span className="text-white font-bold text-sm md:text-base tracking-wide">{food.category}</span>
                 </div>
                 <h1
-                  className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-4 md:mb-6 leading-tight drop-shadow-2xl counter-animated"
+                  className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white mb-5 md:mb-7 leading-tight drop-shadow-2xl"
+                  style={{ textShadow: '0 4px 20px rgba(0,0,0,0.7), 0 2px 10px rgba(34,197,94,0.4)' }}
                   data-testid="text-food-name"
                 >
                   {food.name}
                 </h1>
-                <p className="text-lg md:text-xl lg:text-2xl text-white/95 mb-6 md:mb-8 font-medium">
+                <p className="text-xl md:text-2xl lg:text-3xl text-white font-semibold mb-8 md:mb-10 drop-shadow-lg" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.6)' }}>
                   {food.servingLabel}
                 </p>
 
-                {/* Quick Stats with Neon Glow */}
+                {/* Quick Stats - Enhanced Visibility */}
                 <div className="grid grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8">
-                  <div className="glass-morph-dark rounded-xl md:rounded-2xl p-3 md:p-4 glow-border-hover hover:scale-105 transition-all duration-300 ripple-effect">
-                    <div className="text-2xl md:text-3xl font-black text-teal-300 counter-animated">{Number(food.protein || 0).toFixed(1)}<span className="text-lg md:text-xl">g</span></div>
-                    <div className="text-xs md:text-sm text-white/80 font-semibold mt-1">Protein</div>
+                  <div className="bg-gradient-to-br from-teal-500/90 to-teal-600/90 rounded-xl md:rounded-2xl p-4 md:p-5 shadow-xl border border-white/20 hover:scale-105 transition-transform">
+                    <div className="text-3xl md:text-4xl font-black text-white drop-shadow-lg">{Number(food.protein || 0).toFixed(1)}<span className="text-xl md:text-2xl">g</span></div>
+                    <div className="text-sm md:text-base text-white font-bold mt-1">Protein</div>
                   </div>
-                  <div className="glass-morph-dark rounded-xl md:rounded-2xl p-3 md:p-4 glow-border-hover hover:scale-105 transition-all duration-300 ripple-effect">
-                    <div className="text-2xl md:text-3xl font-black text-orange-300 counter-animated">{Number(food.carbs || 0).toFixed(1)}<span className="text-lg md:text-xl">g</span></div>
-                    <div className="text-xs md:text-sm text-white/80 font-semibold mt-1">Karb.</div>
+                  <div className="bg-gradient-to-br from-orange-500/90 to-orange-600/90 rounded-xl md:rounded-2xl p-4 md:p-5 shadow-xl border border-white/20 hover:scale-105 transition-transform">
+                    <div className="text-3xl md:text-4xl font-black text-white drop-shadow-lg">{Number(food.carbs || 0).toFixed(1)}<span className="text-xl md:text-2xl">g</span></div>
+                    <div className="text-sm md:text-base text-white font-bold mt-1">Karb.</div>
                   </div>
-                  <div className="glass-morph-dark rounded-xl md:rounded-2xl p-3 md:p-4 glow-border-hover hover:scale-105 transition-all duration-300 ripple-effect">
-                    <div className="text-2xl md:text-3xl font-black text-yellow-300 counter-animated">{Number(food.fat || 0).toFixed(1)}<span className="text-lg md:text-xl">g</span></div>
-                    <div className="text-xs md:text-sm text-white/80 font-semibold mt-1">Yağ</div>
+                  <div className="bg-gradient-to-br from-yellow-500/90 to-yellow-600/90 rounded-xl md:rounded-2xl p-4 md:p-5 shadow-xl border border-white/20 hover:scale-105 transition-transform">
+                    <div className="text-3xl md:text-4xl font-black text-white drop-shadow-lg">{Number(food.fat || 0).toFixed(1)}<span className="text-xl md:text-2xl">g</span></div>
+                    <div className="text-sm md:text-base text-white font-bold mt-1">Yağ</div>
                   </div>
                 </div>
 
-                {/* Macro Breakdown Bar with Glow */}
-                <div className="glass-morph-dark rounded-2xl p-6 neon-glow-static">
-                  <div className="text-white font-semibold mb-3 flex items-center gap-2">
-                    <Zap className="w-4 h-4 text-green-400" />
-                    <span className="text-sm">Makro Dağılım</span>
+                {/* Macro Breakdown Bar */}
+                <div className="bg-black/40 backdrop-blur-md rounded-2xl p-6 border border-green-500/30 shadow-xl">
+                  <div className="text-white font-bold mb-4 flex items-center gap-2 text-base">
+                    <Zap className="w-5 h-5 text-green-400" />
+                    <span>Makro Dağılım</span>
                   </div>
-                  <div className="relative flex h-5 rounded-full overflow-hidden bg-black/30 shadow-inner">
+                  <div className="relative flex h-6 rounded-full overflow-hidden bg-black/50 shadow-inner border border-white/10">
                     <div
-                      className="bg-gradient-to-r from-teal-400 to-teal-500 transition-all duration-500 relative group"
+                      className="bg-gradient-to-r from-teal-400 to-teal-500 transition-all duration-500"
                       style={{ width: `${proteinPercent}%` }}
                       title={`Protein: ${proteinPercent.toFixed(0)}%`}
-                    >
-                      <div className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100"></div>
-                    </div>
+                    ></div>
                     <div
-                      className="bg-gradient-to-r from-orange-400 to-orange-500 transition-all duration-500 relative group"
+                      className="bg-gradient-to-r from-orange-400 to-orange-500 transition-all duration-500"
                       style={{ width: `${carbsPercent}%` }}
                       title={`Karbonhidrat: ${carbsPercent.toFixed(0)}%`}
-                    >
-                      <div className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100"></div>
-                    </div>
+                    ></div>
                     <div
-                      className="bg-gradient-to-r from-yellow-400 to-yellow-500 transition-all duration-500 relative group"
+                      className="bg-gradient-to-r from-yellow-400 to-yellow-500 transition-all duration-500"
                       style={{ width: `${fatPercent}%` }}
                       title={`Yağ: ${fatPercent.toFixed(0)}%`}
-                    >
-                      <div className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100"></div>
-                    </div>
+                    ></div>
                   </div>
-                  <div className="flex justify-between mt-4 text-xs text-white font-medium">
-                    <span className="flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-teal-400 shadow-lg shadow-teal-400/50"></span>
+                  <div className="flex justify-between mt-4 text-sm text-white font-bold">
+                    <span className="flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full bg-teal-400 shadow-lg"></span>
                       {proteinPercent.toFixed(0)}% Protein
                     </span>
-                    <span className="flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-orange-400 shadow-lg shadow-orange-400/50"></span>
+                    <span className="flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full bg-orange-400 shadow-lg"></span>
                       {carbsPercent.toFixed(0)}% Karb
                     </span>
-                    <span className="flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-yellow-400 shadow-lg shadow-yellow-400/50"></span>
+                    <span className="flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full bg-yellow-400 shadow-lg"></span>
                       {fatPercent.toFixed(0)}% Yağ
                     </span>
                   </div>
@@ -208,45 +196,39 @@ export function FoodDetailPage({ food, alternatives, categoryGroups, currentPath
               </p>
             </div>
 
-            {/* Enhanced Macro Cards with 3D & Neon Effects */}
+            {/* Enhanced Macro Cards - Clean Design */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
               {/* Protein Card */}
-              <Card className="group card-3d neon-glow-static ripple-effect overflow-visible">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-teal-500/20 to-transparent rounded-bl-full animate-pulse"></div>
+              <Card className="group neon-glow-static overflow-visible hover:shadow-2xl transition-shadow">
                 <CardContent className="relative p-8">
                   <div className="flex items-start justify-between mb-6">
-                    <div className="relative w-14 h-14 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-12 transition-all duration-300 shadow-lg shadow-teal-500/50">
+                    <div className="w-14 h-14 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg">
                       <Activity className="w-7 h-7 text-white" />
-                      <div className="absolute inset-0 rounded-2xl shimmer opacity-0 group-hover:opacity-100"></div>
                     </div>
                     <div className="text-right">
-                      <div className="text-4xl font-black text-teal-600 counter-animated">{Number(food.protein || 0).toFixed(1)}</div>
+                      <div className="text-4xl font-black text-teal-600">{Number(food.protein || 0).toFixed(1)}</div>
                       <div className="text-sm font-semibold text-gray-500">gram</div>
                     </div>
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">Protein</h3>
                   <div className="relative w-full h-3 bg-gray-100 rounded-full overflow-hidden shadow-inner">
                     <div
-                      className="h-full bg-gradient-to-r from-teal-500 to-cyan-500 transition-all duration-700 relative"
+                      className="h-full bg-gradient-to-r from-teal-500 to-cyan-500 transition-all duration-500"
                       style={{ width: `${Math.min(proteinPercent, 100)}%` }}
-                    >
-                      <div className="absolute inset-0 shimmer"></div>
-                    </div>
+                    ></div>
                   </div>
                 </CardContent>
               </Card>
 
               {/* Carbs Card */}
-              <Card className="group card-3d neon-glow-static ripple-effect overflow-visible">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-500/20 to-transparent rounded-bl-full animate-pulse"></div>
+              <Card className="group neon-glow-static overflow-visible hover:shadow-2xl transition-shadow">
                 <CardContent className="relative p-8">
                   <div className="flex items-start justify-between mb-6">
-                    <div className="relative w-14 h-14 bg-gradient-to-br from-orange-500 to-amber-500 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-12 transition-all duration-300 shadow-lg shadow-orange-500/50">
+                    <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
                       <Zap className="w-7 h-7 text-white" />
-                      <div className="absolute inset-0 rounded-2xl shimmer opacity-0 group-hover:opacity-100"></div>
                     </div>
                     <div className="text-right">
-                      <div className="text-4xl font-black text-orange-600 counter-animated">{Number(food.carbs || 0).toFixed(1)}</div>
+                      <div className="text-4xl font-black text-orange-600">{Number(food.carbs || 0).toFixed(1)}</div>
                       <div className="text-sm font-semibold text-gray-500">gram</div>
                     </div>
                   </div>
@@ -264,17 +246,15 @@ export function FoodDetailPage({ food, alternatives, categoryGroups, currentPath
                 </CardContent>
               </Card>
 
-              {/* Fat Card - Enhanced with saturated fat, trans fat */}
-              <Card className="group card-3d neon-glow-static ripple-effect overflow-visible">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-yellow-500/20 to-transparent rounded-bl-full animate-pulse"></div>
+              {/* Fat Card */}
+              <Card className="group neon-glow-static overflow-visible hover:shadow-2xl transition-shadow">
                 <CardContent className="relative p-8">
                   <div className="flex items-start justify-between mb-6">
-                    <div className="relative w-14 h-14 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-12 transition-all duration-300 shadow-lg shadow-yellow-500/50">
+                    <div className="w-14 h-14 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
                       <TrendingUp className="w-7 h-7 text-white" />
-                      <div className="absolute inset-0 rounded-2xl shimmer opacity-0 group-hover:opacity-100"></div>
                     </div>
                     <div className="text-right">
-                      <div className="text-4xl font-black text-yellow-600 counter-animated">{Number(food.fat || 0).toFixed(1)}</div>
+                      <div className="text-4xl font-black text-yellow-600">{Number(food.fat || 0).toFixed(1)}</div>
                       <div className="text-sm font-semibold text-gray-500">gram</div>
                     </div>
                   </div>
