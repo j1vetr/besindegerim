@@ -11,6 +11,12 @@ import { LegalPage } from "@/pages/LegalPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 import CalculatorsHubPage from "@/pages/CalculatorsHubPage";
 import DailyCalorieCalculator from "@/pages/calculators/DailyCalorieCalculator";
+import BMICalculator from "@/pages/calculators/BMICalculator";
+import IdealWeightCalculator from "@/pages/calculators/IdealWeightCalculator";
+import WaterIntakeCalculator from "@/pages/calculators/WaterIntakeCalculator";
+import ProteinCalculator from "@/pages/calculators/ProteinCalculator";
+import PortionConverterCalculator from "@/pages/calculators/PortionConverterCalculator";
+import WeightLossTimeCalculator from "@/pages/calculators/WeightLossTimeCalculator";
 import type { CategoryGroup, Food } from "@shared/schema";
 
 // Wrapper components that fetch data
@@ -121,6 +127,42 @@ function DailyCalorieWrapper() {
   return <DailyCalorieCalculator categoryGroups={categoryGroups} currentPath={location} />;
 }
 
+function BMIWrapper() {
+  const [location] = useLocation();
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <BMICalculator categoryGroups={categoryGroups} currentPath={location} />;
+}
+
+function IdealWeightWrapper() {
+  const [location] = useLocation();
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <IdealWeightCalculator categoryGroups={categoryGroups} currentPath={location} />;
+}
+
+function WaterIntakeWrapper() {
+  const [location] = useLocation();
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <WaterIntakeCalculator categoryGroups={categoryGroups} currentPath={location} />;
+}
+
+function ProteinWrapper() {
+  const [location] = useLocation();
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <ProteinCalculator categoryGroups={categoryGroups} currentPath={location} />;
+}
+
+function PortionConverterWrapper() {
+  const [location] = useLocation();
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <PortionConverterCalculator categoryGroups={categoryGroups} currentPath={location} />;
+}
+
+function WeightLossTimeWrapper() {
+  const [location] = useLocation();
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <WeightLossTimeCalculator categoryGroups={categoryGroups} currentPath={location} />;
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -140,6 +182,12 @@ function App() {
         {/* Calculators */}
         <Route path="/hesaplayicilar" component={CalculatorsHubWrapper} />
         <Route path="/hesaplayicilar/gunluk-kalori-ihtiyaci" component={DailyCalorieWrapper} />
+        <Route path="/hesaplayicilar/bmi" component={BMIWrapper} />
+        <Route path="/hesaplayicilar/ideal-kilo" component={IdealWeightWrapper} />
+        <Route path="/hesaplayicilar/gunluk-su-ihtiyaci" component={WaterIntakeWrapper} />
+        <Route path="/hesaplayicilar/protein-gereksinimi" component={ProteinWrapper} />
+        <Route path="/hesaplayicilar/porsiyon-cevirici" component={PortionConverterWrapper} />
+        <Route path="/hesaplayicilar/kilo-verme-suresi" component={WeightLossTimeWrapper} />
         
         {/* Legal pages */}
         <Route path="/gizlilik-politikasi">
