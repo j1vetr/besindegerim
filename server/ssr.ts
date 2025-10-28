@@ -559,8 +559,8 @@ export function registerSSRRoutes(app: Express): void {
     }
   });
 
-  // Hesaplayıcı detay: /hesaplayicilar/:calculatorId
-  app.get("/hesaplayicilar/:calculatorId", async (req: Request, res: Response) => {
+  // Hesaplayıcı detay: /hesaplayici/:calculatorId
+  app.get("/hesaplayici/:calculatorId", async (req: Request, res: Response) => {
     try {
       const { calculatorId } = req.params;
 
@@ -599,7 +599,7 @@ export function registerSSRRoutes(app: Express): void {
         title: `${calculatorTitles[calculatorId] || "Hesaplayıcı"} | besindegerim.com`,
         description: `${calculatorTitles[calculatorId] || "Hesaplayıcı"} - Bilimsel formüllerle desteklenen ücretsiz araç.`,
         keywords: `${calculatorId}, hesaplama, beslenme, kalori`,
-        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/hesaplayicilar/${calculatorId}`,
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/hesaplayici/${calculatorId}`,
       };
 
       await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
