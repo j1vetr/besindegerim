@@ -43,15 +43,75 @@ function MobileMenuPanel({
           <h2 className="text-xl font-bold text-green-700 mb-4">Menü</h2>
           
           <div className="space-y-2">
-            {/* Hesaplayıcılar Link */}
+            {/* Hesaplayıcılar Ana Link */}
             <a
               href="/hesaplayicilar"
               onClick={onClose}
               className="block px-4 py-3 rounded-xl font-semibold bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg"
               data-testid="link-mobile-calculators"
             >
-              🧮 Hesaplayıcılar
+              Hesaplayıcılar
             </a>
+
+            {/* Hesaplayıcılar Alt Menüsü */}
+            <div className="ml-4 space-y-1 mt-1">
+              <a
+                href="/hesaplayicilar/gunluk-kalori-ihtiyaci"
+                onClick={onClose}
+                className="block px-4 py-2 text-sm text-green-700 hover:bg-green-50 rounded-lg transition-colors"
+                data-testid="link-mobile-calc-daily-calorie"
+              >
+                Günlük Kalori ve Makro
+              </a>
+              <a
+                href="/hesaplayicilar/bmi"
+                onClick={onClose}
+                className="block px-4 py-2 text-sm text-green-700 hover:bg-green-50 rounded-lg transition-colors"
+                data-testid="link-mobile-calc-bmi"
+              >
+                BMI (Vücut Kitle İndeksi)
+              </a>
+              <a
+                href="/hesaplayicilar/ideal-kilo"
+                onClick={onClose}
+                className="block px-4 py-2 text-sm text-green-700 hover:bg-green-50 rounded-lg transition-colors"
+                data-testid="link-mobile-calc-ideal-weight"
+              >
+                İdeal Kilo
+              </a>
+              <a
+                href="/hesaplayicilar/gunluk-su-ihtiyaci"
+                onClick={onClose}
+                className="block px-4 py-2 text-sm text-green-700 hover:bg-green-50 rounded-lg transition-colors"
+                data-testid="link-mobile-calc-water"
+              >
+                Günlük Su İhtiyacı
+              </a>
+              <a
+                href="/hesaplayicilar/protein-gereksinimi"
+                onClick={onClose}
+                className="block px-4 py-2 text-sm text-green-700 hover:bg-green-50 rounded-lg transition-colors"
+                data-testid="link-mobile-calc-protein"
+              >
+                Protein Gereksinimi
+              </a>
+              <a
+                href="/hesaplayicilar/porsiyon-cevirici"
+                onClick={onClose}
+                className="block px-4 py-2 text-sm text-green-700 hover:bg-green-50 rounded-lg transition-colors"
+                data-testid="link-mobile-calc-portion"
+              >
+                Porsiyon Çevirici
+              </a>
+              <a
+                href="/hesaplayicilar/kilo-verme-suresi"
+                onClick={onClose}
+                className="block px-4 py-2 text-sm text-green-700 hover:bg-green-50 rounded-lg transition-colors"
+                data-testid="link-mobile-calc-weight-loss"
+              >
+                Kilo Verme/Alma Süresi
+              </a>
+            </div>
 
             {/* Tümü Link */}
             <a
@@ -152,14 +212,71 @@ export function Header({ categoryGroups = [], currentPath = "/" }: HeaderProps) 
         {/* Categories - Desktop Only Horizontal Scroll with Dropdowns */}
         <div className="hidden lg:block relative -mx-4 px-4 mt-3">
           <div className="flex items-center gap-2 overflow-x-auto overflow-y-visible pb-2 scrollbar-hide snap-x snap-mandatory">
-            {/* Hesaplayıcılar Link - Desktop */}
-            <a 
-              href="/hesaplayicilar" 
-              data-testid="link-calculators"
-              className="flex-shrink-0 snap-start whitespace-nowrap rounded-full px-5 py-2 text-sm font-bold transition-all duration-300 bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 shadow-lg border-2 border-green-500"
-            >
-              🧮 Hesaplayıcılar
-            </a>
+            {/* Hesaplayıcılar Dropdown - Desktop */}
+            <div className="relative group flex-shrink-0 snap-start">
+              <a 
+                href="/hesaplayicilar" 
+                data-testid="link-calculators"
+                className="inline-block whitespace-nowrap rounded-full px-5 py-2 text-sm font-bold transition-all duration-300 bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 shadow-lg border-2 border-green-500"
+              >
+                Hesaplayıcılar
+              </a>
+              
+              {/* Dropdown Menu - Hover to show */}
+              <div className="absolute top-full left-0 mt-2 w-72 bg-white rounded-xl shadow-2xl border-2 border-green-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                <div className="p-3 space-y-1">
+                  <a
+                    href="/hesaplayicilar/gunluk-kalori-ihtiyaci"
+                    className="block px-4 py-2.5 text-sm font-medium text-green-700 hover:bg-green-50 rounded-lg transition-colors"
+                    data-testid="link-calc-daily-calorie"
+                  >
+                    Günlük Kalori ve Makro Hesaplayıcı
+                  </a>
+                  <a
+                    href="/hesaplayicilar/bmi"
+                    className="block px-4 py-2.5 text-sm font-medium text-green-700 hover:bg-green-50 rounded-lg transition-colors"
+                    data-testid="link-calc-bmi"
+                  >
+                    BMI (Vücut Kitle İndeksi)
+                  </a>
+                  <a
+                    href="/hesaplayicilar/ideal-kilo"
+                    className="block px-4 py-2.5 text-sm font-medium text-green-700 hover:bg-green-50 rounded-lg transition-colors"
+                    data-testid="link-calc-ideal-weight"
+                  >
+                    İdeal Kilo Hesaplayıcı
+                  </a>
+                  <a
+                    href="/hesaplayicilar/gunluk-su-ihtiyaci"
+                    className="block px-4 py-2.5 text-sm font-medium text-green-700 hover:bg-green-50 rounded-lg transition-colors"
+                    data-testid="link-calc-water"
+                  >
+                    Günlük Su İhtiyacı
+                  </a>
+                  <a
+                    href="/hesaplayicilar/protein-gereksinimi"
+                    className="block px-4 py-2.5 text-sm font-medium text-green-700 hover:bg-green-50 rounded-lg transition-colors"
+                    data-testid="link-calc-protein"
+                  >
+                    Protein Gereksinimi
+                  </a>
+                  <a
+                    href="/hesaplayicilar/porsiyon-cevirici"
+                    className="block px-4 py-2.5 text-sm font-medium text-green-700 hover:bg-green-50 rounded-lg transition-colors"
+                    data-testid="link-calc-portion"
+                  >
+                    Porsiyon Çevirici
+                  </a>
+                  <a
+                    href="/hesaplayicilar/kilo-verme-suresi"
+                    className="block px-4 py-2.5 text-sm font-medium text-green-700 hover:bg-green-50 rounded-lg transition-colors"
+                    data-testid="link-calc-weight-loss"
+                  >
+                    Kilo Verme/Alma Süresi
+                  </a>
+                </div>
+              </div>
+            </div>
 
             <a 
               href="/tum-gidalar" 
