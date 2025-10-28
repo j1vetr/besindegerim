@@ -13,21 +13,20 @@ interface RenderResult {
 
 /**
  * Header HTML (tüm sayfalarda ortak)
+ * SSR için basit HTML - JavaScript gerektirmeyen navigasyon
  */
 function renderHeader(categoryGroups: CategoryGroup[]): string {
   return `
-    <header class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div class="container mx-auto px-4">
-        <div class="flex h-16 items-center justify-between">
-          <a href="/" class="flex items-center gap-2">
-            <span class="text-2xl font-bold bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent">
-              besindegerim.com
-            </span>
+    <header class="sticky top-0 z-50 w-full border-b-2 border-green-200/50 bg-white/95 backdrop-blur shadow-lg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <div class="flex items-center justify-between gap-4">
+          <a href="/" class="flex-shrink-0">
+            <img src="/logo.png" alt="besindegerim.com" class="h-14 sm:h-16 w-auto" />
           </a>
-          <nav class="hidden md:flex items-center gap-6">
-            <a href="/" class="text-sm font-medium hover:text-green-600 transition-colors">Ana Sayfa</a>
-            <a href="/tum-gidalar" class="text-sm font-medium hover:text-green-600 transition-colors">Tüm Gıdalar</a>
-            <a href="/hesaplayicilar" class="text-sm font-medium hover:text-green-600 transition-colors">Hesaplayıcılar</a>
+          <nav class="flex items-center gap-2 sm:gap-3">
+            <a href="/" class="px-3 py-2 text-sm font-semibold text-green-700 hover:bg-green-50 rounded-lg transition-colors">Ana Sayfa</a>
+            <a href="/hesaplayicilar" class="px-4 py-2 text-sm font-bold bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-full hover:from-green-700 hover:to-emerald-700 transition-all shadow-md">Hesaplayıcılar (16)</a>
+            <a href="/tum-gidalar" class="px-3 py-2 text-sm font-semibold text-green-700 hover:bg-green-50 rounded-lg transition-colors">Gıdalar</a>
           </nav>
         </div>
       </div>
