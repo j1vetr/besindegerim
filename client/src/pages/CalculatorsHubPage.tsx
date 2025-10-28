@@ -173,7 +173,7 @@ export default function CalculatorsHubPage({ categoryGroups, currentPath }: Calc
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {calculators.map((calc) => (
-                <Link key={calc.id} href={`/hesaplayicilar/${calc.id}`}>
+                <Link key={calc.id} href={`/hesaplayici/${calc.id}`}>
                   <Card className="group h-full hover:shadow-2xl transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-green-500/30">
                     <CardContent className="p-8">
                       <div className={`w-16 h-16 bg-gradient-to-br ${calc.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg`}>
