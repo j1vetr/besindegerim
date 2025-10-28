@@ -1,5 +1,5 @@
 // Database connection setup
-// Standard pg driver (both Replit and Production)
+// Standard pg driver
 
 import pg from 'pg';
 import { drizzle } from 'drizzle-orm/node-postgres';
