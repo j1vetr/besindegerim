@@ -244,6 +244,21 @@ function ContactPageWrapper() {
   return <ContactPage categoryGroups={categoryGroups} currentPath={location} />;
 }
 
+function PrivacyPageWrapper() {
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <PrivacyPage categoryGroups={categoryGroups} />;
+}
+
+function TermsPageWrapper() {
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <TermsPage categoryGroups={categoryGroups} />;
+}
+
+function CookiePageWrapper() {
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <CookiePage categoryGroups={categoryGroups} />;
+}
+
 // Scroll to top component - handles route changes
 function ScrollToTop() {
   const [location] = useLocation();
@@ -292,9 +307,9 @@ function App() {
         <Route path="/hesaplayici/gida-karsilastirma" component={FoodComparisonWrapper} />
         
         {/* Legal pages - New dedicated components */}
-        <Route path="/gizlilik-politikasi" component={PrivacyPage} />
-        <Route path="/kullanim-kosullari" component={TermsPage} />
-        <Route path="/cerez-politikasi" component={CookiePage} />
+        <Route path="/gizlilik-politikasi" component={PrivacyPageWrapper} />
+        <Route path="/kullanim-kosullari" component={TermsPageWrapper} />
+        <Route path="/cerez-politikasi" component={CookiePageWrapper} />
         
         {/* KVKK still uses LegalPage */}
         <Route path="/kvkk">
