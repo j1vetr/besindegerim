@@ -66,7 +66,7 @@ import { registerSSRRoutes, handleSSRRequest } from "./ssr";
     try {
       const { storage } = await import("./storage");
       const { categoryToSlug } = await import("@shared/utils");
-      const foods = await storage.getAllFoods();
+      const foods = await storage.getAllFoods(10000); // Get all foods for sitemap (high limit)
       const categoryGroups = await storage.getCategoryGroups();
       const baseUrl = process.env.BASE_URL || "https://besindegerim.com";
       
@@ -86,6 +86,14 @@ import { registerSSRRoutes, handleSSRRequest } from "./ssr";
         { loc: `${baseUrl}/hesaplayici/protein-gereksinimi`, priority: "0.9" },
         { loc: `${baseUrl}/hesaplayici/porsiyon-cevirici`, priority: "0.9" },
         { loc: `${baseUrl}/hesaplayici/kilo-verme-suresi`, priority: "0.9" },
+        { loc: `${baseUrl}/hesaplayici/bmr`, priority: "0.9" },
+        { loc: `${baseUrl}/hesaplayici/makro-hesaplayici`, priority: "0.9" },
+        { loc: `${baseUrl}/hesaplayici/ogun-plani`, priority: "0.9" },
+        { loc: `${baseUrl}/hesaplayici/vitamin-mineral`, priority: "0.9" },
+        { loc: `${baseUrl}/hesaplayici/1rm`, priority: "0.9" },
+        { loc: `${baseUrl}/hesaplayici/kalori-yakma`, priority: "0.9" },
+        { loc: `${baseUrl}/hesaplayici/vucut-olcumleri`, priority: "0.9" },
+        { loc: `${baseUrl}/hesaplayici/gida-karsilastirma`, priority: "0.9" },
         
         // Tüm gıdalar (priority 0.85)
         { loc: `${baseUrl}/tum-gidalar`, priority: "0.85" },
@@ -96,6 +104,7 @@ import { registerSSRRoutes, handleSSRRequest } from "./ssr";
         { loc: `${baseUrl}/gizlilik-politikasi`, priority: "0.3" },
         { loc: `${baseUrl}/kullanim-kosullari`, priority: "0.3" },
         { loc: `${baseUrl}/cerez-politikasi`, priority: "0.3" },
+        { loc: `${baseUrl}/kvkk`, priority: "0.3" },
       ];
       
       // Kategori ve alt kategori sayfaları (priority 0.8)
