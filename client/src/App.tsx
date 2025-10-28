@@ -2,6 +2,7 @@ import { Route, Switch, useParams, useSearch, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
+import { useEffect } from "react";
 import HomePage from "@/pages/HomePage";
 import AllFoodsPage from "@/pages/AllFoodsPage";
 import { FoodDetailPage } from "@/pages/FoodDetailPage";
@@ -243,9 +244,21 @@ function ContactPageWrapper() {
   return <ContactPage categoryGroups={categoryGroups} currentPath={location} />;
 }
 
+// Scroll to top component - handles route changes
+function ScrollToTop() {
+  const [location] = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  
+  return null;
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
+      <ScrollToTop />
       <Switch>
         {/* Homepage */}
         <Route path="/" component={HomePageWrapper} />
