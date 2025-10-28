@@ -1,13 +1,9 @@
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Activity, Coffee, Utensils } from "lucide-react";
+import { Activity, Coffee, Utensils, Zap } from "lucide-react";
 import type { CategoryGroup } from "@shared/schema";
+import { Button } from "@/components/ui/button";
 
 interface PortionConverterCalculatorProps {
   categoryGroups?: CategoryGroup[];
@@ -24,12 +20,12 @@ interface ConversionResult {
 
 export default function PortionConverterCalculator({ categoryGroups, currentPath }: PortionConverterCalculatorProps) {
   const [foodType, setFoodType] = useState<string>("solid");
-  const [grams, setGrams] = useState<string>("");
+  const [grams, setGrams] = useState<number>(100);
   const [result, setResult] = useState<ConversionResult | null>(null);
 
   const convert = (e: React.FormEvent) => {
     e.preventDefault();
-    const g = parseFloat(grams);
+    const g = grams;
     
     let tablespoonGrams = 15;
     let servingSize = 100;
@@ -60,215 +56,217 @@ export default function PortionConverterCalculator({ categoryGroups, currentPath
     });
   };
 
+  const foodTypes = [
+    { value: "solid", label: "Katı Gıda", desc: "Genel", icon: "🍎" },
+    { value: "liquid", label: "Sıvı", desc: "Su, süt, meyve suyu", icon: "💧" },
+    { value: "flour", label: "Un, Nişasta", desc: "Hafif tozu", icon: "🌾" },
+    { value: "sugar", label: "Şeker, Tuz", desc: "Kristal yapılı", icon: "🧂" },
+    { value: "rice", label: "Pirinç, Tahıllar", desc: "Taneli", icon: "🌾" },
+    { value: "oil", label: "Yağ", desc: "Sıvı yağlar", icon: "🫒" }
+  ];
+
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-purple-50 via-white to-pink-50">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       <Header categoryGroups={categoryGroups} currentPath={currentPath} />
       
-      <main className="flex-1 py-12">
+      {/* Animated Background */}
+      <div className="fixed inset-0 opacity-20 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-purple-400 to-pink-600 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-pink-400 to-rose-600 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      </div>
+
+      <main className="flex-1 py-12 relative z-10">
         <div className="max-w-7xl mx-auto px-4">
+          {/* Breadcrumb */}
           <div className="mb-6">
-            <a href="/hesaplayicilar" className="text-purple-600 hover:text-purple-700 font-medium text-sm">
+            <a href="/hesaplayicilar" className="text-purple-400 hover:text-purple-300 font-medium text-sm backdrop-blur-sm bg-white/5 px-4 py-2 rounded-full inline-block border border-purple-500/30">
               ← Tüm Hesaplayıcılar
             </a>
           </div>
 
+          {/* Hero */}
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-full px-6 py-2 mb-6 shadow-lg">
-              <Activity className="w-5 h-5" />
-              <span className="font-semibold">Benzersiz Araç</span>
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-full px-6 py-3 mb-6 shadow-2xl shadow-purple-500/50 border border-purple-400/30">
+              <Activity className="w-6 h-6 animate-pulse" />
+              <span className="font-bold">Benzersiz Araç</span>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-4">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 bg-gradient-to-r from-purple-400 via-pink-500 to-rose-400 bg-clip-text text-transparent drop-shadow-2xl">
               Porsiyon Çevirici
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Gramajı porsiyona, kaşığa ve bardağa çevirin - mutfakta pratik ölçüm aracı
             </p>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8 mb-16">
-            <Card className="shadow-2xl border-2 border-purple-100">
-              <CardHeader className="bg-gradient-to-r from-purple-500 to-pink-600 text-white">
-                <CardTitle className="flex items-center gap-2 text-2xl">
-                  <Utensils className="w-6 h-6" />
-                  Bilgileri Girin
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-8">
-                <form onSubmit={convert} className="space-y-6">
-                  <div className="space-y-3">
-                    <Label htmlFor="foodType" className="text-base font-semibold">Gıda Türü</Label>
-                    <Select value={foodType} onValueChange={setFoodType}>
-                      <SelectTrigger className="h-12 text-base" id="foodType">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="solid">Katı Gıda (genel)</SelectItem>
-                        <SelectItem value="liquid">Sıvı (su, süt, meyve suyu)</SelectItem>
-                        <SelectItem value="flour">Un, Nişasta</SelectItem>
-                        <SelectItem value="sugar">Şeker, Tuz</SelectItem>
-                        <SelectItem value="rice">Pirinç, Tahıllar</SelectItem>
-                        <SelectItem value="oil">Yağ, Sıvı Yağlar</SelectItem>
-                      </SelectContent>
-                    </Select>
+            {/* Calculator Form */}
+            <div className="backdrop-blur-2xl bg-white/10 rounded-3xl border border-white/20 shadow-2xl p-8 hover:bg-white/15 transition-all duration-300">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="p-3 bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl shadow-lg shadow-purple-500/50">
+                  <Utensils className="w-7 h-7 text-white" />
+                </div>
+                <h2 className="text-3xl font-black text-white">Bilgileri Girin</h2>
+              </div>
+
+              <form onSubmit={convert} className="space-y-8">
+                {/* Food Type */}
+                <div className="space-y-4">
+                  <label className="text-lg font-bold text-white">Gıda Türü</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {foodTypes.map((type) => (
+                      <button
+                        key={type.value}
+                        type="button"
+                        onClick={() => setFoodType(type.value)}
+                        className={`p-4 rounded-xl text-left transition-all duration-300 ${
+                          foodType === type.value
+                            ? "bg-gradient-to-br from-purple-500 to-pink-600 text-white shadow-2xl shadow-purple-500/50 scale-105"
+                            : "bg-white/5 text-gray-300 hover:bg-white/10 border border-white/10"
+                        }`}
+                      >
+                        <div className="text-2xl mb-2">{type.icon}</div>
+                        <div className="font-bold text-sm">{type.label}</div>
+                        <div className="text-xs opacity-75 mt-1">{type.desc}</div>
+                      </button>
+                    ))}
                   </div>
+                </div>
 
-                  <div className="space-y-3">
-                    <Label htmlFor="grams" className="text-base font-semibold">Miktar (gram)</Label>
-                    <Input
-                      id="grams"
-                      type="number"
-                      value={grams}
-                      onChange={(e) => setGrams(e.target.value)}
-                      placeholder="Örn: 100"
-                      required
-                      min="1"
-                      max="10000"
-                      step="0.1"
-                      className="h-12 text-lg"
-                    />
+                {/* Grams */}
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <label className="text-lg font-bold text-white">Miktar (gram)</label>
+                    <span className="text-4xl font-black bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+                      {grams}g
+                    </span>
                   </div>
+                  <input
+                    type="range"
+                    min="1"
+                    max="1000"
+                    value={grams}
+                    onChange={(e) => setGrams(parseInt(e.target.value))}
+                    className="w-full h-3 bg-gradient-to-r from-green-500/20 to-emerald-600/20 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-7 [&::-webkit-slider-thumb]:h-7 [&::-webkit-slider-thumb]:bg-gradient-to-r [&::-webkit-slider-thumb]:from-green-400 [&::-webkit-slider-thumb]:to-emerald-600 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:shadow-xl [&::-webkit-slider-thumb]:shadow-green-500/50 [&::-webkit-slider-thumb]:cursor-pointer hover:[&::-webkit-slider-thumb]:scale-110 transition-all"
+                  />
+                  <div className="flex justify-between text-xs text-gray-400 px-1">
+                    <span>1g</span>
+                    <span>1000g</span>
+                  </div>
+                </div>
 
-                  <Button type="submit" className="w-full h-14 text-lg font-bold bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 shadow-lg">
-                    <Activity className="w-5 h-5 mr-2" />
-                    Çevir
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
+                <Button
+                  type="submit"
+                  className="w-full h-16 text-xl font-black bg-gradient-to-r from-purple-500 via-pink-600 to-rose-500 hover:from-purple-600 hover:via-pink-700 hover:to-rose-600 shadow-2xl shadow-purple-500/50 rounded-2xl border-2 border-purple-400/50 hover:scale-105 transition-all duration-300"
+                >
+                  <Zap className="w-6 h-6 mr-2 animate-pulse" />
+                  Çevir
+                </Button>
+              </form>
+            </div>
 
+            {/* Results */}
             {result && (
               <div className="space-y-6">
-                <Card className="shadow-2xl border-2 border-purple-100">
-                  <CardHeader className="bg-gradient-to-r from-purple-500 to-pink-600 text-white">
-                    <CardTitle className="flex items-center gap-2 text-2xl">
-                      <Coffee className="w-6 h-6" />
-                      Dönüşüm Sonuçları
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-8 space-y-6">
-                    <div className="bg-gradient-to-br from-purple-50 to-pink-100 rounded-xl p-6 border-2 border-purple-200">
-                      <h3 className="font-bold text-lg mb-4 text-gray-900">Yemek Kaşığı</h3>
-                      <p className="text-5xl font-black text-purple-600">{result.tablespoons}</p>
-                      <p className="text-sm text-gray-600 mt-2">kaşık (yaklaşık)</p>
-                    </div>
+                {/* Tablespoons */}
+                <div className="backdrop-blur-2xl bg-gradient-to-br from-purple-500/20 to-pink-600/20 rounded-3xl border border-purple-400/30 p-8 shadow-2xl hover:scale-105 transition-all duration-300">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Utensils className="w-8 h-8 text-purple-400 animate-pulse" />
+                    <h3 className="text-2xl font-black text-white">Yemek Kaşığı</h3>
+                  </div>
+                  <div className="text-7xl font-black bg-gradient-to-r from-purple-300 to-pink-400 bg-clip-text text-transparent mb-2">
+                    {result.tablespoons}
+                  </div>
+                  <p className="text-gray-300 text-sm">kaşık (yaklaşık)</p>
+                </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-gradient-to-br from-pink-50 to-rose-100 rounded-xl p-6 border-2 border-pink-200">
-                        <Coffee className="w-8 h-8 text-pink-600 mb-3" />
-                        <p className="text-2xl font-black text-pink-600">{result.teaspoons}</p>
-                        <p className="text-sm text-gray-600 mt-1">Çay Kaşığı</p>
-                      </div>
-                      <div className="bg-gradient-to-br from-indigo-50 to-purple-100 rounded-xl p-6 border-2 border-indigo-200">
-                        <Utensils className="w-8 h-8 text-indigo-600 mb-3" />
-                        <p className="text-2xl font-black text-indigo-600">{result.cups}</p>
-                        <p className="text-sm text-gray-600 mt-1">Bardak</p>
-                      </div>
+                {/* Teaspoons & Cups */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="backdrop-blur-2xl bg-gradient-to-br from-pink-500/20 to-rose-600/20 rounded-3xl border border-pink-400/30 p-6 shadow-2xl">
+                    <Coffee className="w-8 h-8 text-pink-400 mb-3" />
+                    <div className="text-4xl font-black bg-gradient-to-r from-pink-300 to-rose-400 bg-clip-text text-transparent mb-2">
+                      {result.teaspoons}
                     </div>
+                    <p className="text-gray-300 text-sm">Çay Kaşığı</p>
+                  </div>
 
-                    <div className="bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl p-6 border-2 border-green-200">
-                      <h3 className="font-bold text-lg mb-4 text-gray-900">Porsiyon</h3>
-                      <p className="text-4xl font-black text-green-600">{result.servings}</p>
-                      <p className="text-sm text-gray-600 mt-2">standart porsiyon</p>
+                  <div className="backdrop-blur-2xl bg-gradient-to-br from-indigo-500/20 to-purple-600/20 rounded-3xl border border-indigo-400/30 p-6 shadow-2xl">
+                    <Utensils className="w-8 h-8 text-indigo-400 mb-3" />
+                    <div className="text-4xl font-black bg-gradient-to-r from-indigo-300 to-purple-400 bg-clip-text text-transparent mb-2">
+                      {result.cups}
                     </div>
+                    <p className="text-gray-300 text-sm">Bardak</p>
+                  </div>
+                </div>
 
-                    <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6">
-                      <h3 className="font-bold text-base text-gray-900 mb-2">💡 Not</h3>
-                      <p className="text-sm text-gray-700">
-                        Değerler yaklaşık olup gıdanın yoğunluğuna göre değişiklik gösterebilir. Hassas ölçüm için mutfak terazisi kullanın.
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
+                {/* Servings */}
+                <div className="backdrop-blur-2xl bg-gradient-to-br from-green-500/20 to-emerald-600/20 rounded-3xl border border-green-400/30 p-8 shadow-2xl hover:scale-105 transition-all duration-300">
+                  <h3 className="text-2xl font-black text-white mb-4">Standart Porsiyon</h3>
+                  <div className="text-6xl font-black bg-gradient-to-r from-green-300 to-emerald-400 bg-clip-text text-transparent mb-2">
+                    {result.servings}
+                  </div>
+                  <p className="text-gray-300 text-sm">standart porsiyon</p>
+                </div>
               </div>
             )}
           </div>
 
           {/* SEO Content */}
-          <div className="max-w-4xl mx-auto prose prose-lg">
-            <Card className="shadow-lg">
-              <CardContent className="p-8">
-                <h2 className="text-3xl font-bold text-gray-900 mb-6">Mutfakta Doğru Ölçüm: Neden Bu Kadar Önemli?</h2>
-                
-                <p className="text-gray-700 leading-relaxed mb-4">
-                  Sağlıklı beslenmenin ve kalori kontrolünün en temel unsuru, porsiyonları doğru ölçmektir. Çoğu insan "göz kararı" ölçüm 
-                  yaparak günlük kalori alımlarını %20-50 oranında yanlış tahmin eder. Özellikle kilo vermeye çalışıyorsanız veya makro 
-                  besin dengesini takip ediyorsanız, gram bazında kesin ölçüm yapmak kritik önem taşır. Bu porsiyon çevirici araç, mutfak 
-                  teraziniz yokken veya tarifler kaşık/bardak ölçüsü verirken size rehberlik eder.
-                </p>
+          <article className="prose prose-lg prose-invert max-w-none">
+            <div className="backdrop-blur-2xl bg-white/5 rounded-3xl border border-white/10 p-12">
+              <h2 className="text-4xl font-black text-white mb-6 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+                Porsiyon Çevirici Nedir ve Nasıl Kullanılır?
+              </h2>
+              
+              <p className="text-gray-300 leading-relaxed mb-6 text-lg">
+                Mutfakta en yaygın sorunlardan biri ölçüm birimleri arasında dönüşüm yapmaktır. Bir tarif 150g un istiyorsa kaç yemek kaşığı 
+                demektir? 100g şeker kaç bardak eder? Porsiyon çevirici bu soruları yanıtlamak için tasarlanmıştır. Gıda türlerine göre yoğunluk 
+                farklılıklarını hesaba katarak gram, yemek kaşığı, çay kaşığı, bardak ve standart porsiyon arasında dönüşüm yapar. Örneğin, 
+                1 yemek kaşığı su 15g iken, 1 yemek kaşığı un sadece 8g'dır çünkü un daha hafif ve havadar bir yapıya sahiptir.
+              </p>
 
-                <h3 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Mutfak Ölçü Birimleri: Standartlar ve Dönüşümler</h3>
-                <p className="text-gray-700 leading-relaxed mb-4">
-                  Türk mutfağında yaygın kullanılan ölçü birimleri arasında yemek kaşığı (yaklaşık 15 ml), çay kaşığı (5 ml), su bardağı 
-                  (200-250 ml) ve çay bardağı (100-125 ml) bulunur. Ancak bu ölçüler gıdanın yoğunluğuna göre değişir. Örneğin 1 yemek 
-                  kaşığı su 15 gram iken, 1 yemek kaşığı un yaklaşık 8 gram, şeker ise 12.5 gramdır. Bu nedenle tariflerde "1 bardak un" 
-                  dendiğinde 125 gram, "1 bardak şeker" dendiğinde 200 gram kastedilir. Amerikan tariflerinde kullanılan "cup" ölçüsü ise 
-                  240 ml'dir ve Türk su bardağından biraz daha büyüktür.
-                </p>
+              <h3 className="text-3xl font-bold text-white mt-10 mb-4 bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+                Gıda Türlerine Göre Dönüşüm Katsayıları
+              </h3>
+              <p className="text-gray-300 leading-relaxed mb-6 text-lg">
+                Her gıda türünün farklı yoğunluğu vardır ve bu dönüşüm oranlarını etkiler. Sıvılar (su, süt, meyve suyu) için 1 yemek kaşığı 
+                = 15ml = 15g'dır. Un ve nişasta gibi hafif tozlar için 1 yemek kaşığı = 8g'dır. Şeker ve tuz gibi kristal yapılar için 1 yemek 
+                kaşığı = 12.5g'dır. Pirinç ve tahıllar için 1 yemek kaşığı = 12g'dır. Sıvı yağlar için 1 yemek kaşığı = 13.5g'dır. Bu farklılıklar 
+                önemlidir çünkü yanlış dönüşüm tariflerin başarısız olmasına neden olabilir. Örneğin, 100g unu ölçerken şeker katsayısını 
+                kullanırsanız fazla un kullanmış olursunuz.
+              </p>
 
-                <h3 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Porsiyon Kontrol: Kilo Yönetiminde Altın Kural</h3>
-                <p className="text-gray-700 leading-relaxed mb-4">
-                  Araştırmalar, porsiyon boyutlarının son 30 yılda ortalama %50 arttığını göstermektedir. Restoranlarda sunulan porsiyonlar 
-                  genellikle 2-3 standart porsiyona denktir. Evde de büyük tabaklar kullanmak ve "gözle" porsiyon ayarlamak aşırı yemeye 
-                  yol açar. İdeal porsiyon kontrol stratejisi: Daha küçük tabaklar kullanın (23 cm yerine 20 cm), yemek servis ederken 
-                  mutfak terazisi veya ölçü kaşıkları kullanın, paketli gıdalarda etiket bilgilerini okuyun ve "porsiyon başı" kaloriyi 
-                  hesaplayın. Protein porsiyonu avuç içi büyüklüğünde (100-120 gram), karbonhidrat yumruk büyüklüğünde (150-200 gram pişmiş) 
-                  olmalıdır.
-                </p>
+              <h3 className="text-3xl font-bold text-white mt-10 mb-4 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+                Standart Porsiyon Boyutları
+              </h3>
+              <p className="text-gray-300 leading-relaxed mb-6 text-lg">
+                Standart porsiyon boyutları besin değerleri hesaplamalarında referans olarak kullanılır. Katı gıdalar için genellikle 100g 
+                standart porsiyondur. Sıvılar için 250ml (1 su bardağı) yaygındır. Un için 125g, şeker için 200g, pirinç için 150g standart 
+                porsiyon kabul edilir. Yağlar için ise 15g (1 yemek kaşığı) referans alınır. Bu standartlar beslenme etiketlerinde ve kalori 
+                hesaplamalarında kullanılır. Örneğin, bir besin etiketi "100g başına 350 kcal" diyorsa ve siz 200g tüketiyseniz, 700 kcal almış 
+                olursunuz.
+              </p>
 
-                <h3 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Yaygın Gıdalar İçin Pratik Dönüşüm Tablosu</h3>
-                <p className="text-gray-700 leading-relaxed mb-4">
-                  İşte mutfakta sık kullanılan gıdalar için pratik dönüşüm bilgileri: Un - 1 yemek kaşığı = 8 gram, 1 su bardağı = 125 gram. 
-                  Şeker - 1 yemek kaşığı = 12.5 gram, 1 su bardağı = 200 gram. Pirinç (çiğ) - 1 yemek kaşığı = 12 gram, 1 su bardağı = 
-                  190 gram. Zeytinyağı - 1 yemek kaşığı = 13.5 gram, 1 su bardağı = 216 gram. Süt - 1 yemek kaşığı = 15 ml, 1 su bardağı = 
-                  250 ml. Yoğurt - 1 yemek kaşığı = 20 gram, 1 su bardağı = 250 gram. Bal - 1 yemek kaşığı = 21 gram. Bu değerler yaklaşık 
-                  olup gıdanın sıkıştırılma derecesine göre değişebilir.
-                </p>
+              <h3 className="text-3xl font-bold text-white mt-10 mb-4 bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
+                Mutfakta Doğru Ölçüm İpuçları
+              </h3>
+              <p className="text-gray-300 leading-relaxed text-lg">
+                Doğru ölçüm yapmak için bir mutfak terazisi kullanmak en hassas yöntemdir. Kaşıklar ve bardaklar yaklaşık değerler verir; 
+                profesyonel aşçılar daima terazi kullanır. Tozlu malzemeleri (un, şeker) ölçerken kaşığa doldurup düzleştirin; tepeleme ölçmeyin. 
+                Sıvıları ölçerken bardağı düz bir yüzeye koyun ve göz hizasında okuyun. Kompakt olmayan malzemeleri (yulaf, irmik) hafifçe 
+                doldurun; sıkıştırmayın. Tarif metrik sistem (gram, ml) kullanıyorsa imperial (bardak, kaşık) kullanmayın; dönüşüm hataları olabilir. 
+                Daima aynı ölçüm sisteminde kalın. Özellikle fırıncılıkta hassas ölçüm kritiktir çünkü hamur kıvamı oranlarla doğrudan ilgilidir.
+              </p>
 
-                <h3 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Mutfak Terazisi: En Güvenilir Ölçüm Aracı</h3>
-                <p className="text-gray-700 leading-relaxed mb-4">
-                  Kalori sayımı ve makro takibi yapıyorsanız, mutfak terazisi en iyi yatırımınız olacaktır. Dijital mutfak terazileri 
-                  1 gram hassasiyetle ölçüm yapar ve sıfırlama (tare) özelliği sayesinde kab ağırlığını çıkarmanızı sağlar. Kaliteli bir 
-                  terazi 100-300 TL arasında bulunur ve yıllarca kullanılabilir. Terazi kullanırken ipuçları: Daima düz bir yüzeyde 
-                  kullanın, tartmadan önce sıfırlayın, gıdayı eklerken yavaş yavaş ekleyin çünkü terazi gecikmeyle tepki verebilir. 
-                  Özellikle fındık, fındık ezmesi, peynir, yağ gibi kalori yoğun gıdaları mutlaka tartın çünkü birkaç gram fark yüzlerce 
-                  kalori anlamına gelebilir.
-                </p>
-
-                <h3 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Dışarıda Yemek ve Porsiyon Tahmini</h3>
-                <p className="text-gray-700 leading-relaxed mb-4">
-                  Restoranlarda veya sosyal etkinliklerde mutfak terazisi kullanamayacağınız için "el ölçüsü" yöntemi kullanabilirsiniz. 
-                  Avuç içi büyüklüğü yaklaşık 100 gram et/tavuk/balığa denktir. Yumruk büyüklüğü 1 porsiyon (150-200 gram) pirinç, makarna 
-                  veya patates demektir. Başparmak ucu 1 yemek kaşığı (15 gram) yağ veya fındık ezmesine eşittir. İki avuç birleştirildiğinde 
-                  1 porsiyon sebze/salata ölçüsü olur. Bu yöntemler kesin olmasa da, terazi olmadan makul bir tahmin yapmanızı sağlar. 
-                  Ayrıca restoran menülerinde genellikle porsiyon büyüklükleri (gram) belirtilir; buna dikkat edin.
-                </p>
-
-                <h3 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Sık Sorulan Sorular</h3>
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-bold text-gray-900 mb-2">Yemek kaşığı ile çay kaşığı arasındaki fark nedir?</h4>
-                    <p className="text-gray-700">
-                      Yemek kaşığı (tablespoon) yaklaşık 15 ml, çay kaşığı (teaspoon) ise 5 ml'dir. Yani 1 yemek kaşığı = 3 çay kaşığı.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900 mb-2">Tariflerde "bir bardak" dendiğinde hangi bardak kastediliyor?</h4>
-                    <p className="text-gray-700">
-                      Türk tariflerinde genellikle 200-250 ml su bardağı kastedilir. Amerikan tariflerinde "cup" ölçüsü 240 ml'dir. 
-                      Net olmadığı durumlarda tarifte belirtilir.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900 mb-2">Ölçü kaşıkları doldururken ne kadar dolu olmalı?</h4>
-                    <p className="text-gray-700">
-                      Standart ölçümlerde kaşık "düz dolu" olmalıdır, yani üst kısmı bıçakla düzeltilmiş gibi düz. "Tepeleme dolu" 
-                      yaklaşık %30-50 daha fazla miktar anlamına gelir ve tarifler bunu belirtmedikçe kullanılmamalıdır.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+              <div className="mt-12 text-center">
+                <a 
+                  href="/hesaplayicilar" 
+                  className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-600 text-white font-bold text-lg hover:from-purple-600 hover:to-pink-700 shadow-2xl shadow-purple-500/50 border border-purple-400/30 hover:scale-105 transition-all duration-300"
+                >
+                  Diğer Hesaplayıcıları Gör
+                </a>
+              </div>
+            </div>
+          </article>
         </div>
       </main>
       

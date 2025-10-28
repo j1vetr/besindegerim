@@ -1,13 +1,9 @@
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { TrendingUp, Calendar, Target, AlertCircle } from "lucide-react";
+import { TrendingUp, Calendar, Target, AlertCircle, Zap } from "lucide-react";
 import type { CategoryGroup } from "@shared/schema";
+import { Button } from "@/components/ui/button";
 
 interface WeightLossTimeCalculatorProps {
   categoryGroups?: CategoryGroup[];
@@ -27,16 +23,16 @@ interface TimeResult {
 
 export default function WeightLossTimeCalculator({ categoryGroups, currentPath }: WeightLossTimeCalculatorProps) {
   const [goal, setGoal] = useState<"lose" | "gain">("lose");
-  const [currentWeight, setCurrentWeight] = useState<string>("");
-  const [targetWeight, setTargetWeight] = useState<string>("");
-  const [weeklyRate, setWeeklyRate] = useState<string>("0.5");
+  const [currentWeight, setCurrentWeight] = useState<number>(80);
+  const [targetWeight, setTargetWeight] = useState<number>(70);
+  const [weeklyRate, setWeeklyRate] = useState<number>(0.5);
   const [result, setResult] = useState<TimeResult | null>(null);
 
   const calculateTime = (e: React.FormEvent) => {
     e.preventDefault();
-    const current = parseFloat(currentWeight);
-    const target = parseFloat(targetWeight);
-    const rate = parseFloat(weeklyRate);
+    const current = currentWeight;
+    const target = targetWeight;
+    const rate = weeklyRate;
     
     const diff = goal === "lose" ? current - target : target - current;
     const weeks = diff / rate;
@@ -76,260 +72,302 @@ export default function WeightLossTimeCalculator({ categoryGroups, currentPath }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-amber-50 via-white to-orange-50">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-900 via-amber-900 to-slate-900">
       <Header categoryGroups={categoryGroups} currentPath={currentPath} />
       
-      <main className="flex-1 py-12">
+      {/* Animated Background */}
+      <div className="fixed inset-0 opacity-20 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-amber-400 to-orange-600 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-orange-400 to-yellow-600 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      </div>
+
+      <main className="flex-1 py-12 relative z-10">
         <div className="max-w-7xl mx-auto px-4">
+          {/* Breadcrumb */}
           <div className="mb-6">
-            <a href="/hesaplayicilar" className="text-amber-600 hover:text-amber-700 font-medium text-sm">
+            <a href="/hesaplayicilar" className="text-amber-400 hover:text-amber-300 font-medium text-sm backdrop-blur-sm bg-white/5 px-4 py-2 rounded-full inline-block border border-amber-500/30">
               ← Tüm Hesaplayıcılar
             </a>
           </div>
 
+          {/* Hero */}
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full px-6 py-2 mb-6 shadow-lg">
-              <TrendingUp className="w-5 h-5" />
-              <span className="font-semibold">Gerçekçi Hedefler</span>
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full px-6 py-3 mb-6 shadow-2xl shadow-amber-500/50 border border-amber-400/30">
+              <TrendingUp className="w-6 h-6 animate-pulse" />
+              <span className="font-bold">Gerçekçi Hedefler</span>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-4">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 bg-gradient-to-r from-amber-400 via-orange-500 to-yellow-400 bg-clip-text text-transparent drop-shadow-2xl">
               Kilo Verme/Alma Süresi Hesaplayıcı
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Hedef kilonuza ulaşmak için gereken süreyi ve günlük kalori ihtiyacınızı hesaplayın
             </p>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8 mb-16">
-            <Card className="shadow-2xl border-2 border-amber-100">
-              <CardHeader className="bg-gradient-to-r from-amber-500 to-orange-600 text-white">
-                <CardTitle className="flex items-center gap-2 text-2xl">
-                  <Target className="w-6 h-6" />
-                  Hedef Bilgileriniz
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-8">
-                <form onSubmit={calculateTime} className="space-y-6">
-                  <div className="space-y-3">
-                    <Label className="text-base font-semibold">Hedefiniz</Label>
-                    <RadioGroup value={goal} onValueChange={(v) => setGoal(v as "lose" | "gain")} className="flex gap-4">
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="lose" id="lose" />
-                        <Label htmlFor="lose" className="cursor-pointer">Kilo Vermek</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="gain" id="gain" />
-                        <Label htmlFor="gain" className="cursor-pointer">Kilo Almak</Label>
-                      </div>
-                    </RadioGroup>
+            {/* Calculator Form */}
+            <div className="backdrop-blur-2xl bg-white/10 rounded-3xl border border-white/20 shadow-2xl p-8 hover:bg-white/15 transition-all duration-300">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="p-3 bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl shadow-lg shadow-amber-500/50">
+                  <Target className="w-7 h-7 text-white" />
+                </div>
+                <h2 className="text-3xl font-black text-white">Hedef Bilgileriniz</h2>
+              </div>
+
+              <form onSubmit={calculateTime} className="space-y-8">
+                {/* Goal */}
+                <div className="space-y-4">
+                  <label className="text-lg font-bold text-white">Hedefiniz</label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <button
+                      type="button"
+                      onClick={() => setGoal("lose")}
+                      className={`p-4 rounded-2xl font-bold transition-all duration-300 ${
+                        goal === "lose"
+                          ? "bg-gradient-to-r from-red-500 to-orange-600 text-white shadow-2xl shadow-red-500/50 scale-105"
+                          : "bg-white/10 text-gray-300 hover:bg-white/20 border border-white/20"
+                      }`}
+                    >
+                      📉 Kilo Vermek
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setGoal("gain")}
+                      className={`p-4 rounded-2xl font-bold transition-all duration-300 ${
+                        goal === "gain"
+                          ? "bg-gradient-to-r from-blue-500 to-cyan-600 text-white shadow-2xl shadow-blue-500/50 scale-105"
+                          : "bg-white/10 text-gray-300 hover:bg-white/20 border border-white/20"
+                      }`}
+                    >
+                      📈 Kilo Almak
+                    </button>
                   </div>
+                </div>
 
-                  <div className="space-y-3">
-                    <Label htmlFor="current" className="text-base font-semibold">Mevcut Kilonuz (kg)</Label>
-                    <Input
-                      id="current"
-                      type="number"
-                      value={currentWeight}
-                      onChange={(e) => setCurrentWeight(e.target.value)}
-                      placeholder="Örn: 80"
-                      required
-                      min="30"
-                      max="300"
-                      step="0.1"
-                      className="h-12 text-lg"
-                    />
+                {/* Current Weight */}
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <label className="text-lg font-bold text-white">Mevcut Kilonuz (kg)</label>
+                    <span className="text-4xl font-black bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
+                      {currentWeight}
+                    </span>
                   </div>
-
-                  <div className="space-y-3">
-                    <Label htmlFor="target" className="text-base font-semibold">Hedef Kilonuz (kg)</Label>
-                    <Input
-                      id="target"
-                      type="number"
-                      value={targetWeight}
-                      onChange={(e) => setTargetWeight(e.target.value)}
-                      placeholder="Örn: 70"
-                      required
-                      min="30"
-                      max="300"
-                      step="0.1"
-                      className="h-12 text-lg"
-                    />
+                  <input
+                    type="range"
+                    min="30"
+                    max="200"
+                    value={currentWeight}
+                    onChange={(e) => setCurrentWeight(parseInt(e.target.value))}
+                    className="w-full h-3 bg-gradient-to-r from-orange-500/20 to-red-600/20 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-7 [&::-webkit-slider-thumb]:h-7 [&::-webkit-slider-thumb]:bg-gradient-to-r [&::-webkit-slider-thumb]:from-orange-400 [&::-webkit-slider-thumb]:to-red-600 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:shadow-xl [&::-webkit-slider-thumb]:shadow-orange-500/50 [&::-webkit-slider-thumb]:cursor-pointer hover:[&::-webkit-slider-thumb]:scale-110 transition-all"
+                  />
+                  <div className="flex justify-between text-xs text-gray-400 px-1">
+                    <span>30 kg</span>
+                    <span>200 kg</span>
                   </div>
+                </div>
 
-                  <div className="space-y-3">
-                    <Label htmlFor="rate" className="text-base font-semibold">Haftalık {goal === "lose" ? "Kayıp" : "Kazanç"} Hızı (kg/hafta)</Label>
-                    <Input
-                      id="rate"
-                      type="number"
-                      value={weeklyRate}
-                      onChange={(e) => setWeeklyRate(e.target.value)}
-                      placeholder="Örn: 0.5"
-                      required
-                      min="0.1"
-                      max="2"
-                      step="0.1"
-                      className="h-12 text-lg"
-                    />
-                    <p className="text-sm text-gray-600">Önerilen: 0.5 kg/hafta (sağlıklı ve sürdürülebilir)</p>
+                {/* Target Weight */}
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <label className="text-lg font-bold text-white">Hedef Kilonuz (kg)</label>
+                    <span className="text-4xl font-black bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+                      {targetWeight}
+                    </span>
                   </div>
+                  <input
+                    type="range"
+                    min="30"
+                    max="200"
+                    value={targetWeight}
+                    onChange={(e) => setTargetWeight(parseInt(e.target.value))}
+                    className="w-full h-3 bg-gradient-to-r from-green-500/20 to-emerald-600/20 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-7 [&::-webkit-slider-thumb]:h-7 [&::-webkit-slider-thumb]:bg-gradient-to-r [&::-webkit-slider-thumb]:from-green-400 [&::-webkit-slider-thumb]:to-emerald-600 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:shadow-xl [&::-webkit-slider-thumb]:shadow-green-500/50 [&::-webkit-slider-thumb]:cursor-pointer hover:[&::-webkit-slider-thumb]:scale-110 transition-all"
+                  />
+                  <div className="flex justify-between text-xs text-gray-400 px-1">
+                    <span>30 kg</span>
+                    <span>200 kg</span>
+                  </div>
+                </div>
 
-                  <Button type="submit" className="w-full h-14 text-lg font-bold bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 shadow-lg">
-                    <Calendar className="w-5 h-5 mr-2" />
-                    Süreyi Hesapla
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
+                {/* Weekly Rate */}
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <label className="text-lg font-bold text-white">Haftalık Hız (kg/hafta)</label>
+                    <span className="text-4xl font-black bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-transparent">
+                      {weeklyRate.toFixed(1)}
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min="0.1"
+                    max="2"
+                    step="0.1"
+                    value={weeklyRate}
+                    onChange={(e) => setWeeklyRate(parseFloat(e.target.value))}
+                    className="w-full h-3 bg-gradient-to-r from-blue-500/20 to-cyan-600/20 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-7 [&::-webkit-slider-thumb]:h-7 [&::-webkit-slider-thumb]:bg-gradient-to-r [&::-webkit-slider-thumb]:from-blue-400 [&::-webkit-slider-thumb]:to-cyan-600 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:shadow-xl [&::-webkit-slider-thumb]:shadow-blue-500/50 [&::-webkit-slider-thumb]:cursor-pointer hover:[&::-webkit-slider-thumb]:scale-110 transition-all"
+                  />
+                  <div className="flex justify-between text-xs text-gray-400 px-1">
+                    <span>0.1 kg/hafta</span>
+                    <span>2.0 kg/hafta</span>
+                  </div>
+                  <p className="text-sm text-gray-300">Önerilen: 0.5 kg/hafta (sağlıklı ve sürdürülebilir)</p>
+                </div>
 
+                <Button
+                  type="submit"
+                  className="w-full h-16 text-xl font-black bg-gradient-to-r from-amber-500 via-orange-600 to-yellow-500 hover:from-amber-600 hover:via-orange-700 hover:to-yellow-600 shadow-2xl shadow-amber-500/50 rounded-2xl border-2 border-amber-400/50 hover:scale-105 transition-all duration-300"
+                >
+                  <Zap className="w-6 h-6 mr-2 animate-pulse" />
+                  Süreyi Hesapla
+                </Button>
+              </form>
+            </div>
+
+            {/* Results */}
             {result && (
               <div className="space-y-6">
-                <Card className="shadow-2xl border-2 border-amber-100">
-                  <CardHeader className="bg-gradient-to-r from-amber-500 to-orange-600 text-white">
-                    <CardTitle className="flex items-center gap-2 text-2xl">
-                      <Calendar className="w-6 h-6" />
-                      Hedef Süreniz
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-8 space-y-6">
-                    <div className="bg-gradient-to-br from-amber-50 to-orange-100 rounded-xl p-6 border-2 border-amber-200">
-                      <h3 className="font-bold text-lg mb-4 text-gray-900">Tahmini Süre</h3>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <p className="text-4xl font-black text-amber-600">{result.weeks}</p>
-                          <p className="text-sm text-gray-600">Hafta</p>
-                        </div>
-                        <div>
-                          <p className="text-4xl font-black text-orange-600">{result.months}</p>
-                          <p className="text-sm text-gray-600">Ay</p>
-                        </div>
+                {/* Timeline */}
+                <div className="backdrop-blur-2xl bg-gradient-to-br from-amber-500/20 to-orange-600/20 rounded-3xl border border-amber-400/30 p-8 shadow-2xl hover:scale-105 transition-all duration-300">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Calendar className="w-8 h-8 text-amber-400 animate-pulse" />
+                    <h3 className="text-2xl font-black text-white">Hedefe Ulaşma Süresi</h3>
+                  </div>
+                  <div className="grid grid-cols-3 gap-4 mb-6">
+                    <div className="text-center">
+                      <div className="text-4xl font-black bg-gradient-to-r from-amber-300 to-orange-400 bg-clip-text text-transparent">
+                        {result.days}
                       </div>
+                      <div className="text-gray-300 text-sm mt-1">Gün</div>
                     </div>
-
-                    <div className="bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl p-6 border-2 border-green-200">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Target className="w-5 h-5 text-green-600" />
-                        <h3 className="font-bold text-lg text-gray-900">Hedef Tarih</h3>
+                    <div className="text-center">
+                      <div className="text-4xl font-black bg-gradient-to-r from-orange-300 to-yellow-400 bg-clip-text text-transparent">
+                        {result.weeks}
                       </div>
-                      <p className="text-2xl font-black text-green-600">{result.targetDate}</p>
+                      <div className="text-gray-300 text-sm mt-1">Hafta</div>
                     </div>
-
-                    <div className="bg-gradient-to-br from-blue-50 to-cyan-100 rounded-xl p-6 border-2 border-blue-200">
-                      <h3 className="font-bold text-lg mb-4 text-gray-900">Günlük Kalori {goal === "lose" ? "Açığı" : "Fazlası"}</h3>
-                      <p className="text-4xl font-black text-blue-600">{result.dailyDeficit} kcal</p>
-                      <p className="text-sm text-gray-600 mt-2">Haftada {result.weeklyDeficit} kcal</p>
-                    </div>
-
-                    <div className={`bg-gradient-to-br ${result.warning ? 'from-red-50 to-orange-100 border-red-200' : 'from-green-50 to-emerald-100 border-green-200'} rounded-xl p-6 border-2`}>
-                      <div className="flex items-start gap-2">
-                        {result.warning ? (
-                          <AlertCircle className="w-5 h-5 text-red-600 mt-1" />
-                        ) : (
-                          <Target className="w-5 h-5 text-green-600 mt-1" />
-                        )}
-                        <div>
-                          <h3 className="font-bold text-lg text-gray-900 mb-2">Hız: {result.pace}</h3>
-                          {result.warning && (
-                            <p className="text-sm text-gray-700">{result.warning}</p>
-                          )}
-                        </div>
+                    <div className="text-center">
+                      <div className="text-4xl font-black bg-gradient-to-r from-yellow-300 to-amber-400 bg-clip-text text-transparent">
+                        {result.months}
                       </div>
+                      <div className="text-gray-300 text-sm mt-1">Ay</div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-gray-300 text-sm mb-2">Hedef Tarih</p>
+                    <p className="text-2xl font-bold text-white">{result.targetDate}</p>
+                  </div>
+                </div>
+
+                {/* Calorie Deficit */}
+                <div className="backdrop-blur-2xl bg-gradient-to-br from-red-500/20 to-pink-600/20 rounded-3xl border border-red-400/30 p-8 shadow-2xl hover:scale-105 transition-all duration-300">
+                  <div className="flex items-center gap-3 mb-4">
+                    <TrendingUp className="w-8 h-8 text-red-400 animate-pulse" />
+                    <h3 className="text-2xl font-black text-white">Kalori {goal === "lose" ? "Açığı" : "Fazlası"}</h3>
+                  </div>
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
+                      <p className="text-gray-300 text-sm mb-2">Günlük</p>
+                      <p className="text-4xl font-black bg-gradient-to-r from-red-300 to-pink-400 bg-clip-text text-transparent">
+                        {result.dailyDeficit}
+                      </p>
+                      <p className="text-gray-300 text-sm mt-1">kcal/gün</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-300 text-sm mb-2">Haftalık</p>
+                      <p className="text-4xl font-black bg-gradient-to-r from-pink-300 to-rose-400 bg-clip-text text-transparent">
+                        {result.weeklyDeficit}
+                      </p>
+                      <p className="text-gray-300 text-sm mt-1">kcal/hafta</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Pace & Warning */}
+                <div className={`backdrop-blur-2xl rounded-3xl border p-8 shadow-2xl ${
+                  result.warning 
+                    ? 'bg-gradient-to-br from-orange-500/20 to-red-600/20 border-orange-400/30' 
+                    : 'bg-gradient-to-br from-green-500/20 to-emerald-600/20 border-green-400/30'
+                }`}>
+                  <div className="flex items-center gap-3 mb-4">
+                    {result.warning ? (
+                      <AlertCircle className="w-8 h-8 text-orange-400 animate-pulse" />
+                    ) : (
+                      <Target className="w-8 h-8 text-green-400 animate-pulse" />
+                    )}
+                    <h3 className="text-2xl font-black text-white">Hızınız</h3>
+                  </div>
+                  <p className={`text-3xl font-bold mb-4 ${result.warning ? 'text-orange-300' : 'text-green-300'}`}>
+                    {result.pace}
+                  </p>
+                  {result.warning && (
+                    <div className="bg-red-500/20 border border-red-400/30 rounded-xl p-4">
+                      <p className="text-gray-200 text-sm leading-relaxed">{result.warning}</p>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
 
           {/* SEO Content */}
-          <div className="max-w-4xl mx-auto prose prose-lg">
-            <Card className="shadow-lg">
-              <CardContent className="p-8">
-                <h2 className="text-3xl font-bold text-gray-900 mb-6">Kilo Verme/Alma Süresi: Gerçekçi Hedefler Belirlemek</h2>
-                
-                <p className="text-gray-700 leading-relaxed mb-4">
-                  Kilo yönetimi bir maraton, sprint değildir. Birçok insan hızlı sonuç almak isterken sürdürülemez yöntemler kullanır 
-                  ve nihayetinde başarısız olur. Bilimsel araştırmalar, yavaş ve istikrarlı kilo kaybının uzun vadede çok daha etkili 
-                  olduğunu göstermektedir. Haftada 0.5-1 kg kilo vermek ideal hızdır; bu hem metabolizmayı korur hem de yoyo etkisini 
-                  önler. Bu hesaplayıcı, hedef kilonuza ulaşmanız için gereken süreyi gerçekçi bir şekilde tahmin eder ve günlük 
-                  kalori ihtiyacınızı hesaplar.
-                </p>
+          <article className="prose prose-lg prose-invert max-w-none">
+            <div className="backdrop-blur-2xl bg-white/5 rounded-3xl border border-white/10 p-12">
+              <h2 className="text-4xl font-black text-white mb-6 bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
+                Kilo Verme ve Alma Sürecinde Gerçekçi Hedefler
+              </h2>
+              
+              <p className="text-gray-300 leading-relaxed mb-6 text-lg">
+                Kilo yönetimi sabır ve tutarlılık gerektiren bir süreçtir. Haftada 0.5-1 kg kilo kaybı/kazancı sağlıklı ve sürdürülebilir kabul 
+                edilir. 1 kg yağ yaklaşık 7700 kalori demektir; bu yüzden haftada 0.5 kg kilo vermek için günlük 550 kalori açığı (7700 ÷ 2 ÷ 7) 
+                oluşturmanız gerekir. Örneğin, 80 kg'dan 70 kg'a düşmek isteyen biri haftada 0.5 kg kaybetmeyi hedeflerse, bu 10 kg ÷ 0.5 = 20 hafta 
+                (yaklaşık 5 ay) sürer. Hızlı kilo kaybı genellikle su ve kas kaybıdır, yağ değil. Ayrıca, hızlı diyetler metabolizmayı yavaşlatır ve 
+                yoyo etkisi yaratır.
+              </p>
 
-                <h3 className="text-2xl font-bold text-gray-900 mt-8 mb-4">1 Kilogram Yağ = 7700 Kalori</h3>
-                <p className="text-gray-700 leading-relaxed mb-4">
-                  Vücut yağının 1 kilogramı yaklaşık 7700 kalori enerji içerir. Bu, 1 kg yağ kaybetmek için toplam 7700 kalori açığı 
-                  oluşturmanız gerektiği anlamına gelir. Haftada 0.5 kg kilo vermek istiyorsanız, haftalık 3850 kalori (günlük ~550 kalori) 
-                  açığı gerekir. Bu açık, daha az yiyerek, daha fazla egzersiz yaparak veya her ikisinin kombinasyonuyla sağlanabilir. 
-                  Örneğin, günlük 300 kalori daha az yiyip 250 kalori egzersiz yaparsanız toplam 550 kalori açığı oluşturursunuz. 
-                  Kilo almak için ise tam tersi geçerlidir; fazla kalori almanız gerekir.
-                </p>
+              <h3 className="text-3xl font-bold text-white mt-10 mb-4 bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+                Kalori Açığı ve Fazlası Stratejileri
+              </h3>
+              <p className="text-gray-300 leading-relaxed mb-6 text-lg">
+                Kilo vermek için kalori açığı oluşturmalısınız: yediğinizden daha fazla yakmalısınız. Haftada 0.5 kg kaybetmek için günlük 
+                500-550 kalori açığı ideal. Bunu hem beslenme hem egzersizle sağlayabilirsiniz: 300 kalori daha az yemek + 200 kalori daha fazla 
+                yakma. Kilo almak için kalori fazlası gereklidir. Haftada 0.5 kg kas yapmak için günlük 300-500 kalori fazlası almalısınız ve 
+                kuvvet antrenmanı yapmalısınız. Aşırı kalori açığı (günde 1000+ kalori) metabolizmayı yavaşlatır, kas kaybına neden olur ve 
+                yorgunluk, saç dökülmesi, hormonal dengesizliklere yol açar. Asla BMR'nizin altında kalori almayın.
+              </p>
 
-                <h3 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Hızlı Kilo Kaybı Neden Zararlıdır?</h3>
-                <p className="text-gray-700 leading-relaxed mb-4">
-                  Haftada 1 kg'dan fazla kilo vermek birçok sağlık riski taşır. Öncelikle, aşırı kalori kısıtlaması metabolizmanızı 
-                  yavaşlatır; vücut "açlık modu"na girer ve enerji tasarrufu yapmaya başlar. Bu, kilo kaybını zorlaştırır ve diyet 
-                  bittiğinde yoyo etkisine (hızlı kilo alma) yol açar. Ayrıca hızlı kilo kaybı kas kütlesi kaybına neden olur; kaybedilen 
-                  kilonun %25-30'u kas olabilir. Kas kaybı metabolizmayı daha da yavaşlatır çünkü kas dokusu yağ dokusundan daha fazla 
-                  kalori yakar. Diğer riskler arasında besin eksiklikleri, yorgunluk, saç dökülmesi, bağışıklık sistemi zayıflaması ve 
-                  safra taşları yer alır.
-                </p>
+              <h3 className="text-3xl font-bold text-white mt-10 mb-4 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+                Hedef Belirleme ve İlerleme Takibi
+              </h3>
+              <p className="text-gray-300 leading-relaxed mb-6 text-lg">
+                SMART hedefler belirleyin: Specific (belirli), Measurable (ölçülebilir), Achievable (ulaşılabilir), Relevant (ilgili), Time-bound 
+                (zamana bağlı). "Kilo vermek istiyorum" yerine "3 ayda 6 kg vereceğim" daha etkilidir. Haftalık aynı gün, aynı saat, aynı koşullarda 
+                (sabah, tuvaletten sonra, aç karnına) tartılın. Günlük tartılmayın; su dengesi dalgalanmaları sizi yanıltabilir. Kilo kaybı doğrusal 
+                değildir; bazı haftalar 0.5 kg, bazıları 0.2 kg, bazıları 0 kg olabilir. Trend önemlidir. Fotoğraf çekin ve ölçümler alın (bel, kalça, 
+                kol çevresi) çünkü bazen kilo sabit kalır ama vücut kompozisyonu değişir. Platolar normaldir; 2-3 hafta kilo vermezseniz kalori 
+                alımını hafifçe azaltın veya aktiviteyi artırın.
+              </p>
 
-                <h3 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Sürdürülebilir Kilo Kaybı Stratejileri</h3>
-                <p className="text-gray-700 leading-relaxed mb-4">
-                  Başarılı ve kalıcı kilo kaybı için şu stratejileri uygulayın: 1) Gerçekçi hedefler koyun - ayda 2-4 kg hedeflemek 
-                  idealdir. 2) Kalori sayımı yapın ama obsesif olmayın; MyFitnessPal gibi uygulamalar kullanışlıdır. 3) Protein alımınızı 
-                  artırın; protein tokluk hissi verir ve kas kaybını önler. 4) Direnç antrenmanı yapın; kas kütlesini korumak için haftada 
-                  2-3 gün ağırlık çalışın. 5) Uyku ve stres yönetimine dikkat edin; yetersiz uyku ve yüksek stres kilo kaybını zorlaştırır. 
-                  6) Su için; genellikle susuzluk açlıkla karıştırılır. 7) İşlenmiş gıdalardan kaçının; tam, doğal besinlere odaklanın. 
-                  8) Sabırlı olun; kilo verme doğrusal değildir, bazı haftalar plato yaşayabilirsiniz.
-                </p>
+              <h3 className="text-3xl font-bold text-white mt-10 mb-4 bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
+                Yaygın Hatalar ve Çözümleri
+              </h3>
+              <p className="text-gray-300 leading-relaxed text-lg">
+                Çok hızlı kilo vermeye çalışmak en yaygın hatadır; bu sürdürülemez ve sağlıksızdır. Gizli kalori alımı (soslar, atıştırmalıklar, 
+                içecekler) insanları yanıltır; her şeyi kaydedin. Kas kaybı önlenmezse metabolizma yavaşlar; proteini yüksek tutun ve direnç 
+                antrenmanı yapın. Sadece tartıya odaklanmak yanıltıcıdır; vücut kompozisyonuna da bakın. Cheat meal yerine cheat day yapmak kalori 
+                açığını ortadan kaldırır. Uyku yetersizliği grelin (açlık hormonu) artırır ve leptin (tokluk hormonu) azaltır; günde 7-9 saat uyuyun. 
+                Stres kortizol seviyesini yükseltir ve kilo kaybını engeller; meditasyon ve egzersiz stresi azaltır. Sabırlı olun; sağlıklı kilo kaybı 
+                yavaş ama kalıcıdır.
+              </p>
 
-                <h3 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Kilo Almak İsteyenler İçin İpuçları</h3>
-                <p className="text-gray-700 leading-relaxed mb-4">
-                  Kilo almak kilo vermek kadar zor olabilir, özellikle hızlı metabolizmaya sahipseniz. Sağlıklı kilo almak için: 
-                  1) Kalori fazlası yaratın ama aşırıya kaçmayın; günde 300-500 kalori fazla alın. 2) Sık sık yiyin; günde 5-6 küçük öğün 
-                  iştahsızlık problemini çözebilir. 3) Kalori yoğun gıdalar seçin; fındık, fındık ezmesi, avokado, zeytinyağı, kuru meyve 
-                  az hacimde çok kalori sağlar. 4) Sıvı kalori ekleyin; smoothie'ler, protein shake'leri ve süt ürünleri yardımcı olabilir. 
-                  5) Kuvvet antrenmanı yapın; fazla kalorilerin kas olarak depolanmasını sağlar. 6) Kardiyoyu sınırlayın; aşırı kardiyovasküler 
-                  egzersiz kalori açığı yaratır. 7) Uyumadan önce yiyin; gece boyunca enerji sağlar ve katabolizmayı önler.
-                </p>
-
-                <h3 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Plato Dönemleri ve Nasıl Aşılır?</h3>
-                <p className="text-gray-700 leading-relaxed mb-4">
-                  Kilo kaybı/kazanımı sırasında "plato" dönemleri yaygındır; birkaç hafta boyunca kilo değişmez. Bu normaldir çünkü 
-                  vücudunuz yeni kiloya adapte olur ve metabolizma ayarlanır. Platoyu aşmak için: 1) Kalori alımınızı yeniden hesaplayın; 
-                  kilo verdikçe daha az kalori yakmaya başlarsınız. 2) Egzersiz rutininizi değiştirin; vücut aynı egzersize alışır, yeni 
-                  hareketler ekleyin. 3) Refeed günleri uygulayın; haftada bir gün karbonhidrat alımını artırarak metabolizmayı canlandırın. 
-                  4) Stresi azaltın; yüksek kortizol (stres hormonu) kilo kaybını engeller. 5) Uyku kalitenizi artırın; yetersiz uyku grelin 
-                  (açlık hormonu) seviyesini yükseltir. 6) Sabırlı olun; bazen plato gerçek değildir, su tutulması kilo gibi görünebilir.
-                </p>
-
-                <h3 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Sık Sorulan Sorular</h3>
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-bold text-gray-900 mb-2">Haftada kaç kilo vermek güvenlidir?</h4>
-                    <p className="text-gray-700">
-                      Genel olarak haftada 0.5-1 kg güvenli ve sürdürülebilir kabul edilir. Daha hızlı kilo kaybı kas kaybı, metabolizma 
-                      yavaşlaması ve besin eksikliklerine yol açabilir.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900 mb-2">Kilo kaybı neden yavaşlıyor?</h4>
-                    <p className="text-gray-700">
-                      Kilo verdikçe vücudunuz daha az enerji harcar (daha hafifsiniz) ve metabolizmanız yavaşlar (adaptif termogenez). 
-                      Kalori açığınızı düzenli olarak yeniden hesaplayın ve egzersiz rutininizi değiştirin.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900 mb-2">Sadece diyet mi, sadece egzersiz mi, yoksa ikisi birden mi?</h4>
-                    <p className="text-gray-700">
-                      Araştırmalar, diyet + egzersiz kombinasyonunun en etkili olduğunu gösterir. Diyet kalori açığı sağlar, egzersiz 
-                      kas kütlesini korur ve metabolizmayı yüksek tutar. Her ikisini de uygulamak ideal sonuçları verir.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+              <div className="mt-12 text-center">
+                <a 
+                  href="/hesaplayicilar" 
+                  className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold text-lg hover:from-amber-600 hover:to-orange-700 shadow-2xl shadow-amber-500/50 border border-amber-400/30 hover:scale-105 transition-all duration-300"
+                >
+                  Diğer Hesaplayıcıları Gör
+                </a>
+              </div>
+            </div>
+          </article>
         </div>
       </main>
       
