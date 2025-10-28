@@ -153,7 +153,9 @@ export async function renderHomePage(foods: Food[], categoryGroups: CategoryGrou
         />
       ` : `
         <div class="w-full h-48 bg-muted rounded-md mb-3 flex items-center justify-center">
-          <span class="text-4xl">🍽️</span>
+          <svg class="w-16 h-16 text-muted-foreground/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
         </div>
       `}
       <h3 class="font-semibold text-lg mb-2">${food.name}</h3>
@@ -585,7 +587,9 @@ export async function renderCategoryPage(
         />
       ` : `
         <div class="w-full h-48 bg-muted rounded-md mb-3 flex items-center justify-center">
-          <span class="text-4xl">🍽️</span>
+          <svg class="w-16 h-16 text-muted-foreground/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
         </div>
       `}
       <h3 class="font-semibold text-lg mb-2">${food.name}</h3>
@@ -624,23 +628,40 @@ export async function renderCategoryPage(
  */
 export async function renderCalculatorsHubPage(categoryGroups: CategoryGroup[]): Promise<RenderResult> {
   const calculators = [
-    { id: "gunluk-kalori-ihtiyaci", title: "Günlük Kalori ve Makro Hesaplayıcı", description: "BMR, TDEE ve günlük kalori ihtiyacınızı hesaplayın. Protein, karbonhidrat ve yağ dağılımınızı öğrenin.", icon: "🔥", color: "from-green-500 to-emerald-600", popular: true },
-    { id: "bmi", title: "Vücut Kitle İndeksi (BMI)", description: "Sağlıklı kilo aralığınızı öğrenin. WHO standartlarına göre BMI hesaplama.", icon: "⚖️", color: "from-blue-500 to-cyan-600", popular: true },
-    { id: "vucut-yag-yuzde", title: "Vücut Yağ Yüzdesi", description: "Navy Method ile vücut yağ yüzdesini hesaplayın. BMI'dan çok daha doğru sonuç!", icon: "💪", color: "from-indigo-500 to-purple-600", popular: true },
-    { id: "ideal-kilo", title: "İdeal Kilo Hesaplayıcı", description: "Boyunuza göre ideal kilonuzu hesaplayın. Devine ve Broca formülleriyle.", icon: "💚", color: "from-pink-500 to-rose-600", popular: false },
-    { id: "gunluk-su-ihtiyaci", title: "Günlük Su İhtiyacı", description: "Kilonuza ve aktivite seviyenize göre günlük su ihtiyacınızı hesaplayın.", icon: "💧", color: "from-sky-500 to-blue-600", popular: false },
-    { id: "protein-gereksinimi", title: "Protein Gereksinimi", description: "Hedef ve aktivite seviyenize göre günlük protein ihtiyacınızı öğrenin.", icon: "🥩", color: "from-red-500 to-orange-600", popular: true },
-    { id: "porsiyon-cevirici", title: "Porsiyon Çevirici", description: "Gramajı porsiyona, porsiyonu kaşık ve bardağa çevirin. Benzersiz araç!", icon: "📊", color: "from-purple-500 to-pink-600", popular: true },
-    { id: "kilo-verme-suresi", title: "Kilo Verme/Alma Süresi", description: "Hedef kilonuza ulaşmanız için gereken süreyi hesaplayın.", icon: "📈", color: "from-amber-500 to-orange-600", popular: false }
+    { id: "gunluk-kalori-ihtiyaci", title: "Günlük Kalori ve Makro Hesaplayıcı", description: "BMR, TDEE ve günlük kalori ihtiyacınızı hesaplayın. Protein, karbonhidrat ve yağ dağılımınızı öğrenin.", iconName: "Flame", color: "from-green-500 to-emerald-600", popular: true },
+    { id: "bmi", title: "Vücut Kitle İndeksi (BMI)", description: "Sağlıklı kilo aralığınızı öğrenin. WHO standartlarına göre BMI hesaplama.", iconName: "Scale", color: "from-blue-500 to-cyan-600", popular: true },
+    { id: "vucut-yag-yuzde", title: "Vücut Yağ Yüzdesi", description: "Navy Method ile vücut yağ yüzdesini hesaplayın. BMI'dan çok daha doğru sonuç!", iconName: "Activity", color: "from-indigo-500 to-purple-600", popular: true },
+    { id: "ideal-kilo", title: "İdeal Kilo Hesaplayıcı", description: "Boyunuza göre ideal kilonuzu hesaplayın. Devine ve Broca formülleriyle.", iconName: "Heart", color: "from-pink-500 to-rose-600", popular: false },
+    { id: "gunluk-su-ihtiyaci", title: "Günlük Su İhtiyacı", description: "Kilonuza ve aktivite seviyenize göre günlük su ihtiyacınızı hesaplayın.", iconName: "Droplets", color: "from-sky-500 to-blue-600", popular: false },
+    { id: "protein-gereksinimi", title: "Protein Gereksinimi", description: "Hedef ve aktivite seviyenize göre günlük protein ihtiyacınızı öğrenin.", iconName: "Beef", color: "from-red-500 to-orange-600", popular: true },
+    { id: "porsiyon-cevirici", title: "Porsiyon Çevirici", description: "Gramajı porsiyona, porsiyonu kaşık ve bardağa çevirin. Benzersiz araç!", iconName: "Utensils", color: "from-purple-500 to-pink-600", popular: true },
+    { id: "kilo-verme-suresi", title: "Kilo Verme/Alma Süresi", description: "Hedef kilonuza ulaşmanız için gereken süreyi hesaplayın.", iconName: "TrendingUp", color: "from-amber-500 to-orange-600", popular: false }
   ];
 
   const popularCalculators = calculators.filter(c => c.popular);
   const otherCalculators = calculators.filter(c => !c.popular);
 
+  // Icon SVG mapper
+  const getIconSVG = (iconName: string): string => {
+    const icons: Record<string, string> = {
+      Flame: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />',
+      Scale: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />',
+      Activity: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />',
+      Heart: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />',
+      Droplets: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />',
+      Beef: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />',
+      Utensils: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />',
+      TrendingUp: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />'
+    };
+    return icons[iconName] || icons.Flame;
+  };
+
   const renderCalculatorCard = (calc: any) => `
     <a href="/hesaplayici/${calc.id}" class="group block border-2 border-transparent hover:border-green-500/30 rounded-lg p-8 bg-white hover:shadow-2xl transition-all duration-300">
       <div class="w-16 h-16 bg-gradient-to-br ${calc.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-        <span class="text-4xl">${calc.icon}</span>
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          ${getIconSVG(calc.iconName)}
+        </svg>
       </div>
       <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-green-600 transition-colors">
         ${calc.title}
@@ -658,7 +679,9 @@ export async function renderCalculatorsHubPage(categoryGroups: CategoryGroup[]):
         <div class="max-w-7xl mx-auto px-4 md:px-8">
           <div class="text-center mb-12">
             <div class="inline-flex items-center gap-2 bg-white border-2 border-green-200 rounded-full px-4 py-2 mb-6 shadow-sm">
-              <span class="text-green-600">🧮</span>
+              <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
               <span class="text-sm font-semibold text-green-600">8 Ücretsiz Hesaplayıcı</span>
             </div>
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6">
@@ -675,7 +698,10 @@ export async function renderCalculatorsHubPage(categoryGroups: CategoryGroup[]):
       <section class="py-16 px-4 bg-white">
         <div class="max-w-7xl mx-auto">
           <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-8 flex items-center gap-3">
-            <span class="text-green-600">⭐</span> Popüler Hesaplayıcılar
+            <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+            Popüler Hesaplayıcılar
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             ${popularCalculators.map(renderCalculatorCard).join('')}
@@ -741,7 +767,9 @@ function renderDailyCalorieCalculator(categoryGroups: CategoryGroup[]): RenderRe
         
         <div class="text-center mb-12">
           <div class="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-orange-600 text-white rounded-full px-6 py-2 mb-6 shadow-lg">
-            <span class="text-xl">🔥</span>
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+            </svg>
             <span class="font-semibold">BMR & TDEE Formülleri</span>
           </div>
           <h1 class="text-4xl md:text-5xl font-black text-gray-900 mb-4">
@@ -753,8 +781,11 @@ function renderDailyCalorieCalculator(categoryGroups: CategoryGroup[]): RenderRe
         </div>
 
         <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6 mb-12">
-          <p class="text-center text-lg font-medium text-gray-900">
-            ⚠️ Bu hesaplayıcıyı kullanmak için JavaScript etkinleştirilmelidir. 
+          <p class="text-center text-lg font-medium text-gray-900 flex items-center justify-center gap-2">
+            <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            Bu hesaplayıcıyı kullanmak için JavaScript etkinleştirilmelidir. 
             Lütfen tarayıcınızın ayarlarından JavaScript'i açın.
           </p>
         </div>
@@ -848,7 +879,7 @@ function renderBMICalculator(categoryGroups: CategoryGroup[]): RenderResult {
 
         <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6 mb-12">
           <p class="text-center text-lg font-medium text-gray-900">
-            ⚠️ Bu hesaplayıcıyı kullanmak için JavaScript etkinleştirilmelidir.
+             Bu hesaplayıcıyı kullanmak için JavaScript etkinleştirilmelidir.
           </p>
         </div>
 
@@ -922,7 +953,9 @@ function renderBodyFatCalculator(categoryGroups: CategoryGroup[]): RenderResult 
         
         <div class="text-center mb-12">
           <div class="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-full px-6 py-2 mb-6 shadow-lg">
-            <span class="text-xl">💪</span>
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
             <span class="font-semibold">Navy Method Formülü</span>
           </div>
           <h1 class="text-4xl md:text-5xl font-black text-gray-900 mb-4">
@@ -935,7 +968,7 @@ function renderBodyFatCalculator(categoryGroups: CategoryGroup[]): RenderResult 
 
         <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6 mb-12">
           <p class="text-center text-lg font-medium text-gray-900">
-            ⚠️ Bu hesaplayıcıyı kullanmak için JavaScript etkinleştirilmelidir.
+             Bu hesaplayıcıyı kullanmak için JavaScript etkinleştirilmelidir.
           </p>
         </div>
 
@@ -1023,7 +1056,7 @@ function renderIdealWeightCalculator(categoryGroups: CategoryGroup[]): RenderRes
 
         <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6 mb-12">
           <p class="text-center text-lg font-medium text-gray-900">
-            ⚠️ JavaScript gereklidir.
+             JavaScript gereklidir.
           </p>
         </div>
 
@@ -1091,7 +1124,7 @@ function renderWaterIntakeCalculator(categoryGroups: CategoryGroup[]): RenderRes
 
         <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6 mb-12">
           <p class="text-center text-lg font-medium text-gray-900">
-            ⚠️ JavaScript gereklidir.
+             JavaScript gereklidir.
           </p>
         </div>
 
@@ -1157,7 +1190,7 @@ function renderProteinCalculator(categoryGroups: CategoryGroup[]): RenderResult 
 
         <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6 mb-12">
           <p class="text-center text-lg font-medium text-gray-900">
-            ⚠️ JavaScript gereklidir.
+             JavaScript gereklidir.
           </p>
         </div>
 
@@ -1222,7 +1255,7 @@ function renderPortionConverterCalculator(categoryGroups: CategoryGroup[]): Rend
 
         <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6 mb-12">
           <p class="text-center text-lg font-medium text-gray-900">
-            ⚠️ JavaScript gereklidir.
+             JavaScript gereklidir.
           </p>
         </div>
 
@@ -1287,7 +1320,7 @@ function renderWeightLossTimeCalculator(categoryGroups: CategoryGroup[]): Render
 
         <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6 mb-12">
           <p class="text-center text-lg font-medium text-gray-900">
-            ⚠️ JavaScript gereklidir.
+             JavaScript gereklidir.
           </p>
         </div>
 
@@ -1580,7 +1613,7 @@ export async function renderContactPage(categoryGroups: CategoryGroup[]): Promis
             
             <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6">
               <p class="text-center text-lg font-medium text-gray-900">
-                ⚠️ İletişim formunu kullanmak için JavaScript etkinleştirilmelidir. 
+                 İletişim formunu kullanmak için JavaScript etkinleştirilmelidir. 
                 Lütfen tarayıcınızın ayarlarından JavaScript'i açın veya 
                 <a href="mailto:info@besindegerim.com" class="text-green-600 hover:underline font-semibold">
                   info@besindegerim.com
