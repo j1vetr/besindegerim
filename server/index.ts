@@ -65,16 +65,62 @@ import { registerSSRRoutes, handleSSRRequest } from "./ssr";
   app.get("/sitemap.xml", async (_req: Request, res: Response) => {
     try {
       const { storage } = await import("./storage");
+      const { categoryToSlug } = await import("@shared/utils");
       const foods = await storage.getAllFoods();
+      const categoryGroups = await storage.getCategoryGroups();
       const baseUrl = process.env.BASE_URL || "https://besindegerim.com";
+      
       const urls = [
+        // Ana sayfa (priority 1.0)
         { loc: baseUrl, priority: "1.0" },
-        { loc: `${baseUrl}/tum-gidalar`, priority: "0.9" },
-        ...foods.map((food: any) => ({
-          loc: `${baseUrl}/${food.slug}`,
-          priority: "0.8",
-        })),
+        
+        // Hesaplayıcılar hub (priority 0.95)
+        { loc: `${baseUrl}/hesaplayicilar`, priority: "0.95" },
+        
+        // Her bir hesaplayıcı (priority 0.9)
+        { loc: `${baseUrl}/hesaplayici/gunluk-kalori-ihtiyaci`, priority: "0.9" },
+        { loc: `${baseUrl}/hesaplayici/bmi`, priority: "0.9" },
+        { loc: `${baseUrl}/hesaplayici/ideal-kilo`, priority: "0.9" },
+        { loc: `${baseUrl}/hesaplayici/gunluk-su-ihtiyaci`, priority: "0.9" },
+        { loc: `${baseUrl}/hesaplayici/protein-gereksinimi`, priority: "0.9" },
+        { loc: `${baseUrl}/hesaplayici/porsiyon-cevirici`, priority: "0.9" },
+        { loc: `${baseUrl}/hesaplayici/kilo-verme-suresi`, priority: "0.9" },
+        
+        // Tüm gıdalar (priority 0.85)
+        { loc: `${baseUrl}/tum-gidalar`, priority: "0.85" },
+        
+        // Kurumsal sayfalar (priority 0.5)
+        { loc: `${baseUrl}/hakkimizda`, priority: "0.5" },
+        { loc: `${baseUrl}/iletisim`, priority: "0.5" },
+        { loc: `${baseUrl}/gizlilik-politikasi`, priority: "0.3" },
+        { loc: `${baseUrl}/kullanim-kosullari`, priority: "0.3" },
+        { loc: `${baseUrl}/cerez-politikasi`, priority: "0.3" },
       ];
+      
+      // Kategori ve alt kategori sayfaları (priority 0.8)
+      categoryGroups.forEach((group: any) => {
+        const mainCategorySlug = categoryToSlug(group.mainCategory);
+        urls.push({
+          loc: `${baseUrl}/kategori/${mainCategorySlug}`,
+          priority: "0.8"
+        });
+        
+        group.subcategories.forEach((subcategory: string) => {
+          const subcategorySlug = categoryToSlug(subcategory);
+          urls.push({
+            loc: `${baseUrl}/kategori/${mainCategorySlug}/${subcategorySlug}`,
+            priority: "0.75"
+          });
+        });
+      });
+      
+      // Gıda detay sayfaları (priority 0.7)
+      foods.forEach((food: any) => {
+        urls.push({
+          loc: `${baseUrl}/${food.slug}`,
+          priority: "0.7"
+        });
+      });
 
       const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
