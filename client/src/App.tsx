@@ -23,6 +23,9 @@ import MacroCalculator from "@/pages/calculators/MacroCalculator";
 import MealPlanCalculator from "@/pages/calculators/MealPlanCalculator";
 import VitaminCalculator from "@/pages/calculators/VitaminCalculator";
 import OneRMCalculator from "@/pages/calculators/OneRMCalculator";
+import CalorieBurnCalculator from "@/pages/calculators/CalorieBurnCalculator";
+import BodyMeasurementCalculator from "@/pages/calculators/BodyMeasurementCalculator";
+import FoodComparisonCalculator from "@/pages/calculators/FoodComparisonCalculator";
 import type { CategoryGroup, Food } from "@shared/schema";
 
 // Wrapper components that fetch data
@@ -205,6 +208,24 @@ function OneRMWrapper() {
   return <OneRMCalculator categoryGroups={categoryGroups} currentPath={location} />;
 }
 
+function CalorieBurnWrapper() {
+  const [location] = useLocation();
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <CalorieBurnCalculator categoryGroups={categoryGroups} currentPath={location} />;
+}
+
+function BodyMeasurementWrapper() {
+  const [location] = useLocation();
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <BodyMeasurementCalculator categoryGroups={categoryGroups} currentPath={location} />;
+}
+
+function FoodComparisonWrapper() {
+  const [location] = useLocation();
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <FoodComparisonCalculator categoryGroups={categoryGroups} currentPath={location} />;
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -236,6 +257,9 @@ function App() {
         <Route path="/hesaplayicilar/ogun-plani" component={MealPlanWrapper} />
         <Route path="/hesaplayicilar/vitamin-mineral" component={VitaminWrapper} />
         <Route path="/hesaplayicilar/1rm" component={OneRMWrapper} />
+        <Route path="/hesaplayicilar/kalori-yakma" component={CalorieBurnWrapper} />
+        <Route path="/hesaplayicilar/vucut-olcumleri" component={BodyMeasurementWrapper} />
+        <Route path="/hesaplayicilar/gida-karsilastirma" component={FoodComparisonWrapper} />
         
         {/* Legal pages */}
         <Route path="/gizlilik-politikasi">

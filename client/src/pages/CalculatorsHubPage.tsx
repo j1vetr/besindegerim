@@ -1,7 +1,7 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
-import { Calculator, Heart, Activity, Droplets, Beef, Scale, TrendingUp } from "lucide-react";
+import { Calculator, Heart, Activity, Droplets, Beef, Scale, TrendingUp, ArrowLeftRight } from "lucide-react";
 import { Link } from "wouter";
 import type { CategoryGroup } from "@shared/schema";
 
@@ -60,6 +60,14 @@ const calculators = [
     popular: true
   },
   {
+    id: "gida-karsilastirma",
+    title: "Gıda Karşılaştırma",
+    description: "İki gıdayı yan yana karşılaştırın. Besin değerlerini, radar grafiği ve besin yoğunluğunu görün.",
+    icon: ArrowLeftRight,
+    color: "from-lime-500 to-green-600",
+    popular: true
+  },
+  {
     id: "kilo-verme-suresi",
     title: "Kilo Verme/Alma Süresi",
     description: "Hedef kilonuza ulaşmanız için gereken süreyi hesaplayın.",
@@ -84,7 +92,7 @@ export default function CalculatorsHubPage({ categoryGroups, currentPath }: Calc
             <div className="text-center mb-12">
               <div className="inline-flex items-center gap-2 bg-white border-2 border-green-200 rounded-full px-4 py-2 mb-6 shadow-sm">
                 <Calculator className="w-5 h-5 text-green-600" />
-                <span className="text-sm font-semibold text-green-600">7 Ücretsiz Hesaplayıcı</span>
+                <span className="text-sm font-semibold text-green-600">8 Ücretsiz Hesaplayıcı</span>
               </div>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6">
