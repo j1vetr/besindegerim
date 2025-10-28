@@ -17,6 +17,12 @@ import WaterIntakeCalculator from "@/pages/calculators/WaterIntakeCalculator";
 import ProteinCalculator from "@/pages/calculators/ProteinCalculator";
 import PortionConverterCalculator from "@/pages/calculators/PortionConverterCalculator";
 import WeightLossTimeCalculator from "@/pages/calculators/WeightLossTimeCalculator";
+import BMRCalculator from "@/pages/calculators/BMRCalculator";
+import BodyFatCalculator from "@/pages/calculators/BodyFatCalculator";
+import MacroCalculator from "@/pages/calculators/MacroCalculator";
+import MealPlanCalculator from "@/pages/calculators/MealPlanCalculator";
+import VitaminCalculator from "@/pages/calculators/VitaminCalculator";
+import OneRMCalculator from "@/pages/calculators/OneRMCalculator";
 import type { CategoryGroup, Food } from "@shared/schema";
 
 // Wrapper components that fetch data
@@ -163,6 +169,42 @@ function WeightLossTimeWrapper() {
   return <WeightLossTimeCalculator categoryGroups={categoryGroups} currentPath={location} />;
 }
 
+function BMRWrapper() {
+  const [location] = useLocation();
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <BMRCalculator categoryGroups={categoryGroups} currentPath={location} />;
+}
+
+function BodyFatWrapper() {
+  const [location] = useLocation();
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <BodyFatCalculator categoryGroups={categoryGroups} currentPath={location} />;
+}
+
+function MacroWrapper() {
+  const [location] = useLocation();
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <MacroCalculator categoryGroups={categoryGroups} currentPath={location} />;
+}
+
+function MealPlanWrapper() {
+  const [location] = useLocation();
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <MealPlanCalculator categoryGroups={categoryGroups} currentPath={location} />;
+}
+
+function VitaminWrapper() {
+  const [location] = useLocation();
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <VitaminCalculator categoryGroups={categoryGroups} currentPath={location} />;
+}
+
+function OneRMWrapper() {
+  const [location] = useLocation();
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <OneRMCalculator categoryGroups={categoryGroups} currentPath={location} />;
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -188,6 +230,12 @@ function App() {
         <Route path="/hesaplayicilar/protein-gereksinimi" component={ProteinWrapper} />
         <Route path="/hesaplayicilar/porsiyon-cevirici" component={PortionConverterWrapper} />
         <Route path="/hesaplayicilar/kilo-verme-suresi" component={WeightLossTimeWrapper} />
+        <Route path="/hesaplayicilar/bmr" component={BMRWrapper} />
+        <Route path="/hesaplayicilar/vucut-yag-yuzdesi" component={BodyFatWrapper} />
+        <Route path="/hesaplayicilar/makro-hesaplayici" component={MacroWrapper} />
+        <Route path="/hesaplayicilar/ogun-plani" component={MealPlanWrapper} />
+        <Route path="/hesaplayicilar/vitamin-mineral" component={VitaminWrapper} />
+        <Route path="/hesaplayicilar/1rm" component={OneRMWrapper} />
         
         {/* Legal pages */}
         <Route path="/gizlilik-politikasi">
