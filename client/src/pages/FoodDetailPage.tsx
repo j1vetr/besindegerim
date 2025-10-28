@@ -6,7 +6,9 @@ import { FoodCard } from "@/components/FoodCard";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
-import { TrendingUp, Heart, Zap, Activity, Shield, Flame } from "lucide-react";
+import { TrendingUp, Heart, Zap, Activity, Shield, Flame, Calculator, ArrowRight } from "lucide-react";
+import { getCalculatorRecommendations } from "@shared/calculatorRecommendations";
+import { Link } from "wouter";
 
 interface FoodDetailPageProps {
   food: Food;
@@ -410,6 +412,74 @@ export function FoodDetailPage({ food, alternatives, categoryGroups, currentPath
               </h3>
               <NutritionTable food={food} />
             </div>
+
+            {/* Calculator Recommendations - Smart Suggestions */}
+            {(() => {
+              const recommendations = getCalculatorRecommendations(food);
+              return (
+                <div className="mb-16 max-w-6xl mx-auto">
+                  <div className="text-center mb-10">
+                    <div className="inline-flex items-center gap-3 mb-4">
+                      <Calculator className="w-8 h-8 text-green-600" />
+                      <h3 className="text-3xl font-bold text-gray-900">
+                        {food.name} İçin Önerilen Hesaplayıcılar
+                      </h3>
+                    </div>
+                    <p className="text-gray-600 text-lg">
+                      Beslenme hedefleriniz için size özel hesaplama araçları
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {recommendations.map((calc) => (
+                      <Link key={calc.id} href={`/hesaplayici/${calc.id}`}>
+                        <Card 
+                          className="group h-full hover:shadow-2xl transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-green-500/30"
+                          data-testid={`card-calculator-${calc.id}`}
+                        >
+                          <CardContent className="p-8">
+                            <div className="flex items-start gap-6">
+                              <div className={`flex-shrink-0 w-16 h-16 bg-gradient-to-br ${calc.color} rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
+                                <span className="text-3xl">{calc.icon}</span>
+                              </div>
+                              
+                              <div className="flex-1 min-w-0">
+                                <h4 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-green-600 transition-colors">
+                                  {calc.title}
+                                </h4>
+                                <p className="text-gray-600 mb-3 leading-relaxed">
+                                  {calc.description}
+                                </p>
+                                <div className="flex items-center gap-2">
+                                  <div className="flex items-center gap-1 px-3 py-1 bg-green-50 text-green-700 text-sm font-medium rounded-full">
+                                    <span>💡</span>
+                                    <span className="text-xs">{calc.reason}</span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <ArrowRight className="flex-shrink-0 w-6 h-6 text-green-600 group-hover:translate-x-1 transition-transform" />
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </Link>
+                    ))}
+                  </div>
+
+                  <div className="text-center mt-8">
+                    <Link href="/hesaplayicilar">
+                      <button 
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-xl hover:shadow-xl transition-all hover:scale-105"
+                        data-testid="button-all-calculators"
+                      >
+                        <Calculator className="w-5 h-5" />
+                        <span>Tüm Hesaplayıcılar</span>
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* FAQ Section - Google Featured Snippets */}
             <div className="max-w-4xl mx-auto">
