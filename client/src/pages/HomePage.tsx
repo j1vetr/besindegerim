@@ -20,12 +20,12 @@ const faqData = [
   {
     id: "1",
     question: "besindegerim.com nedir?",
-    answer: "besindegerim.com, Türkiye'nin en kapsamlı besin değerleri platformudur. 266+ gıdanın gerçek porsiyon bazlı kalori, protein, karbonhidrat, yağ ve vitamin/mineral değerlerini sunar. USDA FoodData Central veritabanı ile desteklenen bilimsel veriler içerir. Ücretsiz hesaplayıcılar (BMI, kalori, protein) ve detaylı besin analizleri sağlar."
+    answer: "besindegerim.com, Türkiye'nin en kapsamlı besin değerleri platformudur. 266+ gıdanın gerçek porsiyon bazlı kalori, protein, karbonhidrat, yağ ve vitamin/mineral değerlerini sunar. Bilimsel kaynaklardan alınan güvenilir verilerle desteklenir. Ücretsiz hesaplayıcılar (BMI, kalori, protein, makro dağılımı) ve detaylı besin analizleri sağlar."
   },
   {
     id: "2",
     question: "Besin değerleri doğru mu?",
-    answer: "Evet, tüm besin değerleri Amerika Tarım Bakanlığı'nın (USDA) FoodData Central veritabanından alınır. Bu, laboratuvar analizleri ve bilimsel çalışmalarla doğrulanmış, dünya çapında kabul görmüş en güvenilir kaynaktır. Veriler düzenli olarak güncellenir ve 20+ vitamin/mineral içerir."
+    answer: "Evet, tüm besin değerleri uluslararası kabul görmüş bilimsel veritabanlarından alınır. Laboratuvar analizleri ve bilimsel çalışmalarla doğrulanmış, dünya çapında güvenilir kaynaklardır. Veriler düzenli olarak güncellenir ve 20+ vitamin/mineral içerir. Platform üzerindeki her besin için detaylı makro ve mikro besin öğesi bilgisi bulunur."
   },
   {
     id: "3",
@@ -177,7 +177,7 @@ export default function HomePage({
 
             <p className="text-lg md:text-2xl text-slate-700 mb-12 max-w-3xl mx-auto leading-relaxed">
               Gerçek porsiyon bazlı kalori ve besin değerleri. 
-              <span className="text-green-600 font-semibold"> USDA verisiyle</span> desteklenen, 
+              <span className="text-green-600 font-semibold"> Bilimsel verilerle</span> desteklenen, 
               <span className="text-emerald-600 font-semibold"> vitamin ve minerallerle</span> zenginleştirilmiş platform.
             </p>
 
@@ -204,7 +204,7 @@ export default function HomePage({
               
               <div className="backdrop-blur-xl bg-white/70 border-2 border-green-200/50 rounded-2xl p-6 hover:bg-white/90 hover:border-green-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-green-500/10 group" data-testid="stat-pill-2">
                 <Zap className="w-10 h-10 mx-auto mb-3 text-green-600 group-hover:scale-110 transition-transform" />
-                <p className="text-base md:text-lg font-bold text-slate-900">USDA Verisi</p>
+                <p className="text-base md:text-lg font-bold text-slate-900">16 Hesaplayıcı</p>
               </div>
               
               <div className="backdrop-blur-xl bg-white/70 border-2 border-green-200/50 rounded-2xl p-6 hover:bg-white/90 hover:border-green-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-green-500/10 group" data-testid="stat-pill-3">

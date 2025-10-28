@@ -43,23 +43,32 @@ function renderFooter(): string {
   return `
     <footer class="mt-auto border-t border-border/40 bg-muted/50">
       <div class="container mx-auto px-4 py-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 class="font-semibold mb-4">besindegerim.com</h3>
             <p class="text-sm text-muted-foreground">
-              Gerçek porsiyon bazlı besin değerleri. USDA verisi ile güvenilir bilgi.
+              Türkiye'nin en kapsamlı besin değerleri platformu. Gerçek porsiyon bazlı kalori ve makro hesaplama.
             </p>
           </div>
           <div>
-            <h4 class="font-semibold mb-4">Sayfalar</h4>
+            <h4 class="font-semibold mb-4">Kurumsal</h4>
             <ul class="space-y-2 text-sm">
               <li><a href="/hakkimizda" class="text-muted-foreground hover:text-foreground">Hakkımızda</a></li>
               <li><a href="/iletisim" class="text-muted-foreground hover:text-foreground">İletişim</a></li>
-              <li><a href="/kvkk" class="text-muted-foreground hover:text-foreground">KVKK</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-4">Yasal</h4>
+            <ul class="space-y-2 text-sm">
+              <li><a href="/gizlilik-politikasi" class="text-muted-foreground hover:text-foreground">Gizlilik Politikası</a></li>
+              <li><a href="/kullanim-kosullari" class="text-muted-foreground hover:text-foreground">Kullanım Koşulları</a></li>
+              <li><a href="/kvkk" class="text-muted-foreground hover:text-foreground">KVKK Aydınlatma Metni</a></li>
+              <li><a href="/cerez-politikasi" class="text-muted-foreground hover:text-foreground">Çerez Politikası</a></li>
             </ul>
           </div>
           <div>
             <h4 class="font-semibold mb-4">İletişim</h4>
+            <p class="text-sm text-muted-foreground mb-2">Soru, öneri ve işbirliği için:</p>
             <p class="text-sm text-muted-foreground">info@besindegerim.com</p>
           </div>
         </div>
@@ -99,11 +108,11 @@ export async function renderHomePage(foods: Food[], categoryGroups: CategoryGrou
   const faqData = [
     {
       question: "besindegerim.com nedir?",
-      answer: "besindegerim.com, Türkiye'nin en kapsamlı besin değerleri platformudur. 266+ gıdanın gerçek porsiyon bazlı kalori, protein, karbonhidrat, yağ ve vitamin/mineral değerlerini sunar. USDA FoodData Central veritabanı ile desteklenen bilimsel veriler içerir. Ücretsiz hesaplayıcılar (BMI, kalori, protein) ve detaylı besin analizleri sağlar."
+      answer: "besindegerim.com, Türkiye'nin en kapsamlı besin değerleri platformudur. 266+ gıdanın gerçek porsiyon bazlı kalori, protein, karbonhidrat, yağ ve vitamin/mineral değerlerini sunar. Bilimsel kaynaklardan alınan güvenilir verilerle desteklenir. Ücretsiz hesaplayıcılar (BMI, kalori, protein, makro dağılımı) ve detaylı besin analizleri sağlar."
     },
     {
       question: "Besin değerleri doğru mu?",
-      answer: "Evet, tüm besin değerleri Amerika Tarım Bakanlığı'nın (USDA) FoodData Central veritabanından alınır. Bu, laboratuvar analizleri ve bilimsel çalışmalarla doğrulanmış, dünya çapında kabul görmüş en güvenilir kaynaktır. Veriler düzenli olarak güncellenir ve 20+ vitamin/mineral içerir."
+      answer: "Evet, tüm besin değerleri uluslararası kabul görmüş bilimsel veritabanlarından alınır. Laboratuvar analizleri ve bilimsel çalışmalarla doğrulanmış, dünya çapında güvenilir kaynaklardır. Veriler düzenli olarak güncellenir ve 20+ vitamin/mineral içerir. Platform üzerindeki her besin için detaylı makro ve mikro besin öğesi bilgisi bulunur."
     },
     {
       question: "Platformu nasıl kullanırım?",
@@ -1113,7 +1122,7 @@ export async function renderAboutPage(categoryGroups: CategoryGroup[]): Promise<
             <div class="backdrop-blur-xl bg-white/70 border-2 border-green-200/50 rounded-2xl p-8 text-center hover:scale-105 transition-transform duration-300 shadow-lg shadow-green-500/10">
               <p class="text-4xl font-black text-green-600 mb-2">266+</p>
               <p class="text-slate-700 font-semibold">Gıda Verisi</p>
-              <p class="text-sm text-slate-600 mt-2">USDA kaynaklı, doğrulanmış besin değerleri</p>
+              <p class="text-sm text-slate-600 mt-2">Bilimsel kaynaklı, doğrulanmış besin değerleri</p>
             </div>
 
             <div class="backdrop-blur-xl bg-white/70 border-2 border-green-200/50 rounded-2xl p-8 text-center hover:scale-105 transition-transform duration-300 shadow-lg shadow-green-500/10">
@@ -1138,7 +1147,7 @@ export async function renderAboutPage(categoryGroups: CategoryGroup[]): Promise<
           <div class="bg-white border-2 border-green-200/50 rounded-2xl p-6 hover:border-green-500/50 transition-colors">
             <h3 class="text-xl font-bold text-slate-900 mb-2">Doğruluk ve Güvenilirlik</h3>
             <p class="text-slate-700 leading-relaxed">
-              Tüm verilerimiz USDA FoodData Central gibi güvenilir kaynaklardan alınır ve 
+              Tüm verilerimiz uluslararası kabul görmüş güvenilir bilimsel kaynaklardan alınır ve 
               düzenli olarak güncellenir. Kullanıcılarımıza yalnızca doğrulanmış bilgiler sunarız.
             </p>
           </div>
@@ -1334,8 +1343,8 @@ export async function renderContactPage(categoryGroups: CategoryGroup[]): Promis
                 Verilerin kaynağı nedir?
               </h3>
               <p class="text-slate-700">
-                Besin değerleri <strong class="text-green-600">USDA FoodData Central</strong> gibi 
-                güvenilir kaynaklardan alınır ve bilimsel verilere dayanır.
+                Besin değerleri <strong class="text-green-600">uluslararası kabul görmüş bilimsel</strong> 
+                kaynaklardan alınır ve doğrulanmış verilere dayanır.
               </p>
             </div>
 
