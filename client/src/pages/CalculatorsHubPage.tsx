@@ -1,7 +1,7 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
-import { Calculator, Heart, Activity, Droplets, Beef, Scale, TrendingUp, ArrowLeftRight } from "lucide-react";
+import { Calculator, Heart, Activity, Droplets, Beef, Scale, TrendingUp, ArrowLeftRight, Flame, Utensils, Pill, Dumbbell, Zap, Ruler } from "lucide-react";
 import { Link } from "wouter";
 import type { CategoryGroup } from "@shared/schema";
 
@@ -20,12 +20,100 @@ const calculators = [
     popular: true
   },
   {
+    id: "vucut-yag-yuzde",
+    title: "Vücut Yağ Yüzdesi",
+    description: "Navy Method ile vücut yağ yüzdesini hesaplayın. BMI'dan çok daha doğru sonuç!",
+    icon: Activity,
+    color: "from-indigo-500 to-purple-600",
+    popular: true
+  },
+  {
+    id: "bmr",
+    title: "Bazal Metabolizma Hızı (BMR)",
+    description: "Dinlenirken yaktığınız kaloriyi öğrenin. Harris-Benedict ve Mifflin-St Jeor formülleri.",
+    icon: Flame,
+    color: "from-orange-500 to-red-600",
+    popular: true
+  },
+  {
+    id: "makro-hesaplayici",
+    title: "Makro Dağılımı Hesaplayıcı",
+    description: "Hedeflerinize göre optimal protein, karbonhidrat ve yağ oranlarını hesaplayın.",
+    icon: Utensils,
+    color: "from-teal-500 to-cyan-600",
+    popular: true
+  },
+  {
     id: "bmi",
     title: "Vücut Kitle İndeksi (BMI)",
     description: "Sağlıklı kilo aralığınızı öğrenin. WHO standartlarına göre BMI hesaplama.",
     icon: Scale,
     color: "from-blue-500 to-cyan-600",
     popular: true
+  },
+  {
+    id: "kalori-yakma",
+    title: "Kalori Yakım Hesaplayıcı",
+    description: "25+ egzersiz türüyle yakılan kaloriyi hesaplayın. MET değerleri kullanılır.",
+    icon: Zap,
+    color: "from-amber-500 to-orange-600",
+    popular: true
+  },
+  {
+    id: "gida-karsilastirma",
+    title: "Gıda Karşılaştırma",
+    description: "İki gıdayı yan yana karşılaştırın. Besin değerlerini, radar grafiği ve besin yoğunluğunu görün.",
+    icon: ArrowLeftRight,
+    color: "from-lime-500 to-green-600",
+    popular: true
+  },
+  {
+    id: "protein-gereksinimi",
+    title: "Protein Gereksinimi",
+    description: "Hedef ve aktivite seviyenize göre günlük protein ihtiyacınızı öğrenin.",
+    icon: Beef,
+    color: "from-red-500 to-orange-600",
+    popular: true
+  },
+  {
+    id: "porsiyon-cevirici",
+    title: "Porsiyon Çevirici",
+    description: "Gramajı porsiyona, porsiyonu kaşık ve bardağa çevirin. Benzersiz araç!",
+    icon: Activity,
+    color: "from-purple-500 to-pink-600",
+    popular: false
+  },
+  {
+    id: "ogun-plani",
+    title: "Öğün Planlayıcı",
+    description: "Günlük kalorinizi 3-6 öğüne dağıtın. Öğün zamanlaması stratejileri.",
+    icon: Utensils,
+    color: "from-emerald-500 to-green-600",
+    popular: false
+  },
+  {
+    id: "vitamin-mineral",
+    title: "Vitamin & Mineral İhtiyacı",
+    description: "Yaş, cinsiyet ve aktiviteye göre günlük vitamin/mineral RDA değerlerini öğrenin.",
+    icon: Pill,
+    color: "from-purple-500 to-pink-600",
+    popular: false
+  },
+  {
+    id: "1rm",
+    title: "1RM Hesaplayıcı (One Rep Max)",
+    description: "Maksimum kuvvetinizi hesaplayın. 5 farklı formül, kuvvet seviyeleri ve antrenman yüzdeleri.",
+    icon: Dumbbell,
+    color: "from-red-500 to-pink-600",
+    popular: false
+  },
+  {
+    id: "vucut-olcumleri",
+    title: "Vücut Ölçümleri & WHR",
+    description: "Bel/kalça oranı, WHtR ve vücut şekli analizi. Sağlık riski değerlendirmesi.",
+    icon: Ruler,
+    color: "from-fuchsia-500 to-pink-600",
+    popular: false
   },
   {
     id: "ideal-kilo",
@@ -42,30 +130,6 @@ const calculators = [
     icon: Droplets,
     color: "from-sky-500 to-blue-600",
     popular: false
-  },
-  {
-    id: "protein-gereksinimi",
-    title: "Protein Gereksinimi",
-    description: "Hedef ve aktivite seviyenize göre günlük protein ihtiyacınızı öğrenin.",
-    icon: Beef,
-    color: "from-red-500 to-orange-600",
-    popular: true
-  },
-  {
-    id: "porsiyon-cevirici",
-    title: "Porsiyon Çevirici",
-    description: "Gramajı porsiyona, porsiyonu kaşık ve bardağa çevirin. Benzersiz araç!",
-    icon: Activity,
-    color: "from-purple-500 to-pink-600",
-    popular: true
-  },
-  {
-    id: "gida-karsilastirma",
-    title: "Gıda Karşılaştırma",
-    description: "İki gıdayı yan yana karşılaştırın. Besin değerlerini, radar grafiği ve besin yoğunluğunu görün.",
-    icon: ArrowLeftRight,
-    color: "from-lime-500 to-green-600",
-    popular: true
   },
   {
     id: "kilo-verme-suresi",
@@ -92,7 +156,7 @@ export default function CalculatorsHubPage({ categoryGroups, currentPath }: Calc
             <div className="text-center mb-12">
               <div className="inline-flex items-center gap-2 bg-white border-2 border-green-200 rounded-full px-4 py-2 mb-6 shadow-sm">
                 <Calculator className="w-5 h-5 text-green-600" />
-                <span className="text-sm font-semibold text-green-600">8 Ücretsiz Hesaplayıcı</span>
+                <span className="text-sm font-semibold text-green-600">16 Ücretsiz Hesaplayıcı</span>
               </div>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6">

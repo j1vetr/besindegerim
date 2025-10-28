@@ -446,7 +446,16 @@ export function registerSSRRoutes(app: Express): void {
         "gunluk-su-ihtiyaci": "Günlük Su İhtiyacı Hesaplama",
         "protein-gereksinimi": "Günlük Protein Gereksinimi",
         "porsiyon-cevirici": "Porsiyon Çevirici",
-        "kilo-verme-suresi": "Kilo Verme/Alma Süresi Hesaplama"
+        "kilo-verme-suresi": "Kilo Verme/Alma Süresi Hesaplama",
+        "vucut-yag-yuzde": "Vücut Yağ Yüzdesi Hesaplayıcı",
+        "bmr": "Bazal Metabolizma Hızı (BMR) Hesaplayıcı",
+        "makro-hesaplayici": "Makro Dağılımı Hesaplayıcı",
+        "ogun-plani": "Öğün Planlayıcı",
+        "vitamin-mineral": "Vitamin ve Mineral İhtiyacı Hesaplayıcı",
+        "1rm": "1RM (One Rep Max) Hesaplayıcı",
+        "kalori-yakma": "Kalori Yakım Hesaplayıcı",
+        "vucut-olcumleri": "Vücut Ölçümleri ve WHR Hesaplayıcı",
+        "gida-karsilastirma": "Gıda Karşılaştırma"
       };
 
       const meta = {
