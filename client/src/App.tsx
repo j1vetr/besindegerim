@@ -9,6 +9,8 @@ import { CategoryPage } from "@/pages/CategoryPage";
 import { SearchResultsPage } from "@/pages/SearchResultsPage";
 import { LegalPage } from "@/pages/LegalPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
+import CalculatorsHubPage from "@/pages/CalculatorsHubPage";
+import DailyCalorieCalculator from "@/pages/calculators/DailyCalorieCalculator";
 import type { CategoryGroup, Food } from "@shared/schema";
 
 // Wrapper components that fetch data
@@ -107,6 +109,18 @@ function AllFoodsPageWrapper() {
   />;
 }
 
+function CalculatorsHubWrapper() {
+  const [location] = useLocation();
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <CalculatorsHubPage categoryGroups={categoryGroups} currentPath={location} />;
+}
+
+function DailyCalorieWrapper() {
+  const [location] = useLocation();
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <DailyCalorieCalculator categoryGroups={categoryGroups} currentPath={location} />;
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -122,6 +136,10 @@ function App() {
         
         {/* Category pages */}
         <Route path="/kategori/:category/:subcategory?" component={CategoryPageWrapper} />
+        
+        {/* Calculators */}
+        <Route path="/hesaplayicilar" component={CalculatorsHubWrapper} />
+        <Route path="/hesaplayicilar/gunluk-kalori-ihtiyaci" component={DailyCalorieWrapper} />
         
         {/* Legal pages */}
         <Route path="/gizlilik-politikasi">
