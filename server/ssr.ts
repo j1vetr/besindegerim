@@ -394,6 +394,75 @@ export function registerSSRRoutes(app: Express): void {
     }
   });
 
+  // Hesaplayıcılar Hub: /hesaplayicilar
+  app.get("/hesaplayicilar", async (req: Request, res: Response) => {
+    try {
+      // Get category groups
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
+      }
+
+      // Render
+      const { renderCalculatorsHubPage } = await import("./render");
+      const renderResult = await renderCalculatorsHubPage(categoryGroups);
+      const meta = {
+        title: "Beslenme Hesaplayıcıları - 7 Ücretsiz Araç | besindegerim.com",
+        description: "Günlük kalori, BMI, protein gereksinimi, su ihtiyacı ve daha fazlası. Bilimsel formüllerle desteklenen ücretsiz hesaplayıcılar.",
+        keywords: "kalori hesaplama, BMI, protein hesaplama, su ihtiyacı, beslenme hesaplayıcı",
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/hesaplayicilar`,
+      };
+
+      await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+    } catch (error) {
+      console.error("[SSR /hesaplayicilar] Error:", error);
+      res.status(500).send("Server Error");
+    }
+  });
+
+  // Hesaplayıcı detay: /hesaplayicilar/:calculatorId
+  app.get("/hesaplayicilar/:calculatorId", async (req: Request, res: Response) => {
+    try {
+      const { calculatorId } = req.params;
+
+      // Get category groups
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
+      }
+
+      // Render
+      const { renderCalculatorPage } = await import("./render");
+      const renderResult = await renderCalculatorPage(calculatorId, categoryGroups);
+      
+      const calculatorTitles: Record<string, string> = {
+        "gunluk-kalori-ihtiyaci": "Günlük Kalori ve Makro Hesaplayıcı",
+        "bmi": "Vücut Kitle İndeksi (BMI) Hesaplama",
+        "ideal-kilo": "İdeal Kilo Hesaplayıcı",
+        "gunluk-su-ihtiyaci": "Günlük Su İhtiyacı Hesaplama",
+        "protein-gereksinimi": "Günlük Protein Gereksinimi",
+        "porsiyon-cevirici": "Porsiyon Çevirici",
+        "kilo-verme-suresi": "Kilo Verme/Alma Süresi Hesaplama"
+      };
+
+      const meta = {
+        title: `${calculatorTitles[calculatorId] || "Hesaplayıcı"} | besindegerim.com`,
+        description: `${calculatorTitles[calculatorId] || "Hesaplayıcı"} - Bilimsel formüllerle desteklenen ücretsiz araç.`,
+        keywords: `${calculatorId}, hesaplama, beslenme, kalori`,
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/hesaplayicilar/${calculatorId}`,
+      };
+
+      await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+    } catch (error) {
+      console.error("[SSR /hesaplayicilar/:calculatorId] Error:", error);
+      res.status(500).send("Server Error");
+    }
+  });
+
   // Gıda detay: /:slug (catch-all route - EN SONDA)
   app.get("/:slug", async (req: Request, res: Response) => {
     try {
@@ -404,7 +473,6 @@ export function registerSSRRoutes(app: Express): void {
         slug.includes(".") ||
         slug === "robots.txt" ||
         slug === "sitemap.xml" ||
-        slug === "hesaplayicilar" ||
         slug === "kategori" ||
         slug.startsWith("api")
       ) {

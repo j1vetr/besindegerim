@@ -305,3 +305,127 @@ export async function renderCategoryPage(
 
   return { html, statusCode: 200 };
 }
+
+/**
+ * Render Calculators Hub Page
+ */
+export async function renderCalculatorsHubPage(categoryGroups: CategoryGroup[]): Promise<RenderResult> {
+  const calculators = [
+    { id: "gunluk-kalori-ihtiyaci", title: "Günlük Kalori ve Makro Hesaplayıcı", description: "BMR, TDEE ve günlük kalori ihtiyacınızı hesaplayın. Protein, karbonhidrat ve yağ dağılımınızı öğrenin.", icon: "🔥", color: "from-green-500 to-emerald-600", popular: true },
+    { id: "bmi", title: "Vücut Kitle İndeksi (BMI)", description: "Sağlıklı kilo aralığınızı öğrenin. WHO standartlarına göre BMI hesaplama.", icon: "⚖️", color: "from-blue-500 to-cyan-600", popular: true },
+    { id: "ideal-kilo", title: "İdeal Kilo Hesaplayıcı", description: "Boyunuza göre ideal kilonuzu hesaplayın. Devine ve Broca formülleriyle.", icon: "💚", color: "from-pink-500 to-rose-600", popular: false },
+    { id: "gunluk-su-ihtiyaci", title: "Günlük Su İhtiyacı", description: "Kilonuza ve aktivite seviyenize göre günlük su ihtiyacınızı hesaplayın.", icon: "💧", color: "from-sky-500 to-blue-600", popular: false },
+    { id: "protein-gereksinimi", title: "Protein Gereksinimi", description: "Hedef ve aktivite seviyenize göre günlük protein ihtiyacınızı öğrenin.", icon: "🥩", color: "from-red-500 to-orange-600", popular: true },
+    { id: "porsiyon-cevirici", title: "Porsiyon Çevirici", description: "Gramajı porsiyona, porsiyonu kaşık ve bardağa çevirin. Benzersiz araç!", icon: "📊", color: "from-purple-500 to-pink-600", popular: true },
+    { id: "kilo-verme-suresi", title: "Kilo Verme/Alma Süresi", description: "Hedef kilonuza ulaşmanız için gereken süreyi hesaplayın.", icon: "📈", color: "from-amber-500 to-orange-600", popular: false }
+  ];
+
+  const popularCalculators = calculators.filter(c => c.popular);
+  const otherCalculators = calculators.filter(c => !c.popular);
+
+  const renderCalculatorCard = (calc: any) => `
+    <a href="/hesaplayicilar/${calc.id}" class="group block border-2 border-transparent hover:border-green-500/30 rounded-lg p-8 bg-white hover:shadow-2xl transition-all duration-300">
+      <div class="w-16 h-16 bg-gradient-to-br ${calc.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
+        <span class="text-4xl">${calc.icon}</span>
+      </div>
+      <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-green-600 transition-colors">
+        ${calc.title}
+      </h3>
+      <p class="text-gray-600 leading-relaxed">
+        ${calc.description}
+      </p>
+    </a>
+  `;
+
+  const html = `
+    ${renderHeader(categoryGroups)}
+    <main class="flex-1">
+      <section class="relative py-12 md:py-16 bg-gradient-to-br from-green-50 via-white to-emerald-50">
+        <div class="max-w-7xl mx-auto px-4 md:px-8">
+          <div class="text-center mb-12">
+            <div class="inline-flex items-center gap-2 bg-white border-2 border-green-200 rounded-full px-4 py-2 mb-6 shadow-sm">
+              <span class="text-green-600">🧮</span>
+              <span class="text-sm font-semibold text-green-600">7 Ücretsiz Hesaplayıcı</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6">
+              Beslenme Hesaplayıcıları
+            </h1>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Bilimsel formüllerle desteklenen, <span class="text-green-600 font-semibold">gerçek porsiyon bazlı</span> hesaplama araçları. 
+              Kalori, makro, su, protein ihtiyacınızı anında öğrenin.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-16 px-4 bg-white">
+        <div class="max-w-7xl mx-auto">
+          <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-8 flex items-center gap-3">
+            <span class="text-green-600">⭐</span> Popüler Hesaplayıcılar
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            ${popularCalculators.map(renderCalculatorCard).join('')}
+          </div>
+        </div>
+      </section>
+
+      <section class="py-16 px-4 bg-gradient-to-br from-gray-50 to-white">
+        <div class="max-w-7xl mx-auto">
+          <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-8">
+            Diğer Hesaplayıcılar
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            ${otherCalculators.map(renderCalculatorCard).join('')}
+          </div>
+        </div>
+      </section>
+    </main>
+    ${renderFooter()}
+  `;
+
+  return { html, statusCode: 200 };
+}
+
+/**
+ * Render Calculator Page (Placeholder for all calculator pages)
+ */
+export async function renderCalculatorPage(calculatorId: string, categoryGroups: CategoryGroup[]): Promise<RenderResult> {
+  const calculators: Record<string, any> = {
+    "gunluk-kalori-ihtiyaci": { title: "Günlük Kalori ve Makro Hesaplayıcı", icon: "🔥" },
+    "bmi": { title: "Vücut Kitle İndeksi (BMI)", icon: "⚖️" },
+    "ideal-kilo": { title: "İdeal Kilo Hesaplayıcı", icon: "💚" },
+    "gunluk-su-ihtiyaci": { title: "Günlük Su İhtiyacı", icon: "💧" },
+    "protein-gereksinimi": { title: "Protein Gereksinimi", icon: "🥩" },
+    "porsiyon-cevirici": { title: "Porsiyon Çevirici", icon: "📊" },
+    "kilo-verme-suresi": { title: "Kilo Verme/Alma Süresi", icon: "📈" }
+  };
+
+  const calculator = calculators[calculatorId];
+  if (!calculator) {
+    return await render404Page(categoryGroups);
+  }
+
+  const html = `
+    ${renderHeader(categoryGroups)}
+    <main class="flex-1 py-12">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="mb-8">
+          <a href="/hesaplayicilar" class="text-green-600 hover:text-green-700 font-medium">← Tüm Hesaplayıcılar</a>
+        </div>
+        <div class="text-center mb-12">
+          <span class="text-6xl mb-6 block">${calculator.icon}</span>
+          <h1 class="text-4xl md:text-5xl font-black text-gray-900 mb-4">${calculator.title}</h1>
+          <p class="text-lg text-gray-600">JavaScript devre dışı olduğu için bu hesaplayıcı çalışmıyor. Lütfen JavaScript'i etkinleştirin.</p>
+        </div>
+        <div class="text-center">
+          <a href="/hesaplayicilar" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-colors">
+            Diğer Hesaplayıcıları Gör
+          </a>
+        </div>
+      </div>
+    </main>
+    ${renderFooter()}
+  `;
+
+  return { html, statusCode: 200 };
+}
