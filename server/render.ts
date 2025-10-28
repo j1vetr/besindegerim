@@ -16,6 +16,7 @@ import {
   getWeightLossTimeCalculatorSchema,
   getBodyFatCalculatorSchema
 } from "./seo/schemas";
+import { getCalculatorRecommendations } from "@shared/calculatorRecommendations";
 
 interface RenderResult {
   html: string;
@@ -396,6 +397,69 @@ export async function renderFoodDetailPage(food: Food, categoryGroups: CategoryG
           </div>
 
           ${nutritionTableHTML}
+
+          ${(() => {
+            const recommendations = getCalculatorRecommendations(food);
+            return `
+              <div class="mb-12 max-w-6xl mx-auto">
+                <div class="text-center mb-10">
+                  <div class="inline-flex items-center gap-3 mb-4">
+                    <span class="text-3xl">🧮</span>
+                    <h3 class="text-3xl font-bold text-gray-900">
+                      ${food.name} İçin Önerilen Hesaplayıcılar
+                    </h3>
+                  </div>
+                  <p class="text-gray-600 text-lg">
+                    Beslenme hedefleriniz için size özel hesaplama araçları
+                  </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                  ${recommendations.map(calc => `
+                    <a 
+                      href="/hesaplayici/${calc.id}" 
+                      class="group block border-2 border-transparent hover:border-green-500/30 rounded-lg p-8 bg-white shadow-md hover:shadow-2xl transition-all duration-300"
+                    >
+                      <div class="flex items-start gap-6">
+                        <div class="flex-shrink-0 w-16 h-16 bg-gradient-to-br ${calc.color} rounded-2xl flex items-center justify-center shadow-lg">
+                          <span class="text-3xl">${calc.icon}</span>
+                        </div>
+                        
+                        <div class="flex-1 min-w-0">
+                          <h4 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-green-600 transition-colors">
+                            ${calc.title}
+                          </h4>
+                          <p class="text-gray-600 mb-3 leading-relaxed">
+                            ${calc.description}
+                          </p>
+                          <div class="flex items-center gap-2">
+                            <div class="inline-flex items-center gap-1 px-3 py-1 bg-green-50 text-green-700 text-sm font-medium rounded-full">
+                              <span>💡</span>
+                              <span class="text-xs">${calc.reason}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <svg class="flex-shrink-0 w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                      </div>
+                    </a>
+                  `).join('')}
+                </div>
+
+                <div class="text-center">
+                  <a 
+                    href="/hesaplayicilar"
+                    class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
+                  >
+                    <span>🧮</span>
+                    <span>Tüm Hesaplayıcılar</span>
+                  </a>
+                </div>
+              </div>
+            `;
+          })()}
 
           ${food.category ? `
             <div class="text-sm text-muted-foreground mb-8">
