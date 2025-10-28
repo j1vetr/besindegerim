@@ -8,7 +8,12 @@ import { FoodDetailPage } from "@/pages/FoodDetailPage";
 import { CategoryPage } from "@/pages/CategoryPage";
 import { SearchResultsPage } from "@/pages/SearchResultsPage";
 import { LegalPage } from "@/pages/LegalPage";
+import { PrivacyPage } from "@/pages/PrivacyPage";
+import { TermsPage } from "@/pages/TermsPage";
+import { CookiePage } from "@/pages/CookiePage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
+import AboutPage from "@/pages/AboutPage";
+import ContactPage from "@/pages/ContactPage";
 import CalculatorsHubPage from "@/pages/CalculatorsHubPage";
 import DailyCalorieCalculator from "@/pages/calculators/DailyCalorieCalculator";
 import BMICalculator from "@/pages/calculators/BMICalculator";
@@ -226,6 +231,18 @@ function FoodComparisonWrapper() {
   return <FoodComparisonCalculator categoryGroups={categoryGroups} currentPath={location} />;
 }
 
+function AboutPageWrapper() {
+  const [location] = useLocation();
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <AboutPage categoryGroups={categoryGroups} currentPath={location} />;
+}
+
+function ContactPageWrapper() {
+  const [location] = useLocation();
+  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
+  return <ContactPage categoryGroups={categoryGroups} currentPath={location} />;
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -261,25 +278,17 @@ function App() {
         <Route path="/hesaplayicilar/vucut-olcumleri" component={BodyMeasurementWrapper} />
         <Route path="/hesaplayicilar/gida-karsilastirma" component={FoodComparisonWrapper} />
         
-        {/* Legal pages */}
-        <Route path="/gizlilik-politikasi">
-          {() => <LegalPage pageType="privacy" />}
-        </Route>
-        <Route path="/kullanim-kosullari">
-          {() => <LegalPage pageType="terms" />}
-        </Route>
+        {/* Legal pages - New dedicated components */}
+        <Route path="/gizlilik-politikasi" component={PrivacyPage} />
+        <Route path="/kullanim-kosullari" component={TermsPage} />
+        <Route path="/cerez-politikasi" component={CookiePage} />
+        
+        {/* KVKK still uses LegalPage */}
         <Route path="/kvkk">
           {() => <LegalPage pageType="kvkk" />}
         </Route>
-        <Route path="/cerez-politikasi">
-          {() => <LegalPage pageType="cookies" />}
-        </Route>
-        <Route path="/hakkimizda">
-          {() => <LegalPage pageType="about" />}
-        </Route>
-        <Route path="/iletisim">
-          {() => <LegalPage pageType="contact" />}
-        </Route>
+        <Route path="/hakkimizda" component={AboutPageWrapper} />
+        <Route path="/iletisim" component={ContactPageWrapper} />
         
         {/* Food detail pages - catch-all for slugs */}
         <Route path="/:slug" component={FoodDetailWrapper} />

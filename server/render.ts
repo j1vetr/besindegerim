@@ -4,6 +4,7 @@
  */
 
 import type { Food, CategoryGroup } from "@shared/schema";
+import { getFAQPageSchema, serializeSchema } from "./seo/schemas";
 
 interface RenderResult {
   html: string;
@@ -94,22 +95,104 @@ export async function renderHomePage(foods: Food[], categoryGroups: CategoryGrou
     </a>
   `).join('');
 
+  // FAQ data for SSR
+  const faqData = [
+    {
+      question: "besindegerim.com nedir?",
+      answer: "besindegerim.com, Türkiye'nin en kapsamlı besin değerleri platformudur. 266+ gıdanın gerçek porsiyon bazlı kalori, protein, karbonhidrat, yağ ve vitamin/mineral değerlerini sunar. USDA FoodData Central veritabanı ile desteklenen bilimsel veriler içerir. Ücretsiz hesaplayıcılar (BMI, kalori, protein) ve detaylı besin analizleri sağlar."
+    },
+    {
+      question: "Besin değerleri doğru mu?",
+      answer: "Evet, tüm besin değerleri Amerika Tarım Bakanlığı'nın (USDA) FoodData Central veritabanından alınır. Bu, laboratuvar analizleri ve bilimsel çalışmalarla doğrulanmış, dünya çapında kabul görmüş en güvenilir kaynaktır. Veriler düzenli olarak güncellenir ve 20+ vitamin/mineral içerir."
+    },
+    {
+      question: "Platformu nasıl kullanırım?",
+      answer: "Ana sayfadaki arama kutusuna gıda adını yazın (örn: elma, tavuk). Arama sonuçlarından istediğiniz gıdayı seçin. Detay sayfasında porsiyon başına kalori, protein, karbonhidrat, yağ ve 20+ vitamin/mineral değerlerini görürsünüz. Hesaplayıcılar menüsünden BMI, kalori, protein gibi hesaplamalar yapabilirsiniz."
+    },
+    {
+      question: "Hangi gıdaları bulabilirim?",
+      answer: "Platformda 266+ gıda bulunur: Meyveler (elma, muz, çilek), sebzeler (domates, brokoli), tahıllar (pirinç, bulgur), et ve tavuk, balık ve deniz ürünleri, süt ürünleri (yoğurt, peynir), kuruyemişler, bakliyatler. Türkiye'de yaygın tüketilen tüm gıdalar kategorilere ayrılmıştır."
+    },
+    {
+      question: "Hesaplayıcılar ücretsiz mi?",
+      answer: "Evet, tüm hesaplayıcılar tamamen ücretsizdir. BMI hesaplayıcı, günlük kalori ihtiyacı (BMR/TDEE), protein gereksinimi, su ihtiyacı, ideal kilo, porsiyon çevirici ve kilo verme süresi hesaplayıcılarını ücretsiz kullanabilirsiniz. Kayıt veya ödeme gerektirmez."
+    },
+    {
+      question: "BMI nedir, nasıl hesaplanır?",
+      answer: "BMI (Vücut Kitle İndeksi), kilo ve boy oranınızı değerlendirir. Formül: Kilo (kg) / Boy (m)². Örnek: 70 kg, 1.75 m → BMI = 70/(1.75²) = 22.9. Değerlendirme: Zayıf <18.5, Normal 18.5-24.9, Fazla Kilolu 25-29.9, Obez ≥30. WHO standartlarına göre sağlık riskini gösterir."
+    },
+    {
+      question: "Günlük kalori ihtiyacım nedir?",
+      answer: "Günlük kalori ihtiyacınız TDEE (Toplam Günlük Enerji Harcaması) ile hesaplanır. Önce BMR (Bazal Metabolizma Hızı) bulunur: erkekler için (10×kilo) + (6.25×boy cm) - (5×yaş) + 5, kadınlar için -161. BMR × aktivite faktörü (hareketsiz 1.2, orta aktif 1.55, çok aktif 1.9) = TDEE. Örnek: BMR 1650, orta aktif → 1650×1.55 = 2558 kcal."
+    },
+    {
+      question: "Protein ihtiyacım ne kadar?",
+      answer: "Protein ihtiyacı hedefinize göre değişir. Sedanter: 0.8-1.0 g/kg, hafif aktif: 1.2-1.4 g/kg, spor yapan: 1.6-2.2 g/kg, kas yapmak isteyen: 2.0-2.5 g/kg vücut ağırlığı başına. 70 kg sporcu için: 70×1.8 = 126 g protein/gün. Yüksek protein diyeti kilo vermede kas korumasına yardımcı olur."
+    },
+    {
+      question: "Porsiyon ölçüleri nedir?",
+      answer: "Porsiyon ölçüleri, gıdaların gerçek tüketim miktarlarıdır. Örnekler: 1 orta elma (182g) = 95 kcal, 1 dilim ekmek (28g) = 74 kcal, 1 su bardağı süt (244g) = 149 kcal, 1 yemek kaşığı zeytinyağı (14g) = 119 kcal. 100g yerine gerçek porsiyon kullanmak günlük kalori takibini kolaylaştırır."
+    },
+    {
+      question: "Makro nedir?",
+      answer: "Makro besinler (makrolar), vücudun büyük miktarlarda ihtiyaç duyduğu besinlerdir: Protein (4 kcal/g) - kas yapımı ve onarımı, Karbonhidrat (4 kcal/g) - enerji kaynağı, Yağ (9 kcal/g) - hormon üretimi ve vitamin emilimi. Dengeli dağılım: protein %25-35, karbonhidrat %40-50, yağ %25-35. Hedef ve aktiviteye göre ayarlanır."
+    },
+    {
+      question: "Kilo vermek için kaç kalori yemeliyim?",
+      answer: "Kilo vermek için kalori açığı gerekir. Sağlıklı kilo kaybı haftada 0.5-1 kg'dır, bu günlük 500-1000 kalori açığı demektir. TDEE'nizi hesaplayın (örn: 2500 kcal), hedef: 2000-2500 kcal arası. Aşırı kısıtlama (1200 kcal altı) metabolizmayı yavaşlatır. Yüksek protein (%30-35) ve orta karbonhidrat (%35-40) tercih edin."
+    },
+    {
+      question: "Vücut yağ yüzdesi nasıl hesaplanır?",
+      answer: "Vücut yağ yüzdesi Navy Method ile hesaplanır. Erkekler için: boyun, bel ve boy ölçüleri kullanılır. Kadınlar için: boyun, bel, kalça ve boy. Sağlıklı aralıklar: Erkek 10-20%, Kadın 18-28%. Atletik yapı: Erkek 6-13%, Kadın 14-20%. Yüksek yağ oranı (Erkek >25%, Kadın >32%) sağlık riskleri oluşturur."
+    },
+    {
+      question: "Günlük su ihtiyacım ne kadar?",
+      answer: "Günlük su ihtiyacı kilo ve aktiviteye göre değişir. Temel formül: Kilo (kg) × 30-40 ml. 70 kg için: 2.1-2.8 litre/gün. Aktif sporcular: +500-1000 ml ekstra. Sıcak havalarda: +20-40% artış. Belirtiler: açık sarı idrar = yeterli, koyu sarı = daha fazla su için. Günde 8-10 bardak (2-2.5 litre) ortalama hedeftir."
+    },
+    {
+      question: "Vitamin ve mineral ihtiyaçlarım nedir?",
+      answer: "RDA (Günlük Önerilen Alım) değerleri: Vitamin C 75-90 mg, Vitamin D 600-800 IU, Vitamin A 700-900 mcg, Demir 8-18 mg, Kalsiyum 1000-1200 mg, Magnezyum 310-420 mg. Besindegerim.com her gıda için 20+ vitamin/mineral değeri gösterir. Çeşitli beslenme en iyisidir: meyve, sebze, tahıl, protein dengesi."
+    },
+    {
+      question: "Platform mobil cihazlarda kullanılabilir mi?",
+      answer: "Evet, besindegerim.com tamamen responsive tasarıma sahiptir. Telefon, tablet ve masaüstü tüm cihazlarda mükemmel çalışır. Mobil tarayıcınızdan (Chrome, Safari) doğrudan kullanabilirsiniz. Arama, detay sayfaları ve hesaplayıcılar mobilde optimize edilmiştir. Uygulama indirmeye gerek yoktur."
+    }
+  ];
+
+  const faqHTML = faqData.map((faq, index) => `
+    <details class="group bg-white border-2 border-green-200/50 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl hover:border-green-500/50 transition-all duration-300">
+      <summary class="flex items-start justify-between cursor-pointer p-6 hover:bg-green-50/50 transition-colors list-none">
+        <h3 class="text-lg font-bold text-gray-900 flex items-start gap-3 pr-4">
+          <svg class="w-5 h-5 text-green-500 shrink-0 mt-0.5 group-open:rotate-90 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+          ${faq.question}
+        </h3>
+      </summary>
+      <div class="px-6 pb-6 text-gray-700 leading-relaxed">
+        ${faq.answer}
+      </div>
+    </details>
+  `).join('');
+
+  const faqSchema = getFAQPageSchema();
+
   const html = `
     ${renderHeader(categoryGroups)}
     <main class="min-h-screen">
-      <section class="py-16 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20">
+      <section class="py-16 bg-gradient-to-br from-green-50 to-emerald-50">
         <div class="container mx-auto px-4 text-center">
           <h1 class="text-5xl font-bold mb-4 bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
             Besin Değeri Anında
           </h1>
-          <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p class="text-xl text-gray-600 max-w-2xl mx-auto">
             ${foods.length}+ gıdanın gerçek porsiyon bazlı kalori ve besin değerleri
           </p>
         </div>
       </section>
       
       <section class="py-12 container mx-auto px-4">
-        <h2 class="text-3xl font-bold mb-8">Popüler Gıdalar</h2>
+        <h2 class="text-3xl font-bold mb-8 text-gray-900">Popüler Gıdalar</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           ${foodsHTML}
         </div>
@@ -118,6 +201,61 @@ export async function renderHomePage(foods: Food[], categoryGroups: CategoryGrou
             Tüm Gıdaları Gör
           </a>
         </div>
+      </section>
+
+      <!-- FAQ Section - SEO Optimized -->
+      <section class="relative py-16 md:py-24 bg-gradient-to-b from-white via-green-50/30 to-emerald-50/30 overflow-hidden border-t-4 border-emerald-500">
+        <div class="max-w-4xl mx-auto px-4 md:px-8">
+          <!-- Section Title -->
+          <div class="text-center mb-12">
+            <div class="inline-flex items-center gap-3 mb-6">
+              <div class="h-1 w-12 bg-gradient-to-r from-transparent to-green-500 rounded-full"></div>
+              <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <div class="h-1 w-12 bg-gradient-to-l from-transparent to-green-500 rounded-full"></div>
+            </div>
+            
+            <h2 class="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+              Sıkça Sorulan Sorular
+            </h2>
+            
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+              Besin değerleri, kalori hesaplama ve platform kullanımı hakkında merak ettikleriniz
+            </p>
+
+            <!-- Green Accent Line -->
+            <div class="mt-6 mx-auto w-24 h-1 bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 rounded-full shadow-lg shadow-green-500/50"></div>
+          </div>
+
+          <!-- FAQ Items -->
+          <div class="space-y-4">
+            ${faqHTML}
+          </div>
+
+          <!-- CTA Section -->
+          <div class="text-center mt-16">
+            <div class="bg-white/70 border-2 border-green-200/50 rounded-3xl p-8 shadow-2xl shadow-green-500/20">
+              <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                Başka sorunuz mu var?
+              </h3>
+              <p class="text-gray-600 mb-6">
+                Bizimle iletişime geçmekten çekinmeyin
+              </p>
+              <a
+                href="/iletisim"
+                class="inline-flex items-center gap-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-8 py-4 rounded-full text-lg font-bold transition-all duration-500 shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/50"
+              >
+                <span>İletişime Geç</span>
+                <svg class="w-5 h-5 rotate-[-90deg]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        ${serializeSchema(faqSchema)}
       </section>
     </main>
     ${renderFooter()}
@@ -917,5 +1055,694 @@ function renderWeightLossTimeCalculator(categoryGroups: CategoryGroup[]): Render
     </main>
     ${renderFooter()}
   `;
+  return { html, statusCode: 200 };
+}
+
+/**
+ * About Page (Hakkımızda) SSR
+ */
+export async function renderAboutPage(categoryGroups: CategoryGroup[]): Promise<RenderResult> {
+  const html = `
+    ${renderHeader(categoryGroups)}
+    <main class="flex-1">
+      <section class="relative py-20 bg-gradient-to-br from-white via-green-50 to-emerald-50 overflow-hidden">
+        <div class="absolute top-20 left-20 w-96 h-96 bg-green-400/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-20 right-20 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl"></div>
+        
+        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
+          <h1 class="text-5xl sm:text-6xl font-black mb-6 bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+            Hakkımızda
+          </h1>
+          <p class="text-xl sm:text-2xl text-slate-700 leading-relaxed">
+            Türkiye'nin en kapsamlı besin değerleri platformu
+          </p>
+        </div>
+      </section>
+
+      <section class="py-16 max-w-5xl mx-auto px-4 sm:px-6">
+        <div class="backdrop-blur-xl bg-white/70 border-2 border-green-200/50 rounded-3xl p-8 sm:p-12 shadow-xl shadow-green-500/10">
+          <h2 class="text-3xl font-bold text-slate-900 mb-6">Misyonumuz</h2>
+          
+          <div class="space-y-6 text-lg text-slate-700 leading-relaxed">
+            <p>
+              <strong class="text-green-600">besindegerim.com</strong>, sağlıklı beslenme yolculuğunuzda 
+              size rehberlik etmek için tasarlanmış, Türkiye'nin en kapsamlı besin değerleri platformudur. 
+              Amacımız, herkesin kolayca erişebileceği, güvenilir ve bilimsel verilere dayanan bir kaynak sunmaktır.
+            </p>
+            
+            <p>
+              Günümüzde sağlıklı yaşam ve dengeli beslenme her zamankinden daha önemli. Ancak doğru besin değeri 
+              bilgisine ulaşmak, özellikle Türkçe kaynaklarda, oldukça zor olabilir. İşte tam bu noktada devreye giriyoruz. 
+              Platform olarak, <strong class="text-green-600">gerçek porsiyon bazlı</strong> besin değerleri sunarak, 
+              günlük hayatınızda pratik ve anlaşılır bir deneyim yaşatmayı hedefliyoruz.
+            </p>
+
+            <p>
+              <strong class="text-green-600">266+ gıdanın</strong> detaylı besin değerleri ve 
+              <strong class="text-green-600"> 16 farklı hesaplayıcı</strong> aracımızla, 
+              kalori takibinden makro hesaplamaya, BMI'dan ideal kilo hesaplamaya kadar geniş bir yelpazede 
+              ihtiyaçlarınıza cevap veriyoruz.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-16 bg-gradient-to-br from-green-50 to-emerald-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="backdrop-blur-xl bg-white/70 border-2 border-green-200/50 rounded-2xl p-8 text-center hover:scale-105 transition-transform duration-300 shadow-lg shadow-green-500/10">
+              <p class="text-4xl font-black text-green-600 mb-2">266+</p>
+              <p class="text-slate-700 font-semibold">Gıda Verisi</p>
+              <p class="text-sm text-slate-600 mt-2">USDA kaynaklı, doğrulanmış besin değerleri</p>
+            </div>
+
+            <div class="backdrop-blur-xl bg-white/70 border-2 border-green-200/50 rounded-2xl p-8 text-center hover:scale-105 transition-transform duration-300 shadow-lg shadow-green-500/10">
+              <p class="text-4xl font-black text-green-600 mb-2">16</p>
+              <p class="text-slate-700 font-semibold">Hesaplayıcı Araç</p>
+              <p class="text-sm text-slate-600 mt-2">BMI, kalori, protein ve daha fazlası</p>
+            </div>
+
+            <div class="backdrop-blur-xl bg-white/70 border-2 border-green-200/50 rounded-2xl p-8 text-center hover:scale-105 transition-transform duration-300 shadow-lg shadow-green-500/10">
+              <p class="text-4xl font-black text-green-600 mb-2">100%</p>
+              <p class="text-slate-700 font-semibold">Doğruluk</p>
+              <p class="text-sm text-slate-600 mt-2">Bilimsel kaynaklara dayalı veriler</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-16 max-w-5xl mx-auto px-4 sm:px-6">
+        <h2 class="text-4xl font-bold text-center mb-12 text-slate-900">Değerlerimiz</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="bg-white border-2 border-green-200/50 rounded-2xl p-6 hover:border-green-500/50 transition-colors">
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Doğruluk ve Güvenilirlik</h3>
+            <p class="text-slate-700 leading-relaxed">
+              Tüm verilerimiz USDA FoodData Central gibi güvenilir kaynaklardan alınır ve 
+              düzenli olarak güncellenir. Kullanıcılarımıza yalnızca doğrulanmış bilgiler sunarız.
+            </p>
+          </div>
+
+          <div class="bg-white border-2 border-green-200/50 rounded-2xl p-6 hover:border-green-500/50 transition-colors">
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Bilimsel Yaklaşım</h3>
+            <p class="text-slate-700 leading-relaxed">
+              Beslenme bilimi ve diyetetik prensiplerine bağlı kalarak, güncel araştırmalar 
+              ışığında hesaplayıcılarımızı ve içeriklerimizi geliştiririz.
+            </p>
+          </div>
+
+          <div class="bg-white border-2 border-green-200/50 rounded-2xl p-6 hover:border-green-500/50 transition-colors">
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Kullanıcı Dostu Deneyim</h3>
+            <p class="text-slate-700 leading-relaxed">
+              Karmaşık besin değeri verilerini anlaşılır, pratik ve kullanımı kolay bir şekilde sunarak, 
+              herkesin faydalanabileceği bir platform oluşturuyoruz.
+            </p>
+          </div>
+
+          <div class="bg-white border-2 border-green-200/50 rounded-2xl p-6 hover:border-green-500/50 transition-colors">
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Şeffaflık</h3>
+            <p class="text-slate-700 leading-relaxed">
+              Verilerimizin kaynağını açıkça belirtir, hesaplama yöntemlerimizi paylaşır ve 
+              kullanıcılarımıza tam şeffaflık sağlarız.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-16 bg-gradient-to-br from-white via-green-50 to-emerald-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+          <div class="backdrop-blur-xl bg-white/70 border-2 border-green-200/50 rounded-3xl p-8 sm:p-12 shadow-xl shadow-green-500/10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Neden Bu Platformu Kurduk?</h2>
+            
+            <div class="space-y-4 text-lg text-slate-700 leading-relaxed">
+              <p>
+                Sağlıklı beslenme konusunda bilinçli kararlar almak isteyen birçok kişi, güvenilir ve 
+                Türkçe besin değeri bilgisine ulaşmakta zorlanıyordu. Çoğu kaynak, ya yabancı dilde 
+                ya da yeterince detaylı değildi.
+              </p>
+              
+              <p>
+                Biz de bu eksikliği gidermek ve herkes için <strong class="text-green-600">ücretsiz</strong>, 
+                <strong class="text-green-600"> doğru</strong> ve 
+                <strong class="text-green-600"> kullanışlı</strong> bir besin değerleri platformu 
+                oluşturmak istedik. Özellikle gerçek porsiyon ölçülerini (1 adet domates, 1 yumurta gibi) 
+                baz alarak, günlük hayatta pratik kullanım sağlamayı hedefledik.
+              </p>
+
+              <p>
+                <strong class="text-green-600">besindegerim.com</strong>, sadece bir veri tabanı değil; 
+                aynı zamanda sağlıklı yaşam yolculuğunuzda yanınızda olan, size rehberlik eden bir yardımcıdır. 
+                Her gün daha fazla gıda ekleyerek, yeni hesaplayıcılar geliştirerek ve kullanıcı geri bildirimlerini 
+                dikkate alarak platformumuzu sürekli geliştiriyoruz.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-16 max-w-4xl mx-auto px-4 sm:px-6 text-center">
+        <h2 class="text-3xl font-bold text-slate-900 mb-4">Hadi Başlayalım!</h2>
+        <p class="text-lg text-slate-700 mb-8">
+          Besin değerlerini keşfedin, hesaplayıcılarımızı kullanın ve sağlıklı yaşam yolculuğunuza bugün başlayın.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/tum-gidalar" class="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-8 py-4 rounded-full font-bold text-lg shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/50 hover:scale-105 transition-all duration-300">
+            Gıdaları Keşfet
+          </a>
+          
+          <a href="/hesaplayicilar" class="border-2 border-green-500 text-green-600 hover:bg-green-50 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300">
+            Hesaplayıcılar
+          </a>
+        </div>
+      </section>
+    </main>
+    ${renderFooter()}
+  `;
+
+  return { html, statusCode: 200 };
+}
+
+/**
+ * Contact Page (İletişim) SSR
+ */
+export async function renderContactPage(categoryGroups: CategoryGroup[]): Promise<RenderResult> {
+  const html = `
+    ${renderHeader(categoryGroups)}
+    <main class="flex-1">
+      <section class="relative py-20 bg-gradient-to-br from-white via-green-50 to-emerald-50 overflow-hidden">
+        <div class="absolute top-20 left-20 w-96 h-96 bg-green-400/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-20 right-20 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl"></div>
+        
+        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
+          <h1 class="text-5xl sm:text-6xl font-black mb-6 bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+            İletişim
+          </h1>
+          <p class="text-xl sm:text-2xl text-slate-700 leading-relaxed">
+            Bizimle iletişime geçin, size yardımcı olmaktan mutluluk duyarız
+          </p>
+        </div>
+      </section>
+
+      <div class="py-16 max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="space-y-6">
+            <div class="backdrop-blur-xl bg-white/70 border-2 border-green-200/50 rounded-3xl p-8 shadow-xl shadow-green-500/10">
+              <h2 class="text-2xl font-bold text-slate-900 mb-6">İletişim Bilgileri</h2>
+              
+              <div class="space-y-6">
+                <div class="flex items-start gap-4">
+                  <div>
+                    <h3 class="text-lg font-semibold text-slate-900 mb-1">E-posta</h3>
+                    <a href="mailto:info@besindegerim.com" class="text-green-600 hover:text-green-700 font-medium">
+                      info@besindegerim.com
+                    </a>
+                    <p class="text-sm text-slate-600 mt-1">
+                      Sorularınız, önerileriniz ve işbirliği teklifleri için
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-4">
+                  <div>
+                    <h3 class="text-lg font-semibold text-slate-900 mb-1">Yanıt Süresi</h3>
+                    <p class="text-slate-700">Hafta içi: <strong class="text-green-600">24-48 saat</strong></p>
+                    <p class="text-slate-700">Hafta sonu: <strong class="text-green-600">48-72 saat</strong></p>
+                    <p class="text-sm text-slate-600 mt-1">
+                      Tüm mesajları dikkatle okur ve en kısa sürede yanıtlarız
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-4">
+                  <div>
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2">Mesaj Konuları</h3>
+                    <ul class="space-y-1 text-slate-700 text-sm">
+                      <li>• Genel sorular ve öneriler</li>
+                      <li>• Besin değerleri ile ilgili geri bildirimler</li>
+                      <li>• Yeni gıda ekleme talepleri</li>
+                      <li>• İşbirliği ve ortaklık teklifleri</li>
+                      <li>• Teknik destek ve hata bildirimleri</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200/50 rounded-2xl p-6">
+              <p class="text-sm text-slate-700 leading-relaxed">
+                <strong class="text-green-600">Not:</strong> Tıbbi tavsiye veya kişisel beslenme 
+                planlaması için lütfen bir diyetisyen veya sağlık profesyoneline danışınız. 
+                Bu platform sadece bilgilendirme amaçlıdır.
+              </p>
+            </div>
+          </div>
+
+          <div class="backdrop-blur-xl bg-white/70 border-2 border-green-200/50 rounded-3xl p-8 shadow-xl shadow-green-500/10">
+            <h2 class="text-2xl font-bold text-slate-900 mb-6">Bize Mesaj Gönderin</h2>
+            
+            <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6">
+              <p class="text-center text-lg font-medium text-gray-900">
+                ⚠️ İletişim formunu kullanmak için JavaScript etkinleştirilmelidir. 
+                Lütfen tarayıcınızın ayarlarından JavaScript'i açın veya 
+                <a href="mailto:info@besindegerim.com" class="text-green-600 hover:underline font-semibold">
+                  info@besindegerim.com
+                </a> adresine e-posta gönderin.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="py-16 bg-gradient-to-br from-green-50 to-emerald-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+          <h2 class="text-3xl font-bold text-center mb-8 text-slate-900">Sıkça Sorulan Sorular</h2>
+          
+          <div class="space-y-4">
+            <div class="bg-white border-2 border-green-200/50 rounded-2xl p-6">
+              <h3 class="text-lg font-semibold text-slate-900 mb-2">
+                Platformunuz ücretsiz mi?
+              </h3>
+              <p class="text-slate-700">
+                Evet, besindegerim.com tamamen <strong class="text-green-600">ücretsizdir</strong>. 
+                Tüm besin değerleri ve hesaplayıcılar herkesin kullanımına açıktır.
+              </p>
+            </div>
+
+            <div class="bg-white border-2 border-green-200/50 rounded-2xl p-6">
+              <h3 class="text-lg font-semibold text-slate-900 mb-2">
+                Verilerin kaynağı nedir?
+              </h3>
+              <p class="text-slate-700">
+                Besin değerleri <strong class="text-green-600">USDA FoodData Central</strong> gibi 
+                güvenilir kaynaklardan alınır ve bilimsel verilere dayanır.
+              </p>
+            </div>
+
+            <div class="bg-white border-2 border-green-200/50 rounded-2xl p-6">
+              <h3 class="text-lg font-semibold text-slate-900 mb-2">
+                Yeni gıda ekleme talebi nasıl yapılır?
+              </h3>
+              <p class="text-slate-700">
+                Yukarıdaki e-posta adresimize mesaj göndererek eklemek istediğiniz gıdayı belirtebilirsiniz. 
+                Taleplerinizi değerlendirip en kısa sürede eklemeye çalışırız.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    ${renderFooter()}
+  `;
+
+  return { html, statusCode: 200 };
+}
+
+/**
+ * Gizlilik Politikası SSR
+ */
+export async function renderPrivacyPage(categoryGroups: CategoryGroup[]): Promise<RenderResult> {
+  const html = `
+    <!DOCTYPE html>
+    <html lang="tr">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Gizlilik Politikası | besindegerim.com</title>
+      <meta name="description" content="besindegerim.com Gizlilik Politikası. Kişisel verilerinizin korunması, KVKK uyumu ve veri güvenliği hakkında detaylı bilgiler.">
+      <meta name="robots" content="index, follow">
+      <link rel="canonical" href="https://besindegerim.com/gizlilik-politikasi">
+    </head>
+    <body>
+      ${renderHeader(categoryGroups)}
+      <main class="flex-1 bg-gradient-to-br from-white via-green-50/30 to-white">
+        <div class="container mx-auto max-w-4xl px-4 py-12">
+          <div class="mb-12 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-4">Gizlilik Politikası</h1>
+            <p class="text-lg text-slate-600">Son güncelleme: 15 Ekim 2025</p>
+          </div>
+
+          <div class="bg-white/70 border-2 border-green-200/50 rounded-3xl p-8 mb-8 shadow-lg">
+            <p class="text-slate-700 leading-relaxed mb-4">
+              besindegerim.com olarak, kullanıcılarımızın gizliliğine saygı duyuyor ve kişisel verilerinin korunmasına azami önem veriyoruz. 
+              Bu Gizlilik Politikası, web sitemizi kullanırken toplanan kişisel verilerin nasıl işlendiğini, saklandığını ve korunduğunu 
+              açıklamaktadır. 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) ve ilgili mevzuat çerçevesinde hareket ediyoruz.
+            </p>
+          </div>
+
+          <section class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">1. Toplanan Kişisel Veriler</h2>
+            <div class="bg-white rounded-2xl border-2 border-green-100 p-6 space-y-4">
+              <p class="text-slate-700 leading-relaxed">
+                Web sitemizi ziyaret ettiğinizde ve kullandığınızda, aşağıdaki kategorilerde kişisel veriler toplanabilir:
+              </p>
+              <div class="space-y-3">
+                <div class="pl-4 border-l-4 border-green-500 py-2">
+                  <h3 class="font-semibold text-slate-900 mb-2">Otomatik Toplanan Veriler:</h3>
+                  <ul class="list-disc list-inside text-slate-700 space-y-1">
+                    <li>IP adresi ve coğrafi konum bilgisi</li>
+                    <li>Tarayıcı türü, sürümü ve dil tercihleri</li>
+                    <li>Ziyaret edilen sayfalar ve sayfa görüntüleme süreleri</li>
+                  </ul>
+                </div>
+                <div class="pl-4 border-l-4 border-emerald-500 py-2">
+                  <h3 class="font-semibold text-slate-900 mb-2">Kullanım Verileri:</h3>
+                  <ul class="list-disc list-inside text-slate-700 space-y-1">
+                    <li>Arama sorguları ve tercihler</li>
+                    <li>Besin değeri aramaları</li>
+                    <li>Hesaplayıcı kullanım verileri</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">2. Verilerin İşlenme Amaçları</h2>
+            <div class="bg-white rounded-2xl border-2 border-green-100 p-6 space-y-4">
+              <p class="text-slate-700 leading-relaxed">
+                Toplanan kişisel veriler, yalnızca aşağıdaki meşru amaçlar doğrultusunda işlenmektedir:
+              </p>
+              <ul class="space-y-3">
+                <li class="flex gap-3">
+                  <span class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-sm font-bold">1</span>
+                  <span class="text-slate-700"><strong>Hizmet Sunumu:</strong> Web sitesinin işlevselliğini sağlamak</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-sm font-bold">2</span>
+                  <span class="text-slate-700"><strong>Kullanıcı Deneyimi:</strong> Site performansını optimize etmek</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-sm font-bold">3</span>
+                  <span class="text-slate-700"><strong>Güvenlik:</strong> Kötüye kullanımı önlemek</span>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">3. Çerezler ve İzleme Teknolojileri</h2>
+            <div class="bg-white rounded-2xl border-2 border-green-100 p-6">
+              <p class="text-slate-700 leading-relaxed">
+                Web sitemiz, kullanıcı deneyimini iyileştirmek için çerezler kullanmaktadır. 
+                Detaylı bilgi için <a href="/cerez-politikasi" class="text-green-600 hover:text-green-700 font-semibold underline">Çerez Politikamızı</a> inceleyebilirsiniz.
+              </p>
+            </div>
+          </section>
+
+          <section class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">4. Kullanıcı Hakları</h2>
+            <div class="bg-white rounded-2xl border-2 border-green-100 p-6">
+              <p class="text-slate-700 leading-relaxed mb-4">
+                KVKK kapsamında, kişisel verilerinizle ilgili haklara sahipsiniz: bilgi alma, erişim, düzeltme, silme ve itiraz hakkı.
+              </p>
+            </div>
+          </section>
+
+          <section class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">5. KVKK Uyumu ve Veri Güvenliği</h2>
+            <div class="bg-white rounded-2xl border-2 border-green-100 p-6">
+              <p class="text-slate-700 leading-relaxed">
+                6698 sayılı KVKK'ya tam uyum sağlamak için SSL/TLS şifreleme, güvenlik duvarı koruması ve düzenli güvenlik güncellemeleri uygulanmaktadır.
+              </p>
+            </div>
+          </section>
+
+          <section class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">6. İletişim ve Başvuru</h2>
+            <div class="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-2 border-green-300/50 rounded-3xl p-8">
+              <p class="text-slate-700 leading-relaxed mb-4">
+                Kişisel verilerinizle ilgili sorularınız için bizimle iletişime geçebilirsiniz:
+              </p>
+              <div class="bg-white rounded-xl p-6 border-2 border-green-200">
+                <p class="text-lg font-semibold text-slate-900 mb-2">E-posta:</p>
+                <a href="mailto:info@besindegerim.com" class="text-green-600 hover:text-green-700 font-bold text-xl">
+                  info@besindegerim.com
+                </a>
+              </div>
+            </div>
+          </section>
+
+          <div class="mt-12 bg-slate-100 rounded-2xl p-6 border-2 border-slate-200">
+            <p class="text-sm text-slate-600 mb-2">
+              <strong>Son Güncelleme:</strong> 15 Ekim 2025
+            </p>
+            <p class="text-sm text-slate-700 leading-relaxed">
+              Bu Gizlilik Politikası gerektiğinde güncellenebilir. Güncellemeler bu sayfada yayınlanır.
+            </p>
+          </div>
+        </div>
+      </main>
+      ${renderFooter()}
+    </body>
+    </html>
+  `;
+
+  return { html, statusCode: 200 };
+}
+
+/**
+ * Kullanım Koşulları SSR
+ */
+export async function renderTermsPage(categoryGroups: CategoryGroup[]): Promise<RenderResult> {
+  const html = `
+    <!DOCTYPE html>
+    <html lang="tr">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Kullanım Koşulları | besindegerim.com</title>
+      <meta name="description" content="besindegerim.com Kullanım Koşulları. Web sitesi kullanım kuralları, sorumluluklar, fikri mülkiyet hakları ve yasal bilgiler.">
+      <meta name="robots" content="index, follow">
+      <link rel="canonical" href="https://besindegerim.com/kullanim-kosullari">
+    </head>
+    <body>
+      ${renderHeader(categoryGroups)}
+      <main class="flex-1 bg-gradient-to-br from-white via-green-50/30 to-white">
+        <div class="container mx-auto max-w-4xl px-4 py-12">
+          <div class="mb-12 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-4">Kullanım Koşulları</h1>
+            <p class="text-lg text-slate-600">Son güncelleme: 15 Ekim 2025</p>
+          </div>
+
+          <div class="bg-white/70 border-2 border-green-200/50 rounded-3xl p-8 mb-8 shadow-lg">
+            <p class="text-slate-700 leading-relaxed mb-4">
+              besindegerim.com web sitesine hoş geldiniz. Bu Kullanım Koşulları, sitemizi kullanımınızı düzenleyen yasal 
+              bir sözleşmedir. Sitemize erişerek veya kullanarak, bu koşulları kabul etmiş sayılırsınız.
+            </p>
+          </div>
+
+          <section class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">1. Koşulların Kabulü</h2>
+            <div class="bg-white rounded-2xl border-2 border-green-100 p-6">
+              <p class="text-slate-700 leading-relaxed">
+                besindegerim.com'u ziyaret ettiğinizde, bu Kullanım Koşulları'nı ve Gizlilik Politikamızı kabul etmiş sayılırsınız.
+              </p>
+            </div>
+          </section>
+
+          <section class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">2. Hizmet Tanımı ve Kullanım Amacı</h2>
+            <div class="bg-white rounded-2xl border-2 border-green-100 p-6 space-y-4">
+              <p class="text-slate-700 leading-relaxed">
+                besindegerim.com, besin değeri bilgileri ve sağlık hesaplayıcıları sunar.
+              </p>
+              <div class="bg-red-50 border-2 border-red-300 rounded-xl p-5">
+                <p class="text-sm font-bold text-red-900 mb-2">SORUMLULUK REDDİ</p>
+                <p class="text-sm text-red-800 leading-relaxed">
+                  Bu web sitesinde sunulan tüm bilgiler <strong>sadece genel bilgilendirme amaçlıdır</strong> ve 
+                  hiçbir şekilde tıbbi tavsiye, teşhis veya tedavi yerine geçmez.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">3. Kullanıcı Sorumlulukları</h2>
+            <div class="bg-white rounded-2xl border-2 border-green-100 p-6">
+              <p class="text-slate-700 leading-relaxed mb-4">
+                Web sitemizi kullanırken yasal kurallara uymayı ve zararlı faaliyetlerden kaçınmayı taahhüt edersiniz.
+              </p>
+            </div>
+          </section>
+
+          <section class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">4. Fikri Mülkiyet Hakları</h2>
+            <div class="bg-white rounded-2xl border-2 border-green-100 p-6">
+              <p class="text-slate-700 leading-relaxed">
+                Web sitesindeki tüm içerik, tasarım ve markalar telif hakları ile korunmaktadır. İzinsiz kullanım yasaktır.
+              </p>
+            </div>
+          </section>
+
+          <section class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">5. Sorumluluk Sınırlaması</h2>
+            <div class="bg-white rounded-2xl border-2 border-green-100 p-6">
+              <p class="text-slate-700 leading-relaxed">
+                Web sitemiz "olduğu gibi" sunulmaktadır. Kesintisiz veya hatasız çalışma garantisi verilmemektedir.
+              </p>
+            </div>
+          </section>
+
+          <section class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">6. Koşullarda Değişiklik</h2>
+            <div class="bg-white rounded-2xl border-2 border-green-100 p-6">
+              <p class="text-slate-700 leading-relaxed">
+                Bu koşullar önceden haber verilmeksizin güncellenebilir. Güncellemeler bu sayfada yayınlanır.
+              </p>
+            </div>
+          </section>
+
+          <section class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">7. Geçerli Hukuk</h2>
+            <div class="bg-white rounded-2xl border-2 border-green-100 p-6">
+              <p class="text-slate-700 leading-relaxed">
+                Bu koşullar Türkiye Cumhuriyeti yasalarına tabidir. Uyuşmazlıklar İstanbul mahkemelerinde çözülür.
+              </p>
+            </div>
+          </section>
+
+          <div class="mt-12 bg-slate-100 rounded-2xl p-6 border-2 border-slate-200">
+            <p class="text-sm text-slate-600 mb-4">
+              <strong>Son Güncelleme:</strong> 15 Ekim 2025
+            </p>
+            <p class="text-sm text-slate-700 leading-relaxed">
+              İletişim: <a href="mailto:info@besindegerim.com" class="text-green-600 hover:text-green-700 font-semibold">info@besindegerim.com</a>
+            </p>
+          </div>
+        </div>
+      </main>
+      ${renderFooter()}
+    </body>
+    </html>
+  `;
+
+  return { html, statusCode: 200 };
+}
+
+/**
+ * Çerez Politikası SSR
+ */
+export async function renderCookiePage(categoryGroups: CategoryGroup[]): Promise<RenderResult> {
+  const html = `
+    <!DOCTYPE html>
+    <html lang="tr">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Çerez Politikası | besindegerim.com</title>
+      <meta name="description" content="besindegerim.com Çerez Politikası. Çerez kullanımı, türleri, amaçları ve yönetimi hakkında detaylı bilgiler.">
+      <meta name="robots" content="index, follow">
+      <link rel="canonical" href="https://besindegerim.com/cerez-politikasi">
+    </head>
+    <body>
+      ${renderHeader(categoryGroups)}
+      <main class="flex-1 bg-gradient-to-br from-white via-green-50/30 to-white">
+        <div class="container mx-auto max-w-4xl px-4 py-12">
+          <div class="mb-12 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-4">Çerez Politikası</h1>
+            <p class="text-lg text-slate-600">Son güncelleme: 15 Ekim 2025</p>
+          </div>
+
+          <div class="bg-white/70 border-2 border-green-200/50 rounded-3xl p-8 mb-8 shadow-lg">
+            <p class="text-slate-700 leading-relaxed mb-4">
+              besindegerim.com olarak, web sitemizde kullanıcı deneyimini iyileştirmek ve site performansını optimize etmek 
+              amacıyla çerezler (cookies) kullanmaktayız.
+            </p>
+          </div>
+
+          <section class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">1. Çerez (Cookie) Nedir?</h2>
+            <div class="bg-white rounded-2xl border-2 border-green-100 p-6">
+              <p class="text-slate-700 leading-relaxed">
+                Çerezler, web sitesini ziyaret ettiğinizde tarayıcınız tarafından cihazınıza kaydedilen küçük metin dosyalarıdır. 
+                Web sitesinin işlevselliğini artırmak için kullanılır.
+              </p>
+            </div>
+          </section>
+
+          <section class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">2. Kullanılan Çerezler</h2>
+            <div class="bg-white rounded-2xl border-2 border-green-100 p-6 space-y-4">
+              <div class="border-2 border-red-200 bg-red-50 rounded-xl p-5">
+                <h3 class="font-bold text-red-900 text-lg mb-2">Zorunlu Çerezler</h3>
+                <p class="text-sm text-slate-700">
+                  Web sitesinin temel işlevleri için kesinlikle gereklidir.
+                </p>
+              </div>
+              <div class="border-2 border-blue-200 bg-blue-50 rounded-xl p-5">
+                <h3 class="font-bold text-blue-900 text-lg mb-2">İşlevsel Çerezler</h3>
+                <p class="text-sm text-slate-700">
+                  Tercihlerinizi hatırlayarak gelişmiş özellikler sunar.
+                </p>
+              </div>
+              <div class="border-2 border-green-200 bg-green-50 rounded-xl p-5">
+                <h3 class="font-bold text-green-900 text-lg mb-2">Analitik Çerezler</h3>
+                <p class="text-sm text-slate-700">
+                  Kullanım istatistikleri toplar (Google Analytics gibi).
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">3. Çerez Türleri (Süre)</h2>
+            <div class="bg-white rounded-2xl border-2 border-green-100 p-6">
+              <p class="text-slate-700 leading-relaxed mb-3">
+                <strong>Oturum Çerezleri:</strong> Tarayıcınızı kapattığınızda silinir.
+              </p>
+              <p class="text-slate-700 leading-relaxed">
+                <strong>Kalıcı Çerezler:</strong> Belirli bir süre cihazınızda kalır.
+              </p>
+            </div>
+          </section>
+
+          <section class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">4. Çerezleri Nasıl Kontrol Edebilirsiniz?</h2>
+            <div class="bg-white rounded-2xl border-2 border-green-100 p-6">
+              <p class="text-slate-700 leading-relaxed mb-4">
+                Tarayıcı ayarlarınızdan çerezleri yönetebilir, silebilir veya engelleyebilirsiniz.
+              </p>
+              <div class="bg-amber-50 border-2 border-amber-300 rounded-xl p-5">
+                <p class="text-sm text-amber-800">
+                  <strong>Dikkat:</strong> Çerezleri devre dışı bırakırsanız, bazı özellikler düzgün çalışmayabilir.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">5. Üçüncü Taraf Çerezleri</h2>
+            <div class="bg-white rounded-2xl border-2 border-green-100 p-6">
+              <p class="text-slate-700 leading-relaxed">
+                Google Analytics gibi üçüncü taraf hizmetler kullanılabilir. Bu hizmetler kendi gizlilik politikalarına tabidir.
+              </p>
+            </div>
+          </section>
+
+          <section class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">6. Güncellemeler</h2>
+            <div class="bg-white rounded-2xl border-2 border-green-100 p-6">
+              <p class="text-slate-700 leading-relaxed">
+                Bu Çerez Politikası gerektiğinde güncellenebilir. Güncellemeler bu sayfada yayınlanır.
+              </p>
+            </div>
+          </section>
+
+          <div class="mt-12 bg-slate-100 rounded-2xl p-6 border-2 border-slate-200">
+            <p class="text-sm text-slate-600 mb-4">
+              <strong>Son Güncelleme:</strong> 15 Ekim 2025
+            </p>
+            <p class="text-sm text-slate-700 leading-relaxed">
+              Sorularınız için: <a href="mailto:info@besindegerim.com" class="text-green-600 hover:text-green-700 font-semibold">info@besindegerim.com</a>
+            </p>
+          </div>
+        </div>
+      </main>
+      ${renderFooter()}
+    </body>
+    </html>
+  `;
+
   return { html, statusCode: 200 };
 }

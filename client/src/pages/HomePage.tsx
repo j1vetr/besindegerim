@@ -7,7 +7,8 @@ import { SearchAutocomplete } from "@/components/SearchAutocomplete";
 import { ClientOnly } from "@/components/ClientOnly";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Database, TrendingUp, Sparkles, Zap, HelpCircle, ChevronRight, Apple, Cookie, Beef, Fish, Milk, Carrot, Salad, Pizza } from "lucide-react";
+import { Database, TrendingUp, Sparkles, Zap, HelpCircle, ChevronDown, Apple, Cookie, Beef, Fish, Milk, Carrot, Salad, Pizza } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 interface HomePageProps {
   categoryGroups?: CategoryGroup[];
@@ -15,13 +16,89 @@ interface HomePageProps {
   currentPath?: string;
 }
 
+const faqData = [
+  {
+    id: "1",
+    question: "besindegerim.com nedir?",
+    answer: "besindegerim.com, Türkiye'nin en kapsamlı besin değerleri platformudur. 266+ gıdanın gerçek porsiyon bazlı kalori, protein, karbonhidrat, yağ ve vitamin/mineral değerlerini sunar. USDA FoodData Central veritabanı ile desteklenen bilimsel veriler içerir. Ücretsiz hesaplayıcılar (BMI, kalori, protein) ve detaylı besin analizleri sağlar."
+  },
+  {
+    id: "2",
+    question: "Besin değerleri doğru mu?",
+    answer: "Evet, tüm besin değerleri Amerika Tarım Bakanlığı'nın (USDA) FoodData Central veritabanından alınır. Bu, laboratuvar analizleri ve bilimsel çalışmalarla doğrulanmış, dünya çapında kabul görmüş en güvenilir kaynaktır. Veriler düzenli olarak güncellenir ve 20+ vitamin/mineral içerir."
+  },
+  {
+    id: "3",
+    question: "Platformu nasıl kullanırım?",
+    answer: "Ana sayfadaki arama kutusuna gıda adını yazın (örn: elma, tavuk). Arama sonuçlarından istediğiniz gıdayı seçin. Detay sayfasında porsiyon başına kalori, protein, karbonhidrat, yağ ve 20+ vitamin/mineral değerlerini görürsünüz. Hesaplayıcılar menüsünden BMI, kalori, protein gibi hesaplamalar yapabilirsiniz."
+  },
+  {
+    id: "4",
+    question: "Hangi gıdaları bulabilirim?",
+    answer: "Platformda 266+ gıda bulunur: Meyveler (elma, muz, çilek), sebzeler (domates, brokoli), tahıllar (pirinç, bulgur), et ve tavuk, balık ve deniz ürünleri, süt ürünleri (yoğurt, peynir), kuruyemişler, bakliyatler. Türkiye'de yaygın tüketilen tüm gıdalar kategorilere ayrılmıştır."
+  },
+  {
+    id: "5",
+    question: "Hesaplayıcılar ücretsiz mi?",
+    answer: "Evet, tüm hesaplayıcılar tamamen ücretsizdir. BMI hesaplayıcı, günlük kalori ihtiyacı (BMR/TDEE), protein gereksinimi, su ihtiyacı, ideal kilo, porsiyon çevirici ve kilo verme süresi hesaplayıcılarını ücretsiz kullanabilirsiniz. Kayıt veya ödeme gerektirmez."
+  },
+  {
+    id: "6",
+    question: "BMI nedir, nasıl hesaplanır?",
+    answer: "BMI (Vücut Kitle İndeksi), kilo ve boy oranınızı değerlendirir. Formül: Kilo (kg) / Boy (m)². Örnek: 70 kg, 1.75 m → BMI = 70/(1.75²) = 22.9. Değerlendirme: Zayıf <18.5, Normal 18.5-24.9, Fazla Kilolu 25-29.9, Obez ≥30. WHO standartlarına göre sağlık riskini gösterir."
+  },
+  {
+    id: "7",
+    question: "Günlük kalori ihtiyacım nedir?",
+    answer: "Günlük kalori ihtiyacınız TDEE (Toplam Günlük Enerji Harcaması) ile hesaplanır. Önce BMR (Bazal Metabolizma Hızı) bulunur: erkekler için (10×kilo) + (6.25×boy cm) - (5×yaş) + 5, kadınlar için -161. BMR × aktivite faktörü (hareketsiz 1.2, orta aktif 1.55, çok aktif 1.9) = TDEE. Örnek: BMR 1650, orta aktif → 1650×1.55 = 2558 kcal."
+  },
+  {
+    id: "8",
+    question: "Protein ihtiyacım ne kadar?",
+    answer: "Protein ihtiyacı hedefinize göre değişir. Sedanter: 0.8-1.0 g/kg, hafif aktif: 1.2-1.4 g/kg, spor yapan: 1.6-2.2 g/kg, kas yapmak isteyen: 2.0-2.5 g/kg vücut ağırlığı başına. 70 kg sporcu için: 70×1.8 = 126 g protein/gün. Yüksek protein diyeti kilo vermede kas korumasına yardımcı olur."
+  },
+  {
+    id: "9",
+    question: "Porsiyon ölçüleri nedir?",
+    answer: "Porsiyon ölçüleri, gıdaların gerçek tüketim miktarlarıdır. Örnekler: 1 orta elma (182g) = 95 kcal, 1 dilim ekmek (28g) = 74 kcal, 1 su bardağı süt (244g) = 149 kcal, 1 yemek kaşığı zeytinyağı (14g) = 119 kcal. 100g yerine gerçek porsiyon kullanmak günlük kalori takibini kolaylaştırır."
+  },
+  {
+    id: "10",
+    question: "Makro nedir?",
+    answer: "Makro besinler (makrolar), vücudun büyük miktarlarda ihtiyaç duyduğu besinlerdir: Protein (4 kcal/g) - kas yapımı ve onarımı, Karbonhidrat (4 kcal/g) - enerji kaynağı, Yağ (9 kcal/g) - hormon üretimi ve vitamin emilimi. Dengeli dağılım: protein %25-35, karbonhidrat %40-50, yağ %25-35. Hedef ve aktiviteye göre ayarlanır."
+  },
+  {
+    id: "11",
+    question: "Kilo vermek için kaç kalori yemeliyim?",
+    answer: "Kilo vermek için kalori açığı gerekir. Sağlıklı kilo kaybı haftada 0.5-1 kg'dır, bu günlük 500-1000 kalori açığı demektir. TDEE'nizi hesaplayın (örn: 2500 kcal), hedef: 2000-2500 kcal arası. Aşırı kısıtlama (1200 kcal altı) metabolizmayı yavaşlatır. Yüksek protein (%30-35) ve orta karbonhidrat (%35-40) tercih edin."
+  },
+  {
+    id: "12",
+    question: "Vücut yağ yüzdesi nasıl hesaplanır?",
+    answer: "Vücut yağ yüzdesi Navy Method ile hesaplanır. Erkekler için: boyun, bel ve boy ölçüleri kullanılır. Kadınlar için: boyun, bel, kalça ve boy. Sağlıklı aralıklar: Erkek 10-20%, Kadın 18-28%. Atletik yapı: Erkek 6-13%, Kadın 14-20%. Yüksek yağ oranı (Erkek >25%, Kadın >32%) sağlık riskleri oluşturur."
+  },
+  {
+    id: "13",
+    question: "Günlük su ihtiyacım ne kadar?",
+    answer: "Günlük su ihtiyacı kilo ve aktiviteye göre değişir. Temel formül: Kilo (kg) × 30-40 ml. 70 kg için: 2.1-2.8 litre/gün. Aktif sporcular: +500-1000 ml ekstra. Sıcak havalarda: +20-40% artış. Belirtiler: açık sarı idrar = yeterli, koyu sarı = daha fazla su için. Günde 8-10 bardak (2-2.5 litre) ortalama hedeftir."
+  },
+  {
+    id: "14",
+    question: "Vitamin ve mineral ihtiyaçlarım nedir?",
+    answer: "RDA (Günlük Önerilen Alım) değerleri: Vitamin C 75-90 mg, Vitamin D 600-800 IU, Vitamin A 700-900 mcg, Demir 8-18 mg, Kalsiyum 1000-1200 mg, Magnezyum 310-420 mg. Besindegerim.com her gıda için 20+ vitamin/mineral değeri gösterir. Çeşitli beslenme en iyisidir: meyve, sebze, tahıl, protein dengesi."
+  },
+  {
+    id: "15",
+    question: "Platform mobil cihazlarda kullanılabilir mi?",
+    answer: "Evet, besindegerim.com tamamen responsive tasarıma sahiptir. Telefon, tablet ve masaüstü tüm cihazlarda mükemmel çalışır. Mobil tarayıcınızdan (Chrome, Safari) doğrudan kullanabilirsiniz. Arama, detay sayfaları ve hesaplayıcılar mobilde optimize edilmiştir. Uygulama indirmeye gerek yoktur."
+  }
+];
+
 export default function HomePage({ 
   categoryGroups = [], 
   popularFoods = [],
   currentPath = "/"
 }: HomePageProps) {
-  // Client-side data fetching for development mode (CSR)
-  // Only fetch if popularFoods prop is empty (not from SSR)
   const { data: foodsData, isLoading: isFetching } = useQuery<{ items: Food[] }>({
     queryKey: ['/api/foods'],
     enabled: popularFoods.length === 0,
@@ -202,154 +279,90 @@ export default function HomePage({
         {/* Decorative Divider */}
         <div className="h-2 bg-gradient-to-r from-emerald-600 via-green-500 to-emerald-600"></div>
 
-        {/* FAQ Section - SEO Optimized - Darker Green Tone */}
-        <section className="relative py-16 md:py-24 bg-white overflow-hidden border-t-4 border-emerald-500">
+        {/* FAQ Section - SEO Optimized */}
+        <section className="relative py-16 md:py-24 bg-gradient-to-b from-white via-green-50/30 to-emerald-50/30 overflow-hidden border-t-4 border-emerald-500">
           <div className="max-w-4xl mx-auto px-4 md:px-8">
             {/* Section Title */}
             <div className="text-center mb-12">
               <div className="inline-flex items-center gap-3 mb-6">
+                <div className="h-1 w-12 bg-gradient-to-r from-transparent to-green-500 rounded-full"></div>
                 <HelpCircle className="w-8 h-8 text-green-500" />
+                <div className="h-1 w-12 bg-gradient-to-l from-transparent to-green-500 rounded-full"></div>
               </div>
+              
               <h2 className="text-4xl md:text-5xl font-black mb-4 bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
                 Sıkça Sorulan Sorular
               </h2>
-              <p className="text-lg text-slate-600">
-                Besin değerleri hakkında merak ettikleriniz
+              
+              <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+                Besin değerleri, kalori hesaplama ve platform kullanımı hakkında merak ettikleriniz
               </p>
+
+              {/* Green Accent Line */}
+              <div className="mt-6 mx-auto w-24 h-1 bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 rounded-full shadow-lg shadow-green-500/50"></div>
             </div>
 
-            {/* FAQ Items - Accordion Style */}
-            <div className="space-y-4">
-              {/* FAQ 1 */}
-              <details className="group backdrop-blur-xl bg-white/80 border-2 border-green-200/50 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300" data-testid="faq-item-1">
-                <summary className="flex items-center justify-between cursor-pointer p-6 hover:bg-green-50/50 transition-colors">
-                  <h3 className="text-lg font-bold text-slate-900 flex items-center gap-3">
-                    <ChevronRight className="w-5 h-5 text-green-500 group-open:rotate-90 transition-transform" />
-                    Besin değerleri nereden geliyor?
-                  </h3>
-                </summary>
-                <div className="px-6 pb-6 text-slate-700 leading-relaxed">
-                  Tüm besin değerleri, Amerika Tarım Bakanlığı'nın (USDA) FoodData Central veritabanından alınmaktadır. 
-                  Bu, dünyanın en kapsamlı ve bilimsel olarak doğrulanmış besin değerleri kaynağıdır. 
-                  Veriler düzenli olarak güncellenir ve vitamin, mineral gibi mikrobesinleri de içerir.
-                </div>
-              </details>
+            {/* FAQ Accordion */}
+            <Accordion type="single" collapsible className="space-y-4">
+              {faqData.map((faq, index) => (
+                <AccordionItem 
+                  key={faq.id} 
+                  value={faq.id}
+                  className="backdrop-blur-xl bg-white/80 border-2 border-green-200/50 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl hover:border-green-500/50 transition-all duration-300"
+                  data-testid={`faq-item-${index + 1}`}
+                >
+                  <AccordionTrigger className="px-6 py-5 hover:bg-green-50/50 transition-colors text-left hover:no-underline">
+                    <h3 className="text-lg font-bold text-slate-900 flex items-center gap-3 pr-4">
+                      <ChevronDown className="w-5 h-5 text-green-500 shrink-0" />
+                      {faq.question}
+                    </h3>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-6 pb-6 text-slate-700 leading-relaxed">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
 
-              {/* FAQ 2 */}
-              <details className="group backdrop-blur-xl bg-white/80 border-2 border-green-200/50 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300" data-testid="faq-item-2">
-                <summary className="flex items-center justify-between cursor-pointer p-6 hover:bg-green-50/50 transition-colors">
-                  <h3 className="text-lg font-bold text-slate-900 flex items-center gap-3">
-                    <ChevronRight className="w-5 h-5 text-green-500 group-open:rotate-90 transition-transform" />
-                    Gerçek porsiyon ne demek?
-                  </h3>
-                </summary>
-                <div className="px-6 pb-6 text-slate-700 leading-relaxed">
-                  Diğer sitelerden farklı olarak, 100g bazlı değil gerçek porsiyon bazlı kalori gösteriyoruz. 
-                  Örneğin "1 orta domates = 22 kcal" veya "1 dilim ekmek = 66 kcal" şeklinde. 
-                  Bu sayede günlük hayatta daha kolay hesaplama yapabilirsiniz.
-                </div>
-              </details>
-
-              {/* FAQ 3 */}
-              <details className="group backdrop-blur-xl bg-white/80 border-2 border-green-200/50 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300" data-testid="faq-item-3">
-                <summary className="flex items-center justify-between cursor-pointer p-6 hover:bg-green-50/50 transition-colors">
-                  <h3 className="text-lg font-bold text-slate-900 flex items-center gap-3">
-                    <ChevronRight className="w-5 h-5 text-green-500 group-open:rotate-90 transition-transform" />
-                    Hangi besin değerleri gösteriliyor?
-                  </h3>
-                </summary>
-                <div className="px-6 pb-6 text-slate-700 leading-relaxed">
-                  Her gıda için kalori, protein, karbonhidrat, yağ, lif ve şeker gibi makro besinleri gösteriyoruz. 
-                  Ayrıca A vitamini, C vitamini, demir, kalsiyum gibi 20+ vitamin ve mineral değerlerini de sunuyoruz. 
-                  Tüm değerler porsiyon başına hesaplanmıştır.
-                </div>
-              </details>
-
-              {/* FAQ 4 */}
-              <details className="group backdrop-blur-xl bg-white/80 border-2 border-green-200/50 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300" data-testid="faq-item-4">
-                <summary className="flex items-center justify-between cursor-pointer p-6 hover:bg-green-50/50 transition-colors">
-                  <h3 className="text-lg font-bold text-slate-900 flex items-center gap-3">
-                    <ChevronRight className="w-5 h-5 text-green-500 group-open:rotate-90 transition-transform" />
-                    Veriler güvenilir mi?
-                  </h3>
-                </summary>
-                <div className="px-6 pb-6 text-slate-700 leading-relaxed">
-                  Evet, tüm veriler USDA FoodData Central'dan alındığı için %100 güvenilirdir. 
-                  Bu veritabanı, laboratuvar analizleri ve bilimsel çalışmalarla desteklenen, 
-                  dünya çapında kabul görmüş bir kaynaktır. Ancak, bireysel sağlık kararları için 
-                  mutlaka bir sağlık profesyoneline danışmanız önerilir.
-                </div>
-              </details>
-
-              {/* FAQ 5 */}
-              <details className="group backdrop-blur-xl bg-white/80 border-2 border-green-200/50 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300" data-testid="faq-item-5">
-                <summary className="flex items-center justify-between cursor-pointer p-6 hover:bg-green-50/50 transition-colors">
-                  <h3 className="text-lg font-bold text-slate-900 flex items-center gap-3">
-                    <ChevronRight className="w-5 h-5 text-green-500 group-open:rotate-90 transition-transform" />
-                    Yeni gıdalar nasıl ekleniyor?
-                  </h3>
-                </summary>
-                <div className="px-6 pb-6 text-slate-700 leading-relaxed">
-                  Platformumuz sürekli genişlemektedir. Türkiye'de yaygın tüketilen gıdaları önceliklendirerek, 
-                  USDA veritabanından Türkçe karşılıklarını bulup ekliyoruz. Pexels'ten profesyonel görseller 
-                  kullanarak her gıdayı görsel olarak da zenginleştiriyoruz. Öneri için bizimle iletişime geçebilirsiniz.
-                </div>
-              </details>
+            {/* CTA Section */}
+            <div className="text-center mt-16">
+              <div className="backdrop-blur-xl bg-white/70 border-2 border-green-200/50 rounded-3xl p-8 shadow-2xl shadow-green-500/20">
+                <h3 className="text-2xl font-bold text-slate-900 mb-4">
+                  Başka sorunuz mu var?
+                </h3>
+                <p className="text-slate-600 mb-6">
+                  Bizimle iletişime geçmekten çekinmeyin
+                </p>
+                <a
+                  href="/iletisim"
+                  className="inline-flex items-center gap-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-8 py-4 rounded-full text-lg font-bold transition-all duration-500 shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/50 hover:scale-105"
+                  data-testid="link-contact"
+                >
+                  <span>İletişime Geç</span>
+                  <ChevronDown className="w-5 h-5 rotate-[-90deg]" />
+                </a>
+              </div>
             </div>
-
-            {/* FAQ Schema for SEO */}
-            <script 
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: JSON.stringify({
-                  "@context": "https://schema.org",
-                  "@type": "FAQPage",
-                  "mainEntity": [
-                    {
-                      "@type": "Question",
-                      "name": "Besin değerleri nereden geliyor?",
-                      "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "Tüm besin değerleri, Amerika Tarım Bakanlığı'nın (USDA) FoodData Central veritabanından alınmaktadır. Bu, dünyanın en kapsamlı ve bilimsel olarak doğrulanmış besin değerleri kaynağıdır."
-                      }
-                    },
-                    {
-                      "@type": "Question",
-                      "name": "Gerçek porsiyon ne demek?",
-                      "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "Diğer sitelerden farklı olarak, 100g bazlı değil gerçek porsiyon bazlı kalori gösteriyoruz. Örneğin '1 orta domates = 22 kcal' veya '1 dilim ekmek = 66 kcal' şeklinde."
-                      }
-                    },
-                    {
-                      "@type": "Question",
-                      "name": "Hangi besin değerleri gösteriliyor?",
-                      "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "Her gıda için kalori, protein, karbonhidrat, yağ, lif ve şeker gibi makro besinleri gösteriyoruz. Ayrıca A vitamini, C vitamini, demir, kalsiyum gibi 20+ vitamin ve mineral değerlerini de sunuyoruz."
-                      }
-                    },
-                    {
-                      "@type": "Question",
-                      "name": "Veriler güvenilir mi?",
-                      "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "Evet, tüm veriler USDA FoodData Central'dan alındığı için %100 güvenilirdir. Bu veritabanı, laboratuvar analizleri ve bilimsel çalışmalarla desteklenen, dünya çapında kabul görmüş bir kaynaktır."
-                      }
-                    },
-                    {
-                      "@type": "Question",
-                      "name": "Yeni gıdalar nasıl ekleniyor?",
-                      "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "Platformumuz sürekli genişlemektedir. Türkiye'de yaygın tüketilen gıdaları önceliklendirerek, USDA veritabanından Türkçe karşılıklarını bulup ekliyoruz."
-                      }
-                    }
-                  ]
-                })
-              }}
-            />
           </div>
+
+          {/* FAQ Schema for SEO */}
+          <script 
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": faqData.map(faq => ({
+                  "@type": "Question",
+                  "name": faq.question,
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": faq.answer
+                  }
+                }))
+              })
+            }}
+          />
         </section>
       </main>
 

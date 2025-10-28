@@ -19,8 +19,8 @@ export function Footer() {
               />
             </a>
             <p className="text-sm text-slate-700 leading-relaxed">
-              Gerçek porsiyon bazlı kalori ve besin değerleri. 
-              USDA FoodData Central ile destekleniyor.
+              Türkiye'nin en kapsamlı besin değerleri platformu. 
+              Gerçek porsiyon bazlı kalori ve makro hesaplama.
             </p>
           </div>
 
@@ -124,10 +124,10 @@ export function Footer() {
             Önemli Uyarı - Sadece Bilgilendirme Amaçlıdır
           </p>
           <p className="text-xs text-slate-700 leading-relaxed" data-testid="text-disclaimer">
-            Bu sitede yer alan besin değerleri bilgileri sadece bilgilendirme amaçlıdır. 
-            Tıbbi tavsiye, teşhis veya tedavi yerine geçmez. Sağlık durumunuz hakkında 
-            karar vermeden önce mutlaka bir sağlık profesyoneline danışınız. Besin değerleri 
-            USDA FoodData Central'dan alınmıştır ve yaklaşık değerler içerebilir.
+            Bu sitede yer alan besin değerleri ve hesaplayıcılar sadece bilgilendirme amaçlıdır. 
+            Tıbbi tavsiye, teşhis veya tedavi yerine geçmez. Sağlık durumunuz, diyet planınız 
+            veya beslenme alışkanlıklarınız hakkında karar vermeden önce mutlaka bir diyetisyen 
+            veya sağlık profesyoneline danışınız. Veriler bilimsel kaynaklardan alınmıştır.
           </p>
         </div>
 

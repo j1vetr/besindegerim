@@ -11,6 +11,11 @@ import {
   render404Page,
   renderAllFoodsPage,
   renderCategoryPage,
+  renderAboutPage,
+  renderContactPage,
+  renderPrivacyPage,
+  renderTermsPage,
+  renderCookiePage,
 } from "./render";
 import {
   buildMetaForHome,
@@ -21,6 +26,7 @@ import { storage } from "./storage";
 import { cache } from "./cache";
 import type { Food, CategoryGroup } from "@shared/schema";
 import { findMainCategoryBySlug, findSubcategoryBySlug, categoryToSlug } from "@shared/utils";
+import { getAboutPageSchema, getContactPageSchema, serializeSchema } from "./seo/schemas";
 
 /**
  * HTML template'ini oku ve meta + body inject et
@@ -166,6 +172,42 @@ export async function handleSSRRequest(req: Request, res: Response): Promise<voi
         description: `${allFoods.length} gıdanın besin değerlerini keşfedin`,
         keywords: "besin değerleri, kalori, gıdalar",
         canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/tum-gidalar?page=${page}`,
+      };
+      return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+    }
+
+    // Gizlilik Politikası
+    if (requestPath === "/gizlilik-politikasi") {
+      const renderResult = await renderPrivacyPage(categoryGroups);
+      const meta = {
+        title: "Gizlilik Politikası | besindegerim.com",
+        description: "besindegerim.com Gizlilik Politikası. Kişisel verilerinizin korunması, KVKK uyumu ve veri güvenliği hakkında detaylı bilgiler.",
+        keywords: "gizlilik politikası, KVKK, kişisel verilerin korunması, veri güvenliği",
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/gizlilik-politikasi`,
+      };
+      return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+    }
+
+    // Kullanım Koşulları
+    if (requestPath === "/kullanim-kosullari") {
+      const renderResult = await renderTermsPage(categoryGroups);
+      const meta = {
+        title: "Kullanım Koşulları | besindegerim.com",
+        description: "besindegerim.com Kullanım Koşulları. Web sitesi kullanım kuralları, sorumluluklar, fikri mülkiyet hakları ve yasal bilgiler.",
+        keywords: "kullanım koşulları, terms of service, yasal bilgiler, fikri mülkiyet",
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/kullanim-kosullari`,
+      };
+      return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+    }
+
+    // Çerez Politikası
+    if (requestPath === "/cerez-politikasi") {
+      const renderResult = await renderCookiePage(categoryGroups);
+      const meta = {
+        title: "Çerez Politikası | besindegerim.com",
+        description: "besindegerim.com Çerez Politikası. Çerez kullanımı, türleri, amaçları ve yönetimi hakkında detaylı bilgiler.",
+        keywords: "çerez politikası, cookie policy, çerez kullanımı, gizlilik",
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/cerez-politikasi`,
       };
       return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
     }
@@ -468,6 +510,145 @@ export function registerSSRRoutes(app: Express): void {
       await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
     } catch (error) {
       console.error("[SSR /hesaplayicilar/:calculatorId] Error:", error);
+      res.status(500).send("Server Error");
+    }
+  });
+
+  // Hakkımızda (About) Page: /hakkimizda
+  app.get("/hakkimizda", async (req: Request, res: Response) => {
+    try {
+      // Get category groups
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
+      }
+
+      // Render
+      const renderResult = await renderAboutPage(categoryGroups);
+      const schema = getAboutPageSchema();
+      const meta = {
+        title: "Hakkımızda - Türkiye'nin En Kapsamlı Besin Değerleri Platformu | besindegerim.com",
+        description: "besindegerim.com, 266+ gıdanın gerçek porsiyon bazlı besin değerleri ve 16 hesaplayıcı ile Türkiye'nin en güvenilir beslenme platformudur. Misyonumuz, değerlerimiz ve hikayemizi keşfedin.",
+        keywords: "hakkımızda, besin değerleri platformu, beslenme, kalori hesaplama, misyon, değerler, USDA verileri",
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/hakkimizda`,
+        jsonLd: serializeSchema(schema),
+      };
+
+      await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+    } catch (error) {
+      console.error("[SSR /hakkimizda] Error:", error);
+      res.status(500).send("Server Error");
+    }
+  });
+
+  // İletişim (Contact) Page: /iletisim
+  app.get("/iletisim", async (req: Request, res: Response) => {
+    try {
+      // Get category groups
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
+      }
+
+      // Render
+      const renderResult = await renderContactPage(categoryGroups);
+      const schema = getContactPageSchema();
+      const meta = {
+        title: "İletişim - Bize Ulaşın | besindegerim.com",
+        description: "besindegerim.com ile iletişime geçin. Sorularınız, önerileriniz ve işbirliği teklifleri için info@besindegerim.com adresinden bize ulaşabilirsiniz.",
+        keywords: "iletişim, destek, geri bildirim, email, besindegerim iletişim, müşteri hizmetleri",
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/iletisim`,
+        jsonLd: serializeSchema(schema),
+      };
+
+      await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+    } catch (error) {
+      console.error("[SSR /iletisim] Error:", error);
+      res.status(500).send("Server Error");
+    }
+  });
+
+  // Gizlilik Politikası: /gizlilik-politikasi
+  app.get("/gizlilik-politikasi", async (req: Request, res: Response) => {
+    try {
+      // Get category groups
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
+      }
+
+      // Render
+      const renderResult = await renderPrivacyPage(categoryGroups);
+      const meta = {
+        title: "Gizlilik Politikası | besindegerim.com",
+        description: "besindegerim.com Gizlilik Politikası. Kişisel verilerinizin korunması, KVKK uyumu ve veri güvenliği hakkında detaylı bilgiler.",
+        keywords: "gizlilik politikası, KVKK, kişisel verilerin korunması, veri güvenliği",
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/gizlilik-politikasi`,
+      };
+
+      await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+    } catch (error) {
+      console.error("[SSR /gizlilik-politikasi] Error:", error);
+      res.status(500).send("Server Error");
+    }
+  });
+
+  // Kullanım Koşulları: /kullanim-kosullari
+  app.get("/kullanim-kosullari", async (req: Request, res: Response) => {
+    try {
+      // Get category groups
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
+      }
+
+      // Render
+      const renderResult = await renderTermsPage(categoryGroups);
+      const meta = {
+        title: "Kullanım Koşulları | besindegerim.com",
+        description: "besindegerim.com Kullanım Koşulları. Web sitesi kullanım kuralları, sorumluluklar, fikri mülkiyet hakları ve yasal bilgiler.",
+        keywords: "kullanım koşulları, terms of service, yasal bilgiler, fikri mülkiyet",
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/kullanim-kosullari`,
+      };
+
+      await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+    } catch (error) {
+      console.error("[SSR /kullanim-kosullari] Error:", error);
+      res.status(500).send("Server Error");
+    }
+  });
+
+  // Çerez Politikası: /cerez-politikasi
+  app.get("/cerez-politikasi", async (req: Request, res: Response) => {
+    try {
+      // Get category groups
+      const categoryGroupsCacheKey = "all_categories";
+      let categoryGroups: CategoryGroup[] | undefined = cache.get<CategoryGroup[]>(categoryGroupsCacheKey);
+      if (!categoryGroups) {
+        categoryGroups = await storage.getCategoryGroups();
+        cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
+      }
+
+      // Render
+      const renderResult = await renderCookiePage(categoryGroups);
+      const meta = {
+        title: "Çerez Politikası | besindegerim.com",
+        description: "besindegerim.com Çerez Politikası. Çerez kullanımı, türleri, amaçları ve yönetimi hakkında detaylı bilgiler.",
+        keywords: "çerez politikası, cookie policy, çerez kullanımı, gizlilik",
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/cerez-politikasi`,
+      };
+
+      await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+    } catch (error) {
+      console.error("[SSR /cerez-politikasi] Error:", error);
       res.status(500).send("Server Error");
     }
   });
