@@ -4,7 +4,17 @@
  */
 
 import type { Food, CategoryGroup } from "@shared/schema";
-import { getFAQPageSchema, serializeSchema } from "./seo/schemas";
+import { 
+  getFAQPageSchema, 
+  serializeSchema,
+  getDailyCalorieCalculatorSchema,
+  getBMICalculatorSchema,
+  getIdealWeightCalculatorSchema,
+  getWaterIntakeCalculatorSchema,
+  getProteinCalculatorSchema,
+  getPortionConverterCalculatorSchema,
+  getWeightLossTimeCalculatorSchema
+} from "./seo/schemas";
 
 interface RenderResult {
   html: string;
@@ -301,6 +311,59 @@ export async function renderFoodDetailPage(food: Food, categoryGroups: CategoryG
     </div>
   `).join('');
 
+  // Build comprehensive nutrition table
+  const nutritionRows: {name: string, amount: string, unit: string}[] = [];
+  
+  // Macronutrients
+  if (food.protein) nutritionRows.push({name: 'Protein', amount: parseFloat(food.protein).toFixed(1), unit: 'g'});
+  if (food.carbs) nutritionRows.push({name: 'Karbonhidrat', amount: parseFloat(food.carbs).toFixed(1), unit: 'g'});
+  if (food.fiber) nutritionRows.push({name: 'Lif', amount: parseFloat(food.fiber).toFixed(1), unit: 'g'});
+  if (food.sugar) nutritionRows.push({name: 'Şeker', amount: parseFloat(food.sugar).toFixed(1), unit: 'g'});
+  if (food.addedSugar && parseFloat(food.addedSugar) > 0) nutritionRows.push({name: 'Eklenmiş Şeker', amount: parseFloat(food.addedSugar).toFixed(1), unit: 'g'});
+  if (food.fat) nutritionRows.push({name: 'Yağ (Toplam)', amount: parseFloat(food.fat).toFixed(1), unit: 'g'});
+  if (food.saturatedFat && parseFloat(food.saturatedFat) > 0) nutritionRows.push({name: 'Doymuş Yağ', amount: parseFloat(food.saturatedFat).toFixed(1), unit: 'g'});
+  if (food.transFat && parseFloat(food.transFat) > 0) nutritionRows.push({name: 'Trans Yağ', amount: parseFloat(food.transFat).toFixed(1), unit: 'g'});
+  if (food.cholesterol && parseFloat(food.cholesterol) > 0) nutritionRows.push({name: 'Kolesterol', amount: parseFloat(food.cholesterol).toFixed(0), unit: 'mg'});
+  
+  // Minerals & Vitamins from micronutrients
+  if (food.micronutrients) {
+    const micronutrients = food.micronutrients as any;
+    Object.keys(micronutrients).forEach(key => {
+      const nutrient = micronutrients[key];
+      if (nutrient && nutrient.amount && parseFloat(nutrient.amount) > 0) {
+        const formattedName = key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        nutritionRows.push({name: formattedName, amount: parseFloat(nutrient.amount).toFixed(1), unit: nutrient.unit || ''});
+      }
+    });
+  }
+
+  const nutritionTableHTML = nutritionRows.length > 0 ? `
+    <div class="bg-white rounded-lg border-2 border-border p-6 mb-8">
+      <h2 class="text-2xl font-bold mb-4">Besin Değerleri Tablosu</h2>
+      <p class="text-sm text-muted-foreground mb-4">Porsiyon başına: ${food.servingLabel || `${food.servingSize}g`}</p>
+      <table class="w-full">
+        <thead>
+          <tr class="border-b border-border">
+            <th class="text-left py-2 font-semibold">Besin</th>
+            <th class="text-right py-2 font-semibold">Miktar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-border bg-green-50">
+            <td class="py-3 font-semibold">Kalori</td>
+            <td class="text-right py-3 font-semibold text-green-600">${Math.round(parseFloat(food.calories))} kcal</td>
+          </tr>
+          ${nutritionRows.map(row => `
+            <tr class="border-b border-border hover:bg-muted/50">
+              <td class="py-2">${row.name}</td>
+              <td class="text-right py-2">${row.amount} ${row.unit}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  ` : '';
+
   const html = `
     ${renderHeader(categoryGroups)}
     <main class="min-h-screen py-12">
@@ -314,15 +377,16 @@ export async function renderFoodDetailPage(food: Food, categoryGroups: CategoryG
             />
           ` : ''}
           
-          <h1 class="text-4xl font-bold mb-4">${food.name}</h1>
+          <h1 class="text-4xl font-bold mb-4">${food.name} Kaç Kalori?</h1>
           
           <div class="rounded-xl border-l-4 border-green-500 bg-green-50 dark:bg-green-950/20 p-6 mb-8">
-            <div class="flex items-baseline gap-2">
+            <div class="flex items-baseline gap-2 mb-2">
               <span class="text-5xl font-bold text-green-600">${Math.round(parseFloat(food.calories))}</span>
-              <span class="text-xl text-muted-foreground">kcal</span>
+              <span class="text-xl text-muted-foreground">kalori</span>
             </div>
-            <p class="text-sm text-muted-foreground mt-2">
-              Porsiyon: ${food.servingLabel || `${food.servingSize}g`}
+            <p class="text-base text-gray-700 font-medium">
+              ${food.name}, ${food.servingLabel || `${food.servingSize}g`} başına ${Math.round(parseFloat(food.calories))} kalori içerir. 
+              Bu değer gerçek porsiyon bazlı bilimsel verilerine göre hesaplanmıştır.
             </p>
           </div>
 
@@ -330,8 +394,10 @@ export async function renderFoodDetailPage(food: Food, categoryGroups: CategoryG
             ${macrosHTML}
           </div>
 
+          ${nutritionTableHTML}
+
           ${food.category ? `
-            <div class="text-sm text-muted-foreground">
+            <div class="text-sm text-muted-foreground mb-8">
               Kategori: <a href="/kategori/${food.category.toLowerCase().replace(/ /g, '-')}" class="text-green-600 hover:underline">${food.category}</a>
             </div>
           ` : ''}
@@ -573,6 +639,7 @@ export async function renderCalculatorPage(calculatorId: string, categoryGroups:
 function renderDailyCalorieCalculator(categoryGroups: CategoryGroup[]): RenderResult {
   const html = `
     ${renderHeader(categoryGroups)}
+    ${serializeSchema(getDailyCalorieCalculatorSchema())}
     <main class="flex-1 py-12 bg-gradient-to-br from-red-50 via-white to-orange-50">
       <div class="max-w-4xl mx-auto px-4">
         <div class="mb-6">
@@ -666,6 +733,7 @@ function renderDailyCalorieCalculator(categoryGroups: CategoryGroup[]): RenderRe
 function renderBMICalculator(categoryGroups: CategoryGroup[]): RenderResult {
   const html = `
     ${renderHeader(categoryGroups)}
+    ${serializeSchema(getBMICalculatorSchema())}
     <main class="flex-1 py-12 bg-gradient-to-br from-blue-50 via-white to-cyan-50">
       <div class="max-w-4xl mx-auto px-4">
         <div class="mb-6">
@@ -752,6 +820,7 @@ function renderBMICalculator(categoryGroups: CategoryGroup[]): RenderResult {
 function renderIdealWeightCalculator(categoryGroups: CategoryGroup[]): RenderResult {
   const html = `
     ${renderHeader(categoryGroups)}
+    ${serializeSchema(getIdealWeightCalculatorSchema())}
     <main class="flex-1 py-12 bg-gradient-to-br from-pink-50 via-white to-rose-50">
       <div class="max-w-4xl mx-auto px-4">
         <div class="mb-6">
@@ -819,6 +888,7 @@ function renderIdealWeightCalculator(categoryGroups: CategoryGroup[]): RenderRes
 function renderWaterIntakeCalculator(categoryGroups: CategoryGroup[]): RenderResult {
   const html = `
     ${renderHeader(categoryGroups)}
+    ${serializeSchema(getWaterIntakeCalculatorSchema())}
     <main class="flex-1 py-12 bg-gradient-to-br from-sky-50 via-white to-blue-50">
       <div class="max-w-4xl mx-auto px-4">
         <div class="mb-6">
@@ -884,6 +954,7 @@ function renderWaterIntakeCalculator(categoryGroups: CategoryGroup[]): RenderRes
 function renderProteinCalculator(categoryGroups: CategoryGroup[]): RenderResult {
   const html = `
     ${renderHeader(categoryGroups)}
+    ${serializeSchema(getProteinCalculatorSchema())}
     <main class="flex-1 py-12 bg-gradient-to-br from-red-50 via-white to-orange-50">
       <div class="max-w-4xl mx-auto px-4">
         <div class="mb-6">
@@ -948,6 +1019,7 @@ function renderProteinCalculator(categoryGroups: CategoryGroup[]): RenderResult 
 function renderPortionConverterCalculator(categoryGroups: CategoryGroup[]): RenderResult {
   const html = `
     ${renderHeader(categoryGroups)}
+    ${serializeSchema(getPortionConverterCalculatorSchema())}
     <main class="flex-1 py-12 bg-gradient-to-br from-purple-50 via-white to-pink-50">
       <div class="max-w-4xl mx-auto px-4">
         <div class="mb-6">
@@ -1012,6 +1084,7 @@ function renderPortionConverterCalculator(categoryGroups: CategoryGroup[]): Rend
 function renderWeightLossTimeCalculator(categoryGroups: CategoryGroup[]): RenderResult {
   const html = `
     ${renderHeader(categoryGroups)}
+    ${serializeSchema(getWeightLossTimeCalculatorSchema())}
     <main class="flex-1 py-12 bg-gradient-to-br from-amber-50 via-white to-orange-50">
       <div class="max-w-4xl mx-auto px-4">
         <div class="mb-6">

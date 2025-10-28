@@ -121,6 +121,221 @@ export function getFAQPageSchema() {
 }
 
 /**
+ * Daily Calorie Calculator Schema (HowTo)
+ */
+export function getDailyCalorieCalculatorSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "Günlük Kalori İhtiyacı Hesaplama",
+    "description": "BMR ve TDEE hesaplayarak günlük kalori ihtiyacınızı ve makro besin dağılımınızı öğrenin.",
+    "image": "https://besindegerim.com/logo.png",
+    "totalTime": "PT2M",
+    "tool": ["Kilo (kg)", "Boy (cm)", "Yaş", "Cinsiyet", "Aktivite Seviyesi"],
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Bilgileri Girin",
+        "text": "Kilonuzu (kg), boyunuzu (cm), yaşınızı, cinsiyetinizi ve günlük aktivite seviyenizi seçin.",
+        "position": 1
+      },
+      {
+        "@type": "HowToStep",
+        "name": "BMR Hesaplanır",
+        "text": "Mifflin-St Jeor formülü kullanılarak Bazal Metabolizma Hızınız (BMR) hesaplanır.",
+        "position": 2
+      },
+      {
+        "@type": "HowToStep",
+        "name": "TDEE ve Makrolar",
+        "text": "BMR değeriniz aktivite faktörü ile çarpılarak TDEE bulunur. Protein, karbonhidrat ve yağ dağılımınız hesaplanır.",
+        "position": 3
+      }
+    ]
+  };
+}
+
+/**
+ * BMI Calculator Schema (HowTo)
+ */
+export function getBMICalculatorSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "BMI (Vücut Kitle İndeksi) Hesaplama",
+    "description": "WHO standartlarına göre BMI değerinizi hesaplayın ve sağlıklı kilo aralığınızı öğrenin.",
+    "image": "https://besindegerim.com/logo.png",
+    "totalTime": "PT1M",
+    "tool": ["Kilo (kg)", "Boy (cm)"],
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Kilo ve Boy Girin",
+        "text": "Kilonuzu kilogram (kg) ve boyunuzu santimetre (cm) cinsinden girin.",
+        "position": 1
+      },
+      {
+        "@type": "HowToStep",
+        "name": "BMI Hesaplanır",
+        "text": "BMI = Kilo (kg) / Boy² (m²) formülü ile vücut kitle indeksiniz hesaplanır.",
+        "position": 2
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Kategori ve Öneriler",
+        "text": "BMI değeriniz WHO kategorilerine göre değerlendirilir: Zayıf (<18.5), Normal (18.5-24.9), Fazla Kilolu (25-29.9), Obez (≥30).",
+        "position": 3
+      }
+    ]
+  };
+}
+
+/**
+ * Ideal Weight Calculator Schema (HowTo)
+ */
+export function getIdealWeightCalculatorSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "İdeal Kilo Hesaplama",
+    "description": "Boyunuza ve cinsiyetinize göre Devine ve Broca formülleriyle ideal kilonuzu hesaplayın.",
+    "image": "https://besindegerim.com/logo.png",
+    "totalTime": "PT1M",
+    "tool": ["Boy (cm)", "Cinsiyet"],
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Boy ve Cinsiyet Girin",
+        "text": "Boyunuzu (cm) ve cinsiyetinizi seçin.",
+        "position": 1
+      },
+      {
+        "@type": "HowToStep",
+        "name": "İdeal Kilo Hesaplanır",
+        "text": "Devine ve Broca formülleri kullanılarak ideal kilo aralığınız belirlenir.",
+        "position": 2
+      }
+    ]
+  };
+}
+
+/**
+ * Water Intake Calculator Schema (HowTo)
+ */
+export function getWaterIntakeCalculatorSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "Günlük Su İhtiyacı Hesaplama",
+    "description": "Kilonuza, aktivite seviyenize ve iklime göre günlük su ihtiyacınızı hesaplayın.",
+    "image": "https://besindegerim.com/logo.png",
+    "totalTime": "PT1M",
+    "tool": ["Kilo (kg)", "Aktivite Seviyesi", "İklim"],
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Bilgileri Girin",
+        "text": "Kilonuzu, aktivite seviyenizi ve yaşadığınız iklimi seçin.",
+        "position": 1
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Su İhtiyacı Hesaplanır",
+        "text": "Kilo başına 30-40 ml formülü kullanılarak günlük su ihtiyacınız hesaplanır ve aktivite/iklim faktörleri eklenir.",
+        "position": 2
+      }
+    ]
+  };
+}
+
+/**
+ * Protein Calculator Schema (HowTo)
+ */
+export function getProteinCalculatorSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "Günlük Protein Gereksinimi Hesaplama",
+    "description": "Hedefinize ve aktivite seviyenize göre günlük protein ihtiyacınızı hesaplayın.",
+    "image": "https://besindegerim.com/logo.png",
+    "totalTime": "PT1M",
+    "tool": ["Kilo (kg)", "Hedef", "Aktivite Seviyesi"],
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Bilgileri Girin",
+        "text": "Kilonuzu, hedefinizi (kilo verme, kas yapma, koruma) ve aktivite seviyenizi seçin.",
+        "position": 1
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Protein İhtiyacı Hesaplanır",
+        "text": "Hedefinize göre kg başına protein miktarı (0.8-2.5g/kg) hesaplanır ve protein kaynakları önerilir.",
+        "position": 2
+      }
+    ]
+  };
+}
+
+/**
+ * Portion Converter Calculator Schema (HowTo)
+ */
+export function getPortionConverterCalculatorSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "Porsiyon Çevirici Kullanımı",
+    "description": "Gramajı porsiyona, porsiyonu kaşık ve bardağa çevirin.",
+    "image": "https://besindegerim.com/logo.png",
+    "totalTime": "PT1M",
+    "tool": ["Gıda Seçimi", "Miktar"],
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Gıda ve Miktar Girin",
+        "text": "Çevirmek istediğiniz gıdayı seçin ve miktarını girin.",
+        "position": 1
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Porsiyon Dönüşümü",
+        "text": "Gram, porsiyon, kaşık ve bardak birimleri arasında otomatik çevrim yapılır.",
+        "position": 2
+      }
+    ]
+  };
+}
+
+/**
+ * Weight Loss Time Calculator Schema (HowTo)
+ */
+export function getWeightLossTimeCalculatorSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "Kilo Verme/Alma Süresi Hesaplama",
+    "description": "Hedef kilonuza ulaşmanız için gereken süreyi hesaplayın.",
+    "image": "https://besindegerim.com/logo.png",
+    "totalTime": "PT1M",
+    "tool": ["Mevcut Kilo", "Hedef Kilo", "Haftalık Hedef"],
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Bilgileri Girin",
+        "text": "Mevcut kilonuzu, hedef kilonuzu ve haftada kaç kilo vermek/almak istediğinizi girin.",
+        "position": 1
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Süre Hesaplanır",
+        "text": "Hedef kilonuza ulaşmak için gereken hafta ve ay sayısı hesaplanır ve öneriler sunulur.",
+        "position": 2
+      }
+    ]
+  };
+}
+
+/**
  * Serialize JSON-LD schema as HTML script tag
  */
 export function serializeSchema(schema: any): string {
