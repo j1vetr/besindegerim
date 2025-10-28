@@ -142,9 +142,6 @@ const calculators = [
 ];
 
 export default function CalculatorsHubPage({ categoryGroups, currentPath }: CalculatorsHubPageProps) {
-  const popularCalculators = calculators.filter(c => c.popular);
-  const otherCalculators = calculators.filter(c => !c.popular);
-
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Header categoryGroups={categoryGroups} currentPath={currentPath} />
@@ -171,15 +168,11 @@ export default function CalculatorsHubPage({ categoryGroups, currentPath }: Calc
           </div>
         </section>
 
-        {/* Popular Calculators */}
+        {/* All Calculators - Same Layout */}
         <section className="py-16 px-4 bg-white">
           <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-8 flex items-center gap-3">
-              <span className="text-green-600">⭐</span> Popüler Hesaplayıcılar
-            </h2>
-            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {popularCalculators.map((calc) => (
+              {calculators.map((calc) => (
                 <Link key={calc.id} href={`/hesaplayicilar/${calc.id}`}>
                   <Card className="group h-full hover:shadow-2xl transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-green-500/30">
                     <CardContent className="p-8">
@@ -198,39 +191,6 @@ export default function CalculatorsHubPage({ categoryGroups, currentPath }: Calc
                       <div className="mt-6 flex items-center text-green-600 font-semibold group-hover:gap-2 transition-all">
                         <span>Hesapla</span>
                         <span className="group-hover:translate-x-1 transition-transform">→</span>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Other Calculators */}
-        <section className="py-16 px-4 bg-gradient-to-b from-white to-gray-50">
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-8">
-              Diğer Hesaplayıcılar
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {otherCalculators.map((calc) => (
-                <Link key={calc.id} href={`/hesaplayicilar/${calc.id}`}>
-                  <Card className="group h-full hover:shadow-xl transition-all duration-300 cursor-pointer">
-                    <CardContent className="p-6 flex items-start gap-4">
-                      <div className={`w-12 h-12 bg-gradient-to-br ${calc.color} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
-                        <calc.icon className="w-6 h-6 text-white" />
-                      </div>
-                      
-                      <div className="flex-1">
-                        <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-green-600 transition-colors">
-                          {calc.title}
-                        </h3>
-                        
-                        <p className="text-gray-600 text-sm leading-relaxed">
-                          {calc.description}
-                        </p>
                       </div>
                     </CardContent>
                   </Card>

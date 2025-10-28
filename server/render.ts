@@ -13,21 +13,68 @@ interface RenderResult {
 
 /**
  * Header HTML (tüm sayfalarda ortak)
- * SSR için basit HTML - JavaScript gerektirmeyen navigasyon
+ * SSR için detaylı HTML - JavaScript gerektirmeyen navigasyon
  */
 function renderHeader(categoryGroups: CategoryGroup[]): string {
   return `
-    <header class="sticky top-0 z-50 w-full border-b-2 border-green-200/50 bg-white/95 backdrop-blur shadow-lg">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-        <div class="flex items-center justify-between gap-4">
-          <a href="/" class="flex-shrink-0">
-            <img src="/logo.png" alt="besindegerim.com" class="h-14 sm:h-16 w-auto" />
+    <header class="sticky top-0 z-50 backdrop-blur-2xl bg-white/80 border-b-2 border-green-200/50 shadow-lg shadow-green-500/5">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 lg:py-4">
+        <!-- Top bar - Logo, Search & Navigation -->
+        <div class="flex items-center gap-2 sm:gap-4">
+          <!-- Logo -->
+          <a href="/" class="flex-shrink-0 hover:scale-105 transition-transform">
+            <img 
+              src="/logo.png" 
+              alt="Besin Değerim" 
+              class="h-14 sm:h-16 lg:h-20 w-auto"
+            />
           </a>
-          <nav class="flex items-center gap-2 sm:gap-3">
-            <a href="/" class="px-3 py-2 text-sm font-semibold text-green-700 hover:bg-green-50 rounded-lg transition-colors">Ana Sayfa</a>
-            <a href="/hesaplayicilar" class="px-4 py-2 text-sm font-bold bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-full hover:from-green-700 hover:to-emerald-700 transition-all shadow-md">Hesaplayıcılar (16)</a>
-            <a href="/tum-gidalar" class="px-3 py-2 text-sm font-semibold text-green-700 hover:bg-green-50 rounded-lg transition-colors">Gıdalar</a>
+
+          <!-- Search Form (No JavaScript required) -->
+          <div class="flex-1 min-w-0">
+            <form action="/ara" method="GET">
+              <div class="relative">
+                <svg class="absolute left-3 sm:left-4 top-1/2 h-4 w-4 sm:h-5 sm:w-5 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <input
+                  type="text"
+                  name="q"
+                  placeholder="Ara..."
+                  class="h-10 sm:h-11 w-full rounded-2xl border-2 border-green-200/50 bg-white pl-10 sm:pl-12 pr-4 sm:pr-6 text-sm text-slate-900 placeholder:text-slate-500 outline-none transition-all duration-300 focus:border-green-500"
+                />
+              </div>
+            </form>
+          </div>
+
+          <!-- Mobile Navigation -->
+          <nav class="flex lg:hidden items-center gap-1">
+            <a href="/hesaplayicilar" class="px-3 py-2 text-xs font-bold bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-full shadow-md whitespace-nowrap">16 Hesap</a>
           </nav>
+        </div>
+
+        <!-- Desktop Categories Navigation -->
+        <div class="hidden lg:flex items-center gap-2 mt-3 overflow-x-auto pb-2">
+          <a 
+            href="/hesaplayicilar" 
+            class="inline-block whitespace-nowrap rounded-full px-5 py-2 text-sm font-bold transition-all duration-300 bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 shadow-lg border-2 border-green-500"
+          >
+            Hesaplayıcılar (16)
+          </a>
+          <a 
+            href="/tum-gidalar" 
+            class="whitespace-nowrap rounded-full px-5 py-2 text-sm font-semibold transition-all duration-300 bg-green-100 text-green-700 hover:bg-green-200 border-2 border-green-200/50"
+          >
+            Tümü
+          </a>
+          ${categoryGroups.slice(0, 8).map(group => `
+            <a 
+              href="/kategori/${group.mainCategory.toLowerCase().replace(/ı/g, 'i').replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's').replace(/ö/g, 'o').replace(/ç/g, 'c').replace(/İ/g, 'i').replace(/[^a-z0-9]+/g, '-')}" 
+              class="whitespace-nowrap rounded-full px-5 py-2 text-sm font-semibold transition-all duration-300 bg-green-100 text-green-700 hover:bg-green-200 border-2 border-green-200/50"
+            >
+              ${group.mainCategory}
+            </a>
+          `).join('')}
         </div>
       </div>
     </header>
@@ -103,7 +150,7 @@ export async function renderHomePage(foods: Food[], categoryGroups: CategoryGrou
     </a>
   `).join('');
 
-  // FAQ data for SSR
+  // FAQ data for SSR - 6 Essential Questions
   const faqData = [
     {
       question: "besindegerim.com nedir?",
@@ -118,10 +165,6 @@ export async function renderHomePage(foods: Food[], categoryGroups: CategoryGrou
       answer: "Ana sayfadaki arama kutusuna gıda adını yazın (örn: elma, tavuk). Arama sonuçlarından istediğiniz gıdayı seçin. Detay sayfasında porsiyon başına kalori, protein, karbonhidrat, yağ ve 20+ vitamin/mineral değerlerini görürsünüz. Hesaplayıcılar menüsünden BMI, kalori, protein gibi hesaplamalar yapabilirsiniz."
     },
     {
-      question: "Hangi gıdaları bulabilirim?",
-      answer: "Platformda 266+ gıda bulunur: Meyveler (elma, muz, çilek), sebzeler (domates, brokoli), tahıllar (pirinç, bulgur), et ve tavuk, balık ve deniz ürünleri, süt ürünleri (yoğurt, peynir), kuruyemişler, bakliyatler. Türkiye'de yaygın tüketilen tüm gıdalar kategorilere ayrılmıştır."
-    },
-    {
       question: "Hesaplayıcılar ücretsiz mi?",
       answer: "Evet, tüm hesaplayıcılar tamamen ücretsizdir. BMI hesaplayıcı, günlük kalori ihtiyacı (BMR/TDEE), protein gereksinimi, su ihtiyacı, ideal kilo, porsiyon çevirici ve kilo verme süresi hesaplayıcılarını ücretsiz kullanabilirsiniz. Kayıt veya ödeme gerektirmez."
     },
@@ -132,38 +175,6 @@ export async function renderHomePage(foods: Food[], categoryGroups: CategoryGrou
     {
       question: "Günlük kalori ihtiyacım nedir?",
       answer: "Günlük kalori ihtiyacınız TDEE (Toplam Günlük Enerji Harcaması) ile hesaplanır. Önce BMR (Bazal Metabolizma Hızı) bulunur: erkekler için (10×kilo) + (6.25×boy cm) - (5×yaş) + 5, kadınlar için -161. BMR × aktivite faktörü (hareketsiz 1.2, orta aktif 1.55, çok aktif 1.9) = TDEE. Örnek: BMR 1650, orta aktif → 1650×1.55 = 2558 kcal."
-    },
-    {
-      question: "Protein ihtiyacım ne kadar?",
-      answer: "Protein ihtiyacı hedefinize göre değişir. Sedanter: 0.8-1.0 g/kg, hafif aktif: 1.2-1.4 g/kg, spor yapan: 1.6-2.2 g/kg, kas yapmak isteyen: 2.0-2.5 g/kg vücut ağırlığı başına. 70 kg sporcu için: 70×1.8 = 126 g protein/gün. Yüksek protein diyeti kilo vermede kas korumasına yardımcı olur."
-    },
-    {
-      question: "Porsiyon ölçüleri nedir?",
-      answer: "Porsiyon ölçüleri, gıdaların gerçek tüketim miktarlarıdır. Örnekler: 1 orta elma (182g) = 95 kcal, 1 dilim ekmek (28g) = 74 kcal, 1 su bardağı süt (244g) = 149 kcal, 1 yemek kaşığı zeytinyağı (14g) = 119 kcal. 100g yerine gerçek porsiyon kullanmak günlük kalori takibini kolaylaştırır."
-    },
-    {
-      question: "Makro nedir?",
-      answer: "Makro besinler (makrolar), vücudun büyük miktarlarda ihtiyaç duyduğu besinlerdir: Protein (4 kcal/g) - kas yapımı ve onarımı, Karbonhidrat (4 kcal/g) - enerji kaynağı, Yağ (9 kcal/g) - hormon üretimi ve vitamin emilimi. Dengeli dağılım: protein %25-35, karbonhidrat %40-50, yağ %25-35. Hedef ve aktiviteye göre ayarlanır."
-    },
-    {
-      question: "Kilo vermek için kaç kalori yemeliyim?",
-      answer: "Kilo vermek için kalori açığı gerekir. Sağlıklı kilo kaybı haftada 0.5-1 kg'dır, bu günlük 500-1000 kalori açığı demektir. TDEE'nizi hesaplayın (örn: 2500 kcal), hedef: 2000-2500 kcal arası. Aşırı kısıtlama (1200 kcal altı) metabolizmayı yavaşlatır. Yüksek protein (%30-35) ve orta karbonhidrat (%35-40) tercih edin."
-    },
-    {
-      question: "Vücut yağ yüzdesi nasıl hesaplanır?",
-      answer: "Vücut yağ yüzdesi Navy Method ile hesaplanır. Erkekler için: boyun, bel ve boy ölçüleri kullanılır. Kadınlar için: boyun, bel, kalça ve boy. Sağlıklı aralıklar: Erkek 10-20%, Kadın 18-28%. Atletik yapı: Erkek 6-13%, Kadın 14-20%. Yüksek yağ oranı (Erkek >25%, Kadın >32%) sağlık riskleri oluşturur."
-    },
-    {
-      question: "Günlük su ihtiyacım ne kadar?",
-      answer: "Günlük su ihtiyacı kilo ve aktiviteye göre değişir. Temel formül: Kilo (kg) × 30-40 ml. 70 kg için: 2.1-2.8 litre/gün. Aktif sporcular: +500-1000 ml ekstra. Sıcak havalarda: +20-40% artış. Belirtiler: açık sarı idrar = yeterli, koyu sarı = daha fazla su için. Günde 8-10 bardak (2-2.5 litre) ortalama hedeftir."
-    },
-    {
-      question: "Vitamin ve mineral ihtiyaçlarım nedir?",
-      answer: "RDA (Günlük Önerilen Alım) değerleri: Vitamin C 75-90 mg, Vitamin D 600-800 IU, Vitamin A 700-900 mcg, Demir 8-18 mg, Kalsiyum 1000-1200 mg, Magnezyum 310-420 mg. Besindegerim.com her gıda için 20+ vitamin/mineral değeri gösterir. Çeşitli beslenme en iyisidir: meyve, sebze, tahıl, protein dengesi."
-    },
-    {
-      question: "Platform mobil cihazlarda kullanılabilir mi?",
-      answer: "Evet, besindegerim.com tamamen responsive tasarıma sahiptir. Telefon, tablet ve masaüstü tüm cihazlarda mükemmel çalışır. Mobil tarayıcınızdan (Chrome, Safari) doğrudan kullanabilirsiniz. Arama, detay sayfaları ve hesaplayıcılar mobilde optimize edilmiştir. Uygulama indirmeye gerek yoktur."
     }
   ];
 

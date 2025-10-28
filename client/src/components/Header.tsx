@@ -294,8 +294,8 @@ export function Header({ categoryGroups = [], currentPath = "/" }: HeaderProps) 
                 Hesaplayıcılar
               </a>
               
-              {/* Dropdown Menu - Hover to show - 2 COLUMNS */}
-              <div className="absolute top-full left-0 mt-2 w-[620px] bg-white rounded-xl shadow-2xl border-2 border-green-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+              {/* Dropdown Menu - Hover to show - 2 COLUMNS - Right aligned to prevent overflow */}
+              <div className="absolute top-full right-0 mt-2 w-[620px] max-w-[90vw] bg-white rounded-xl shadow-2xl border-2 border-green-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                 <div className="p-4">
                   <div className="grid grid-cols-2 gap-x-4 gap-y-1">
                     {/* Column 1 */}
