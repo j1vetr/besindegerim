@@ -549,7 +549,7 @@ export async function renderCalculatorsHubPage(categoryGroups: CategoryGroup[]):
   const otherCalculators = calculators.filter(c => !c.popular);
 
   const renderCalculatorCard = (calc: any) => `
-    <a href="/hesaplayicilar/${calc.id}" class="group block border-2 border-transparent hover:border-green-500/30 rounded-lg p-8 bg-white hover:shadow-2xl transition-all duration-300">
+    <a href="/hesaplayici/${calc.id}" class="group block border-2 border-transparent hover:border-green-500/30 rounded-lg p-8 bg-white hover:shadow-2xl transition-all duration-300">
       <div class="w-16 h-16 bg-gradient-to-br ${calc.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
         <span class="text-4xl">${calc.icon}</span>
       </div>

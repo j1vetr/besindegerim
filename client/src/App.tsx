@@ -261,22 +261,22 @@ function App() {
         
         {/* Calculators */}
         <Route path="/hesaplayicilar" component={CalculatorsHubWrapper} />
-        <Route path="/hesaplayicilar/gunluk-kalori-ihtiyaci" component={DailyCalorieWrapper} />
-        <Route path="/hesaplayicilar/bmi" component={BMIWrapper} />
-        <Route path="/hesaplayicilar/ideal-kilo" component={IdealWeightWrapper} />
-        <Route path="/hesaplayicilar/gunluk-su-ihtiyaci" component={WaterIntakeWrapper} />
-        <Route path="/hesaplayicilar/protein-gereksinimi" component={ProteinWrapper} />
-        <Route path="/hesaplayicilar/porsiyon-cevirici" component={PortionConverterWrapper} />
-        <Route path="/hesaplayicilar/kilo-verme-suresi" component={WeightLossTimeWrapper} />
-        <Route path="/hesaplayicilar/bmr" component={BMRWrapper} />
-        <Route path="/hesaplayicilar/vucut-yag-yuzdesi" component={BodyFatWrapper} />
-        <Route path="/hesaplayicilar/makro-hesaplayici" component={MacroWrapper} />
-        <Route path="/hesaplayicilar/ogun-plani" component={MealPlanWrapper} />
-        <Route path="/hesaplayicilar/vitamin-mineral" component={VitaminWrapper} />
-        <Route path="/hesaplayicilar/1rm" component={OneRMWrapper} />
-        <Route path="/hesaplayicilar/kalori-yakma" component={CalorieBurnWrapper} />
-        <Route path="/hesaplayicilar/vucut-olcumleri" component={BodyMeasurementWrapper} />
-        <Route path="/hesaplayicilar/gida-karsilastirma" component={FoodComparisonWrapper} />
+        <Route path="/hesaplayici/gunluk-kalori-ihtiyaci" component={DailyCalorieWrapper} />
+        <Route path="/hesaplayici/bmi" component={BMIWrapper} />
+        <Route path="/hesaplayici/vucut-yag-yuzde" component={BodyFatWrapper} />
+        <Route path="/hesaplayici/ideal-kilo" component={IdealWeightWrapper} />
+        <Route path="/hesaplayici/gunluk-su-ihtiyaci" component={WaterIntakeWrapper} />
+        <Route path="/hesaplayici/protein-gereksinimi" component={ProteinWrapper} />
+        <Route path="/hesaplayici/porsiyon-cevirici" component={PortionConverterWrapper} />
+        <Route path="/hesaplayici/kilo-verme-suresi" component={WeightLossTimeWrapper} />
+        <Route path="/hesaplayici/bmr" component={BMRWrapper} />
+        <Route path="/hesaplayici/makro-hesaplayici" component={MacroWrapper} />
+        <Route path="/hesaplayici/ogun-plani" component={MealPlanWrapper} />
+        <Route path="/hesaplayici/vitamin-mineral" component={VitaminWrapper} />
+        <Route path="/hesaplayici/1rm" component={OneRMWrapper} />
+        <Route path="/hesaplayici/kalori-yakma" component={CalorieBurnWrapper} />
+        <Route path="/hesaplayici/vucut-olcumleri" component={BodyMeasurementWrapper} />
+        <Route path="/hesaplayici/gida-karsilastirma" component={FoodComparisonWrapper} />
         
         {/* Legal pages - New dedicated components */}
         <Route path="/gizlilik-politikasi" component={PrivacyPage} />
