@@ -13,7 +13,8 @@ import {
   getWaterIntakeCalculatorSchema,
   getProteinCalculatorSchema,
   getPortionConverterCalculatorSchema,
-  getWeightLossTimeCalculatorSchema
+  getWeightLossTimeCalculatorSchema,
+  getBodyFatCalculatorSchema
 } from "./seo/schemas";
 
 interface RenderResult {
@@ -536,6 +537,7 @@ export async function renderCalculatorsHubPage(categoryGroups: CategoryGroup[]):
   const calculators = [
     { id: "gunluk-kalori-ihtiyaci", title: "Günlük Kalori ve Makro Hesaplayıcı", description: "BMR, TDEE ve günlük kalori ihtiyacınızı hesaplayın. Protein, karbonhidrat ve yağ dağılımınızı öğrenin.", icon: "🔥", color: "from-green-500 to-emerald-600", popular: true },
     { id: "bmi", title: "Vücut Kitle İndeksi (BMI)", description: "Sağlıklı kilo aralığınızı öğrenin. WHO standartlarına göre BMI hesaplama.", icon: "⚖️", color: "from-blue-500 to-cyan-600", popular: true },
+    { id: "vucut-yag-yuzde", title: "Vücut Yağ Yüzdesi", description: "Navy Method ile vücut yağ yüzdesini hesaplayın. BMI'dan çok daha doğru sonuç!", icon: "💪", color: "from-indigo-500 to-purple-600", popular: true },
     { id: "ideal-kilo", title: "İdeal Kilo Hesaplayıcı", description: "Boyunuza göre ideal kilonuzu hesaplayın. Devine ve Broca formülleriyle.", icon: "💚", color: "from-pink-500 to-rose-600", popular: false },
     { id: "gunluk-su-ihtiyaci", title: "Günlük Su İhtiyacı", description: "Kilonuza ve aktivite seviyenize göre günlük su ihtiyacınızı hesaplayın.", icon: "💧", color: "from-sky-500 to-blue-600", popular: false },
     { id: "protein-gereksinimi", title: "Protein Gereksinimi", description: "Hedef ve aktivite seviyenize göre günlük protein ihtiyacınızı öğrenin.", icon: "🥩", color: "from-red-500 to-orange-600", popular: true },
@@ -568,7 +570,7 @@ export async function renderCalculatorsHubPage(categoryGroups: CategoryGroup[]):
           <div class="text-center mb-12">
             <div class="inline-flex items-center gap-2 bg-white border-2 border-green-200 rounded-full px-4 py-2 mb-6 shadow-sm">
               <span class="text-green-600">🧮</span>
-              <span class="text-sm font-semibold text-green-600">7 Ücretsiz Hesaplayıcı</span>
+              <span class="text-sm font-semibold text-green-600">8 Ücretsiz Hesaplayıcı</span>
             </div>
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6">
               Beslenme Hesaplayıcıları
@@ -618,6 +620,8 @@ export async function renderCalculatorPage(calculatorId: string, categoryGroups:
       return renderDailyCalorieCalculator(categoryGroups);
     case "bmi":
       return renderBMICalculator(categoryGroups);
+    case "vucut-yag-yuzde":
+      return renderBodyFatCalculator(categoryGroups);
     case "ideal-kilo":
       return renderIdealWeightCalculator(categoryGroups);
     case "gunluk-su-ihtiyaci":
@@ -802,6 +806,98 @@ function renderBMICalculator(categoryGroups: CategoryGroup[]): RenderResult {
 
             <div class="mt-8 text-center">
               <a href="/hesaplayicilar" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors">
+                Diğer Hesaplayıcıları Gör
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </main>
+    ${renderFooter()}
+  `;
+  return { html, statusCode: 200 };
+}
+
+/**
+ * Body Fat Percentage Calculator SSR (700+ words SEO content)
+ */
+function renderBodyFatCalculator(categoryGroups: CategoryGroup[]): RenderResult {
+  const html = `
+    ${renderHeader(categoryGroups)}
+    ${serializeSchema(getBodyFatCalculatorSchema())}
+    <main class="flex-1 py-12 bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+      <div class="max-w-4xl mx-auto px-4">
+        <div class="mb-6">
+          <a href="/hesaplayicilar" class="text-indigo-600 hover:text-indigo-700 font-medium">← Tüm Hesaplayıcılar</a>
+        </div>
+        
+        <div class="text-center mb-12">
+          <div class="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-full px-6 py-2 mb-6 shadow-lg">
+            <span class="text-xl">💪</span>
+            <span class="font-semibold">Navy Method Formülü</span>
+          </div>
+          <h1 class="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+            Vücut Yağ Yüzdesi Hesaplayıcı
+          </h1>
+          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+            Navy Method ile vücut yağ yüzdenizi hesaplayın. BMI'dan çok daha doğru sonuç!
+          </p>
+        </div>
+
+        <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6 mb-12">
+          <p class="text-center text-lg font-medium text-gray-900">
+            ⚠️ Bu hesaplayıcıyı kullanmak için JavaScript etkinleştirilmelidir.
+          </p>
+        </div>
+
+        <article class="prose prose-lg max-w-none">
+          <div class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Vücut Yağ Yüzdesi Nedir?</h2>
+            
+            <p class="text-gray-700 leading-relaxed mb-4">
+              Vücut yağ yüzdesi, toplam vücut ağırlığınızın yüzde kaçının yağdan oluştuğunu gösteren bir ölçümdür. BMI'dan farklı olarak, 
+              vücut kompozisyonunuzu daha doğru yansıtır çünkü kas kütlesi ile yağ kütlesini ayırt eder. Örneğin iki kişi aynı kilo ve 
+              boyda olabilir (dolayısıyla aynı BMI), ancak biri kaslı ve düşük yağ yüzdesine sahipken diğeri yüksek yağ yüzdesine sahip 
+              olabilir. Sağlıklı vücut yağ yüzdesi erkekler için %6-24, kadınlar için %14-31 arasındadır. Atletler genellikle daha düşük 
+              değerlere sahiptir: erkek atletler %6-13, kadın atletler %14-20.
+            </p>
+
+            <h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Navy Method (US Navy) Formülü</h3>
+            <p class="text-gray-700 leading-relaxed mb-4">
+              Navy Method, Amerikan Donanması tarafından geliştirilen ve yaygın olarak kullanılan bir yöntemdir. Bu metot bel çevresi, 
+              boyun çevresi ve (kadınlar için) kalça çevresi ölçümlerini kullanarak vücut yağ yüzdesini tahmin eder. Erkekler için formül: 
+              495 / (1.0324 - 0.19077 × log10(bel - boyun) + 0.15456 × log10(boy)) - 450. Kadınlar için: 495 / (1.29579 - 0.35004 × 
+              log10(bel + kalça - boyun) + 0.22100 × log10(boy)) - 450. Bu yöntem pratik, ucuz ve makul derecede doğrudur (%3-4 hata payı).
+            </p>
+
+            <h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Ölçüm Nasıl Yapılır?</h3>
+            <p class="text-gray-700 leading-relaxed mb-4">
+              Doğru sonuçlar için ölçümleri sabah, aç karnına yapın. Bel çevresini göbek deliğinizin hizasından, en geniş noktadan ölçün; 
+              nefes verirken ancak karnınızı içeri çekmeden. Boyun çevresini başınızın hemen altından, en ince noktadan ölçün. Kadınlar 
+              kalça çevresini kalçanın en geniş noktasından ölçmelidir. Her ölçümü en az iki kez yapın ve ortalamasını alın. Ölçüm bandı 
+              gergin ama cildi sıkmayacak şekilde olmalıdır. Aynı kişi tutarlı sonuçlar için hep aynı şekilde ölçüm yapmalıdır.
+            </p>
+
+            <h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Vücut Yağ Yüzdesi Kategorileri</h3>
+            <p class="text-gray-700 leading-relaxed mb-4">
+              <strong>Erkekler:</strong> Atletik ≤13%, Fit 14-17%, Normal 18-24%, Fazla Kilolu 25-29%, Obez ≥30%. 
+              <strong>Kadınlar:</strong> Atletik ≤20%, Fit 21-24%, Normal 25-31%, Fazla Kilolu 32-37%, Obez ≥38%. 
+              Çok düşük yağ yüzdeleri (<6% erkek, <14% kadın) sağlık sorunlarına yol açabilir: hormon dengesizlikleri, kemik 
+              kaybı, bağışıklık sistemi zayıflaması. Optimal sağlık için hedef aralıkta kalmaya çalışın.
+            </p>
+
+            <h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Vücut Yağını Azaltma Stratejileri</h3>
+            <p class="text-gray-700 leading-relaxed mb-4">
+              Vücut yağını sağlıklı bir şekilde azaltmak için kalori açığı oluşturmalısınız ancak bu aşırı olmamalıdır. Günde 300-500 
+              kalori açığı ideal hızda yağ kaybı sağlar (haftada 0.5-1 kg). Protein alımını artırın (kg başına 1.6-2.2g); protein kas 
+              kaybını önler ve tokluk hissi verir. Kuvvet antrenmanı yapın (haftada 3-4 gün); bu kas kütlesini korurken metabolizmayı 
+              hızlandırır. Kardio egzersizleri ekleyin (haftada 150-300 dakika orta tempo veya 75-150 dakika yüksek tempo). Yeterli 
+              uyuyun (7-9 saat); uyku eksikliği hormonları bozar ve yağ depolanmasını artırır. İşlenmiş gıdalardan, şekerden ve trans 
+              yağlardan kaçının.
+            </p>
+
+            <div class="mt-8 text-center">
+              <a href="/hesaplayicilar" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition-colors">
                 Diğer Hesaplayıcıları Gör
               </a>
             </div>

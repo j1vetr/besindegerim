@@ -336,6 +336,41 @@ export function getWeightLossTimeCalculatorSchema() {
 }
 
 /**
+ * Body Fat Percentage Calculator Schema (HowTo)
+ */
+export function getBodyFatCalculatorSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "Vücut Yağ Yüzdesi Hesaplama",
+    "description": "Navy Method ile vücut yağ yüzdesini hesaplayın. Bel, boyun ve kalça ölçümleriyle doğru sonuç.",
+    "image": "https://besindegerim.com/logo.png",
+    "totalTime": "PT2M",
+    "tool": ["Boy (cm)", "Bel Çevresi (cm)", "Boyun Çevresi (cm)", "Kalça Çevresi (cm)", "Cinsiyet"],
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Ölçümleri Alın",
+        "text": "Boyunuzu, bel çevrenizi, boyun çevrenizi ve (kadınlar için) kalça çevrenizi ölçün.",
+        "position": 1
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Bilgileri Girin",
+        "text": "Aldığınız ölçümleri ve cinsiyetinizi hesaplayıcıya girin.",
+        "position": 2
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Vücut Yağ Yüzdesi Hesaplanır",
+        "text": "Navy Method formülü kullanılarak vücut yağ yüzdeniz hesaplanır ve kategori belirlenir (atletik, fit, normal, fazla, obez).",
+        "position": 3
+      }
+    ]
+  };
+}
+
+/**
  * Serialize JSON-LD schema as HTML script tag
  */
 export function serializeSchema(schema: any): string {

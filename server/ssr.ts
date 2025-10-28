@@ -218,8 +218,8 @@ export async function handleSSRRequest(req: Request, res: Response): Promise<voi
     if (requestPath === "/hesaplayicilar") {
       const renderResult = await renderCalculatorsHubPage(categoryGroups);
       const meta = {
-        title: "16 Bilimsel Hesaplayıcı - BMI, Kalori, Protein, Su İhtiyacı | besindegerim.com",
-        description: "Ücretsiz 16 hesaplayıcı: günlük kalori (BMR/TDEE), BMI, ideal kilo, protein gereksinimi, su ihtiyacı, porsiyon çevirici, kilo verme süresi ve daha fazlası.",
+        title: "8 Bilimsel Hesaplayıcı - BMI, Kalori, Protein, Vücut Yağ Yüzdesi | besindegerim.com",
+        description: "Ücretsiz 8 hesaplayıcı: günlük kalori (BMR/TDEE), BMI, vücut yağ yüzdesi, ideal kilo, protein gereksinimi, su ihtiyacı, porsiyon çevirici ve kilo verme süresi.",
         keywords: "BMI hesaplama, günlük kalori, protein hesaplama, su ihtiyacı, ideal kilo, porsiyon çevirici",
         canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/hesaplayicilar`,
       };
@@ -233,6 +233,7 @@ export async function handleSSRRequest(req: Request, res: Response): Promise<voi
       const validCalculators = [
         "gunluk-kalori-ihtiyaci",
         "bmi",
+        "vucut-yag-yuzde",
         "ideal-kilo",
         "gunluk-su-ihtiyaci",
         "protein-gereksinimi",
@@ -264,6 +265,11 @@ export async function handleSSRRequest(req: Request, res: Response): Promise<voi
           title: "BMI Hesaplama - Vücut Kitle İndeksi | besindegerim.com",
           description: "WHO standartlarına göre BMI (Vücut Kitle İndeksi) hesaplayın. Sağlıklı kilo aralığınızı öğrenin. Ücretsiz BMI hesaplayıcı.",
           keywords: "BMI hesaplama, vücut kitle indeksi, ideal kilo, sağlıklı kilo"
+        },
+        "vucut-yag-yuzde": {
+          title: "Vücut Yağ Yüzdesi Hesaplama - Navy Method | besindegerim.com",
+          description: "Navy Method ile vücut yağ yüzdesini hesaplayın. Bel, boyun ve kalça ölçümleriyle BMI'dan çok daha doğru sonuç.",
+          keywords: "vücut yağ yüzdesi, body fat, Navy Method, yağ oranı hesaplama"
         },
         "ideal-kilo": {
           title: "İdeal Kilo Hesaplama - Devine & Broca Formülü | besindegerim.com",

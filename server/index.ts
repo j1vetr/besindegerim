@@ -80,6 +80,7 @@ import { registerSSRRoutes, handleSSRRequest } from "./ssr";
         // Her bir hesaplayıcı (priority 0.9)
         { loc: `${baseUrl}/hesaplayici/gunluk-kalori-ihtiyaci`, priority: "0.9" },
         { loc: `${baseUrl}/hesaplayici/bmi`, priority: "0.9" },
+        { loc: `${baseUrl}/hesaplayici/vucut-yag-yuzde`, priority: "0.9" },
         { loc: `${baseUrl}/hesaplayici/ideal-kilo`, priority: "0.9" },
         { loc: `${baseUrl}/hesaplayici/gunluk-su-ihtiyaci`, priority: "0.9" },
         { loc: `${baseUrl}/hesaplayici/protein-gereksinimi`, priority: "0.9" },
