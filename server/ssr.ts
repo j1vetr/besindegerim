@@ -16,6 +16,8 @@ import {
   renderPrivacyPage,
   renderTermsPage,
   renderCookiePage,
+  renderCalculatorPage,
+  renderCalculatorsHubPage,
 } from "./render";
 import {
   buildMetaForHome,
@@ -212,6 +214,93 @@ export async function handleSSRRequest(req: Request, res: Response): Promise<voi
       return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
     }
 
+    // Hesaplayıcılar Hub
+    if (requestPath === "/hesaplayicilar") {
+      const renderResult = await renderCalculatorsHubPage(categoryGroups);
+      const meta = {
+        title: "16 Bilimsel Hesaplayıcı - BMI, Kalori, Protein, Su İhtiyacı | besindegerim.com",
+        description: "Ücretsiz 16 hesaplayıcı: günlük kalori (BMR/TDEE), BMI, ideal kilo, protein gereksinimi, su ihtiyacı, porsiyon çevirici, kilo verme süresi ve daha fazlası.",
+        keywords: "BMI hesaplama, günlük kalori, protein hesaplama, su ihtiyacı, ideal kilo, porsiyon çevirici",
+        canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/hesaplayicilar`,
+      };
+      return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+    }
+
+    // Tek bir hesaplayıcı: /hesaplayici/:calculatorId
+    const calculatorMatch = requestPath.match(/^\/hesaplayici\/([^/]+)$/);
+    if (calculatorMatch) {
+      const [, calculatorId] = calculatorMatch;
+      const validCalculators = [
+        "gunluk-kalori-ihtiyaci",
+        "bmi",
+        "ideal-kilo",
+        "gunluk-su-ihtiyaci",
+        "protein-gereksinimi",
+        "porsiyon-cevirici",
+        "kilo-verme-suresi"
+      ];
+      
+      if (!validCalculators.includes(calculatorId)) {
+        const renderResult = await render404Page(categoryGroups);
+        const meta = {
+          title: "Hesaplayıcı Bulunamadı - besindegerim.com",
+          description: "Aradığınız hesaplayıcı bulunamadı.",
+          keywords: "hesaplayıcılar",
+          canonical: `${process.env.BASE_URL || "https://besindegerim.com"}${requestPath}`,
+        };
+        return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+      }
+      
+      const renderResult = await renderCalculatorPage(calculatorId, categoryGroups);
+      
+      // Calculator-specific meta tags
+      const calculatorMetas: Record<string, any> = {
+        "gunluk-kalori-ihtiyaci": {
+          title: "Günlük Kalori İhtiyacı Hesaplama - BMR & TDEE | besindegerim.com",
+          description: "BMR ve TDEE hesaplayarak günlük kalori ihtiyacınızı öğrenin. Mifflin-St Jeor formülü ile doğru sonuçlar. Makro besin dağılımınızı hesaplayın.",
+          keywords: "günlük kalori, BMR hesaplama, TDEE, kalori ihtiyacı, makro besinler"
+        },
+        "bmi": {
+          title: "BMI Hesaplama - Vücut Kitle İndeksi | besindegerim.com",
+          description: "WHO standartlarına göre BMI (Vücut Kitle İndeksi) hesaplayın. Sağlıklı kilo aralığınızı öğrenin. Ücretsiz BMI hesaplayıcı.",
+          keywords: "BMI hesaplama, vücut kitle indeksi, ideal kilo, sağlıklı kilo"
+        },
+        "ideal-kilo": {
+          title: "İdeal Kilo Hesaplama - Devine & Broca Formülü | besindegerim.com",
+          description: "Boyunuza ve cinsiyetinize göre ideal kilonuzu hesaplayın. Devine ve Broca formülleri ile bilimsel sonuçlar.",
+          keywords: "ideal kilo, ideal kilo hesaplama, sağlıklı kilo, hedef kilo"
+        },
+        "gunluk-su-ihtiyaci": {
+          title: "Günlük Su İhtiyacı Hesaplama | besindegerim.com",
+          description: "Kilonuza, aktivite seviyenize ve iklime göre günlük su ihtiyacınızı hesaplayın. Sağlıklı hidrasyon için öneriler.",
+          keywords: "günlük su ihtiyacı, su hesaplama, hidrasyon, günde kaç litre su"
+        },
+        "protein-gereksinimi": {
+          title: "Günlük Protein Gereksinimi Hesaplama | besindegerim.com",
+          description: "Hedefinize ve aktivite seviyenize göre günlük protein ihtiyacınızı hesaplayın. Kas yapma, kilo verme için protein önerileri.",
+          keywords: "protein hesaplama, günlük protein, protein ihtiyacı, kas yapma proteini"
+        },
+        "porsiyon-cevirici": {
+          title: "Porsiyon Çevirici - Gram, Kaşık, Bardak Dönüştürme | besindegerim.com",
+          description: "Gramajı porsiyona, porsiyonu kaşık ve bardağa çevirin. Kolay porsiyon hesaplama aracı.",
+          keywords: "porsiyon çevirici, gram porsiyon, kaşık bardak dönüşümü"
+        },
+        "kilo-verme-suresi": {
+          title: "Kilo Verme/Alma Süresi Hesaplama | besindegerim.com",
+          description: "Hedef kilonuza ulaşmak için gereken süreyi hesaplayın. Sağlıklı kilo verme planı oluşturun.",
+          keywords: "kilo verme süresi, kilo alma süresi, hedef kilo, zayıflama planı"
+        }
+      };
+      
+      const meta = calculatorMetas[calculatorId] || {
+        title: "Hesaplayıcı | besindegerim.com",
+        description: "Hesaplayıcı",
+        keywords: "hesaplayıcı"
+      };
+      meta.canonical = `${process.env.BASE_URL || "https://besindegerim.com"}${requestPath}`;
+      
+      return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
+    }
 
     // Gıda detay: /:slug
     const slug = requestPath.slice(1);
