@@ -4,7 +4,7 @@ export interface CalculatorRecommendation {
   id: string;
   title: string;
   description: string;
-  icon: string;
+  iconName: string; // Lucide icon name (e.g., "Beef", "Flame", "Scale")
   color: string;
   reason: string;
 }
@@ -28,7 +28,7 @@ export function getCalculatorRecommendations(food: Food): CalculatorRecommendati
       id: "protein-gereksinimi",
       title: "Protein Gereksinimi",
       description: "Günlük protein ihtiyacınızı hesaplayın",
-      icon: "🥩",
+      iconName: "Beef",
       color: "from-red-500 to-orange-600",
       reason: `${food.name} yüksek protein içeriyor (${protein.toFixed(1)}g)`
     });
@@ -36,7 +36,7 @@ export function getCalculatorRecommendations(food: Food): CalculatorRecommendati
       id: "gunluk-kalori-ihtiyaci",
       title: "Günlük Kalori İhtiyacı",
       description: "TDEE ve makro ihtiyacınızı öğrenin",
-      icon: "🔥",
+      iconName: "Flame",
       color: "from-green-500 to-emerald-600",
       reason: "Makro dengenizi optimize edin"
     });
@@ -49,7 +49,7 @@ export function getCalculatorRecommendations(food: Food): CalculatorRecommendati
       id: "kilo-verme-suresi",
       title: "Kilo Verme/Alma Süresi",
       description: "Hedef kilonuza ulaşma sürenizi hesaplayın",
-      icon: "📈",
+      iconName: "TrendingUp",
       color: "from-amber-500 to-orange-600",
       reason: `${food.name} yüksek kalorili (${calories.toFixed(0)} kcal)`
     });
@@ -57,7 +57,7 @@ export function getCalculatorRecommendations(food: Food): CalculatorRecommendati
       id: "bmi",
       title: "BMI Hesaplayıcı",
       description: "Sağlıklı kilo aralığınızı öğrenin",
-      icon: "⚖️",
+      iconName: "Scale",
       color: "from-blue-500 to-cyan-600",
       reason: "Kilo hedeflerinizi belirleyin"
     });
@@ -70,7 +70,7 @@ export function getCalculatorRecommendations(food: Food): CalculatorRecommendati
       id: "ideal-kilo",
       title: "İdeal Kilo Hesaplayıcı",
       description: "Boyunuza göre ideal kilonuzu hesaplayın",
-      icon: "💚",
+      iconName: "Heart",
       color: "from-pink-500 to-rose-600",
       reason: `${food.name} düşük kalorili, sağlıklı seçim`
     });
@@ -78,7 +78,7 @@ export function getCalculatorRecommendations(food: Food): CalculatorRecommendati
       id: "gunluk-su-ihtiyaci",
       title: "Günlük Su İhtiyacı",
       description: "Günlük su ihtiyacınızı hesaplayın",
-      icon: "💧",
+      iconName: "Droplets",
       color: "from-sky-500 to-blue-600",
       reason: "Hidrasyon dengenizi koruyun"
     });
@@ -91,7 +91,7 @@ export function getCalculatorRecommendations(food: Food): CalculatorRecommendati
       id: "makro-hesaplayici",
       title: "Makro Dağılımı",
       description: "Optimal makro oranlarınızı hesaplayın",
-      icon: "🍽️",
+      iconName: "Utensils",
       color: "from-teal-500 to-cyan-600",
       reason: `${food.name} yüksek karbonhidrat içeriyor`
     });
@@ -99,7 +99,7 @@ export function getCalculatorRecommendations(food: Food): CalculatorRecommendati
       id: "gunluk-kalori-ihtiyaci",
       title: "Günlük Kalori İhtiyacı",
       description: "TDEE ve makro ihtiyacınızı öğrenin",
-      icon: "🔥",
+      iconName: "Flame",
       color: "from-green-500 to-emerald-600",
       reason: "Dengeli beslenme için"
     });
@@ -112,7 +112,7 @@ export function getCalculatorRecommendations(food: Food): CalculatorRecommendati
       id: "protein-gereksinimi",
       title: "Protein Gereksinimi",
       description: "Günlük protein ihtiyacınızı hesaplayın",
-      icon: "🥩",
+      iconName: "Beef",
       color: "from-red-500 to-orange-600",
       reason: "Protein kaynağı tüketiyorsunuz"
     });
@@ -120,7 +120,7 @@ export function getCalculatorRecommendations(food: Food): CalculatorRecommendati
       id: "gunluk-kalori-ihtiyaci",
       title: "Günlük Kalori İhtiyacı",
       description: "TDEE ve makro ihtiyacınızı öğrenin",
-      icon: "🔥",
+      iconName: "Flame",
       color: "from-green-500 to-emerald-600",
       reason: "Makro dengenizi optimize edin"
     });
@@ -132,7 +132,7 @@ export function getCalculatorRecommendations(food: Food): CalculatorRecommendati
       id: "vitamin-mineral",
       title: "Vitamin & Mineral İhtiyacı",
       description: "Günlük vitamin/mineral RDA değerlerini öğrenin",
-      icon: "💊",
+      iconName: "Pill",
       color: "from-purple-500 to-pink-600",
       reason: "Kalsiyum ve vitamin D kaynağı"
     });
@@ -140,7 +140,7 @@ export function getCalculatorRecommendations(food: Food): CalculatorRecommendati
       id: "ideal-kilo",
       title: "İdeal Kilo Hesaplayıcı",
       description: "Boyunuza göre ideal kilonuzu hesaplayın",
-      icon: "💚",
+      iconName: "Heart",
       color: "from-pink-500 to-rose-600",
       reason: "Sağlıklı beslenme hedefi için"
     });
@@ -152,7 +152,7 @@ export function getCalculatorRecommendations(food: Food): CalculatorRecommendati
       id: "gunluk-su-ihtiyaci",
       title: "Günlük Su İhtiyacı",
       description: "Günlük su ihtiyacınızı hesaplayın",
-      icon: "💧",
+      iconName: "Droplets",
       color: "from-sky-500 to-blue-600",
       reason: "Su içeriği yüksek besinler"
     });
@@ -160,7 +160,7 @@ export function getCalculatorRecommendations(food: Food): CalculatorRecommendati
       id: "vitamin-mineral",
       title: "Vitamin & Mineral İhtiyacı",
       description: "Günlük vitamin/mineral RDA değerlerini öğrenin",
-      icon: "💊",
+      iconName: "Pill",
       color: "from-purple-500 to-pink-600",
       reason: "Vitamin ve mineral kaynağı"
     });
@@ -172,7 +172,7 @@ export function getCalculatorRecommendations(food: Food): CalculatorRecommendati
     id: "gunluk-kalori-ihtiyaci",
     title: "Günlük Kalori İhtiyacı",
     description: "TDEE ve makro ihtiyacınızı öğrenin",
-    icon: "🔥",
+    iconName: "Flame",
     color: "from-green-500 to-emerald-600",
     reason: "Günlük kalori dengenizi öğrenin"
   });
@@ -180,7 +180,7 @@ export function getCalculatorRecommendations(food: Food): CalculatorRecommendati
     id: "porsiyon-cevirici",
     title: "Porsiyon Çevirici",
     description: "Gramajı porsiyona, porsiyonu kaşık/bardağa çevirin",
-    icon: "📊",
+    iconName: "Activity",
     color: "from-purple-500 to-pink-600",
     reason: "Porsiyon kontrolü için ideal"
   });
