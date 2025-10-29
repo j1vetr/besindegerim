@@ -7,7 +7,7 @@ import { SearchAutocomplete } from "@/components/SearchAutocomplete";
 import { ClientOnly } from "@/components/ClientOnly";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Database, TrendingUp, Sparkles, Zap, HelpCircle, ChevronDown, Apple, Cookie, Beef, Fish, Milk, Carrot, Salad, Pizza } from "lucide-react";
+import { Database, TrendingUp, Sparkles, Zap, HelpCircle, ChevronDown, Apple, Cookie, Beef, Fish, Milk, Carrot, Salad, Pizza, Calculator, Activity, Droplets, Scale, ArrowLeftRight, Flame, Utensils, Pill, Dumbbell, Ruler, Heart } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 interface HomePageProps {
@@ -54,17 +54,31 @@ export default function HomePage({
   popularFoods = [],
   currentPath = "/"
 }: HomePageProps) {
-  const { data: foodsData, isLoading: isFetching } = useQuery<{ items: Food[] }>({
-    queryKey: ['/api/foods'],
+  // Fetch category groups client-side if not provided by SSR
+  const { data: categoryGroupsData } = useQuery<CategoryGroup[]>({
+    queryKey: ['/api/category-groups'],
+    enabled: categoryGroups.length === 0,
+  });
+  
+  // Fetch random foods client-side if not provided by SSR (for SPA navigation)
+  const { data: randomData, isLoading: isFetching } = useQuery<{ foods: Food[] }>({
+    queryKey: ['/api/random', { count: 12 }],
+    queryFn: async ({ queryKey }) => {
+      const [endpoint, params] = queryKey as [string, { count: number }];
+      const res = await fetch(`${endpoint}?count=${params.count}`, { credentials: 'include' });
+      if (!res.ok) throw new Error('Failed to fetch random foods');
+      return res.json();
+    },
     enabled: popularFoods.length === 0,
   });
 
-  const displayFoods = popularFoods.length > 0 ? popularFoods : (foodsData?.items || []).slice(0, 8);
+  const displayCategoryGroups = categoryGroups.length > 0 ? categoryGroups : (categoryGroupsData || []);
+  const displayFoods = popularFoods.length > 0 ? popularFoods : (randomData?.foods || []);
   const isLoading = popularFoods.length === 0 && isFetching;
 
   return (
     <div className="min-h-screen bg-white">
-      <Header categoryGroups={categoryGroups} currentPath={currentPath} />
+      <Header categoryGroups={displayCategoryGroups} currentPath={currentPath} />
       
       <main>
         {/* Hero Section - Floating Food Icons Background */}
@@ -257,9 +271,9 @@ export default function HomePage({
               <div className="mt-6 mx-auto w-24 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 rounded-full shadow-lg shadow-emerald-500/50"></div>
             </div>
 
-            {/* Calculators Grid - 8 Featured */}
+            {/* All 16 Calculators Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* Daily Calorie Calculator */}
+              {/* 1. Daily Calorie Calculator */}
               <a
                 href="/hesaplayici/gunluk-kalori-ihtiyaci"
                 className="group backdrop-blur-xl bg-white/80 border-2 border-emerald-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-emerald-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-emerald-500/10 hover:shadow-xl hover:shadow-emerald-500/30"
@@ -267,59 +281,14 @@ export default function HomePage({
               >
                 <div className="flex flex-col items-center text-center">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
-                    <Database className="w-8 h-8 text-white" />
+                    <Calculator className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-lg font-bold text-slate-900 mb-2">Günlük Kalori İhtiyacı</h3>
                   <p className="text-sm text-slate-600">BMR, TDEE ve makro hesaplama</p>
                 </div>
               </a>
 
-              {/* BMI Calculator */}
-              <a
-                href="/hesaplayici/bmi"
-                className="group backdrop-blur-xl bg-white/80 border-2 border-blue-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-blue-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-blue-500/10 hover:shadow-xl hover:shadow-blue-500/30"
-                data-testid="calc-card-bmi"
-              >
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
-                    <TrendingUp className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">BMI Hesaplayıcı</h3>
-                  <p className="text-sm text-slate-600">Sağlıklı kilo aralığınız</p>
-                </div>
-              </a>
-
-              {/* Protein Calculator */}
-              <a
-                href="/hesaplayici/protein-gereksinimi"
-                className="group backdrop-blur-xl bg-white/80 border-2 border-red-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-red-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-red-500/10 hover:shadow-xl hover:shadow-red-500/30"
-                data-testid="calc-card-protein"
-              >
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-orange-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
-                    <Beef className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">Protein Gereksinimi</h3>
-                  <p className="text-sm text-slate-600">Günlük protein hedefi</p>
-                </div>
-              </a>
-
-              {/* Water Intake Calculator */}
-              <a
-                href="/hesaplayici/gunluk-su-ihtiyaci"
-                className="group backdrop-blur-xl bg-white/80 border-2 border-sky-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-sky-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-sky-500/10 hover:shadow-xl hover:shadow-sky-500/30"
-                data-testid="calc-card-water"
-              >
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
-                    <HelpCircle className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">Su İhtiyacı</h3>
-                  <p className="text-sm text-slate-600">Günlük su tüketimi</p>
-                </div>
-              </a>
-
-              {/* Body Fat Calculator */}
+              {/* 2. Body Fat % */}
               <a
                 href="/hesaplayici/vucut-yag-yuzde"
                 className="group backdrop-blur-xl bg-white/80 border-2 border-purple-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-purple-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-purple-500/10 hover:shadow-xl hover:shadow-purple-500/30"
@@ -327,14 +296,29 @@ export default function HomePage({
               >
                 <div className="flex flex-col items-center text-center">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
-                    <Sparkles className="w-8 h-8 text-white" />
+                    <Activity className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-lg font-bold text-slate-900 mb-2">Vücut Yağ Yüzdesi</h3>
                   <p className="text-sm text-slate-600">Navy Method ile hesaplama</p>
                 </div>
               </a>
 
-              {/* Macro Calculator */}
+              {/* 3. BMR */}
+              <a
+                href="/hesaplayici/bmr"
+                className="group backdrop-blur-xl bg-white/80 border-2 border-orange-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-orange-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-orange-500/10 hover:shadow-xl hover:shadow-orange-500/30"
+                data-testid="calc-card-bmr"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <Flame className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">Bazal Metabolizma (BMR)</h3>
+                  <p className="text-sm text-slate-600">Dinlenimdeki kalori harcaması</p>
+                </div>
+              </a>
+
+              {/* 4. Macro Calculator */}
               <a
                 href="/hesaplayici/makro-hesaplayici"
                 className="group backdrop-blur-xl bg-white/80 border-2 border-teal-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-teal-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-teal-500/10 hover:shadow-xl hover:shadow-teal-500/30"
@@ -342,14 +326,29 @@ export default function HomePage({
               >
                 <div className="flex flex-col items-center text-center">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-500 to-cyan-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
-                    <Pizza className="w-8 h-8 text-white" />
+                    <Utensils className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-lg font-bold text-slate-900 mb-2">Makro Dağılımı</h3>
                   <p className="text-sm text-slate-600">Optimal protein/karb/yağ</p>
                 </div>
               </a>
 
-              {/* Calorie Burn Calculator */}
+              {/* 5. BMI */}
+              <a
+                href="/hesaplayici/bmi"
+                className="group backdrop-blur-xl bg-white/80 border-2 border-blue-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-blue-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-blue-500/10 hover:shadow-xl hover:shadow-blue-500/30"
+                data-testid="calc-card-bmi"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <Scale className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">BMI Hesaplayıcı</h3>
+                  <p className="text-sm text-slate-600">Sağlıklı kilo aralığınız</p>
+                </div>
+              </a>
+
+              {/* 6. Calorie Burn */}
               <a
                 href="/hesaplayici/kalori-yakma"
                 className="group backdrop-blur-xl bg-white/80 border-2 border-amber-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-amber-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-amber-500/10 hover:shadow-xl hover:shadow-amber-500/30"
@@ -364,7 +363,7 @@ export default function HomePage({
                 </div>
               </a>
 
-              {/* Food Comparison */}
+              {/* 7. Food Comparison */}
               <a
                 href="/hesaplayici/gida-karsilastirma"
                 className="group backdrop-blur-xl bg-white/80 border-2 border-lime-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-lime-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-lime-500/10 hover:shadow-xl hover:shadow-lime-500/30"
@@ -372,10 +371,145 @@ export default function HomePage({
               >
                 <div className="flex flex-col items-center text-center">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-lime-500 to-green-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
-                    <Salad className="w-8 h-8 text-white" />
+                    <ArrowLeftRight className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-lg font-bold text-slate-900 mb-2">Gıda Karşılaştırma</h3>
                   <p className="text-sm text-slate-600">İki gıdayı yan yana incele</p>
+                </div>
+              </a>
+
+              {/* 8. Protein Requirement */}
+              <a
+                href="/hesaplayici/protein-gereksinimi"
+                className="group backdrop-blur-xl bg-white/80 border-2 border-red-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-red-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-red-500/10 hover:shadow-xl hover:shadow-red-500/30"
+                data-testid="calc-card-protein"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-orange-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <Beef className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">Protein Gereksinimi</h3>
+                  <p className="text-sm text-slate-600">Günlük protein hedefi</p>
+                </div>
+              </a>
+
+              {/* 9. Portion Converter */}
+              <a
+                href="/hesaplayici/porsiyon-cevirici"
+                className="group backdrop-blur-xl bg-white/80 border-2 border-purple-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-purple-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-purple-500/10 hover:shadow-xl hover:shadow-purple-500/30"
+                data-testid="calc-card-portion"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <Activity className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">Porsiyon Çevirici</h3>
+                  <p className="text-sm text-slate-600">Gram, kaşık, bardak dönüşümü</p>
+                </div>
+              </a>
+
+              {/* 10. Meal Planner */}
+              <a
+                href="/hesaplayici/ogun-plani"
+                className="group backdrop-blur-xl bg-white/80 border-2 border-emerald-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-emerald-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-emerald-500/10 hover:shadow-xl hover:shadow-emerald-500/30"
+                data-testid="calc-card-meal"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <Utensils className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">Öğün Planlayıcı</h3>
+                  <p className="text-sm text-slate-600">3-6 öğüne dağıtım</p>
+                </div>
+              </a>
+
+              {/* 11. Vitamin & Mineral */}
+              <a
+                href="/hesaplayici/vitamin-mineral"
+                className="group backdrop-blur-xl bg-white/80 border-2 border-purple-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-purple-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-purple-500/10 hover:shadow-xl hover:shadow-purple-500/30"
+                data-testid="calc-card-vitamin"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <Pill className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">Vitamin & Mineral İhtiyacı</h3>
+                  <p className="text-sm text-slate-600">RDA değerleri</p>
+                </div>
+              </a>
+
+              {/* 12. 1RM Calculator */}
+              <a
+                href="/hesaplayici/1rm"
+                className="group backdrop-blur-xl bg-white/80 border-2 border-red-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-red-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-red-500/10 hover:shadow-xl hover:shadow-red-500/30"
+                data-testid="calc-card-1rm"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-pink-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <Dumbbell className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">1RM Hesaplayıcı</h3>
+                  <p className="text-sm text-slate-600">Maksimum kuvvet testi</p>
+                </div>
+              </a>
+
+              {/* 13. Body Measurements */}
+              <a
+                href="/hesaplayici/vucut-olcumleri"
+                className="group backdrop-blur-xl bg-white/80 border-2 border-fuchsia-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-fuchsia-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-fuchsia-500/10 hover:shadow-xl hover:shadow-fuchsia-500/30"
+                data-testid="calc-card-measurements"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-fuchsia-500 to-pink-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <Ruler className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">Vücut Ölçümleri</h3>
+                  <p className="text-sm text-slate-600">WHR ve vücut şekli</p>
+                </div>
+              </a>
+
+              {/* 14. Ideal Weight */}
+              <a
+                href="/hesaplayici/ideal-kilo"
+                className="group backdrop-blur-xl bg-white/80 border-2 border-pink-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-pink-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-pink-500/10 hover:shadow-xl hover:shadow-pink-500/30"
+                data-testid="calc-card-ideal"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <Heart className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">İdeal Kilo</h3>
+                  <p className="text-sm text-slate-600">Boyunuza göre ideal kilo</p>
+                </div>
+              </a>
+
+              {/* 15. Water Intake */}
+              <a
+                href="/hesaplayici/gunluk-su-ihtiyaci"
+                className="group backdrop-blur-xl bg-white/80 border-2 border-sky-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-sky-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-sky-500/10 hover:shadow-xl hover:shadow-sky-500/30"
+                data-testid="calc-card-water"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <Droplets className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">Günlük Su İhtiyacı</h3>
+                  <p className="text-sm text-slate-600">Su tüketim hedefi</p>
+                </div>
+              </a>
+
+              {/* 16. Weight Loss/Gain Time */}
+              <a
+                href="/hesaplayici/kilo-verme-suresi"
+                className="group backdrop-blur-xl bg-white/80 border-2 border-amber-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-amber-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-amber-500/10 hover:shadow-xl hover:shadow-amber-500/30"
+                data-testid="calc-card-weightloss"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <TrendingUp className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">Kilo Verme/Alma Süresi</h3>
+                  <p className="text-sm text-slate-600">Hedef kilo zamanlaması</p>
                 </div>
               </a>
             </div>

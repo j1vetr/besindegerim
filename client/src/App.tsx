@@ -37,14 +37,8 @@ import type { CategoryGroup, Food } from "@shared/schema";
 // Wrapper components that fetch data
 
 function HomePageWrapper() {
-  const { data: categoryGroups = [] } = useQuery<CategoryGroup[]>({ queryKey: ["/api/category-groups"] });
-  const { data: popularResponse } = useQuery<{ foods: Food[] }>({ queryKey: ["/api/random", { count: 8 }] });
-  
-  return <HomePage 
-    categoryGroups={categoryGroups} 
-    popularFoods={popularResponse?.foods || []} 
-    currentPath="/"
-  />;
+  // HomePage handles its own data fetching with SSR fallbacks
+  return <HomePage />;
 }
 
 function FoodDetailWrapper() {
