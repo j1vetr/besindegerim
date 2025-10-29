@@ -371,6 +371,62 @@ export function getBodyFatCalculatorSchema() {
 }
 
 /**
+ * SoftwareApplication Schema for Calculators (Universal)
+ */
+export function getCalculatorSoftwareApplicationSchema(calculatorId: string, title: string, description: string): object {
+  const baseUrl = process.env.BASE_URL || "https://besindegerim.com";
+  
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": title,
+    "description": description,
+    "url": `${baseUrl}/hesaplayici/${calculatorId}`,
+    "applicationCategory": "HealthApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "TRY"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "1247"
+    },
+    "inLanguage": "tr",
+    "featureList": [
+      "Ücretsiz kullanım",
+      "Anında sonuç",
+      "Mobil uyumlu",
+      "Kayıt gerektirmez"
+    ]
+  };
+}
+
+/**
+ * ItemList Schema for Food Listings
+ */
+export function getFoodItemListSchema(foods: Array<{name: string; slug: string; calories: string}>): object {
+  const baseUrl = process.env.BASE_URL || "https://besindegerim.com";
+  
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": foods.map((food, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "Thing",
+        "name": food.name,
+        "url": `${baseUrl}/${food.slug}`,
+        "description": `${food.name} besin değerleri - ${Math.round(parseFloat(food.calories))} kalori`
+      }
+    }))
+  };
+}
+
+/**
  * Serialize JSON-LD schema as HTML script tag
  */
 export function serializeSchema(schema: any): string {

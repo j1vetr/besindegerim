@@ -96,12 +96,12 @@ function renderHeader(categoryGroups: CategoryGroup[]): string {
 /**
  * Footer HTML (tüm sayfalarda ortak)
  */
-function renderFooter(): string {
+function renderFooter(categoryGroups: CategoryGroup[] = []): string {
   const currentYear = new Date().getFullYear();
   return `
     <footer class="mt-auto border-t border-border/40 bg-muted/50">
       <div class="container mx-auto px-4 py-8">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           <div>
             <h3 class="font-semibold mb-4">besindegerim.com</h3>
             <p class="text-sm text-muted-foreground">
@@ -122,6 +122,16 @@ function renderFooter(): string {
               <li><a href="/kullanim-kosullari" class="text-muted-foreground hover:text-foreground">Kullanım Koşulları</a></li>
               <li><a href="/kvkk" class="text-muted-foreground hover:text-foreground">KVKK Aydınlatma Metni</a></li>
               <li><a href="/cerez-politikasi" class="text-muted-foreground hover:text-foreground">Çerez Politikası</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-4">Kategoriler</h4>
+            <ul class="space-y-2 text-sm">
+              <li><a href="/tum-gidalar" class="text-muted-foreground hover:text-foreground">Tüm Gıdalar</a></li>
+              ${categoryGroups.slice(0, 6).map(group => {
+                const slug = group.mainCategory.toLowerCase().replace(/ı/g, 'i').replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's').replace(/ö/g, 'o').replace(/ç/g, 'c').replace(/İ/g, 'i').replace(/[^a-z0-9]+/g, '-');
+                return `<li><a href="/kategori/${slug}" class="text-muted-foreground hover:text-foreground">${group.mainCategory}</a></li>`;
+              }).join('')}
             </ul>
           </div>
           <div>
@@ -291,7 +301,7 @@ export async function renderHomePage(foods: Food[], categoryGroups: CategoryGrou
         ${serializeSchema(faqSchema)}
       </section>
     </main>
-    ${renderFooter()}
+    ${renderFooter(categoryGroups)}
   `;
 
   return { html, statusCode: 200 };
@@ -497,7 +507,7 @@ export async function renderFoodDetailPage(food: Food, categoryGroups: CategoryG
         </div>
       </div>
     </main>
-    ${renderFooter()}
+    ${renderFooter(categoryGroups)}
   `;
 
   return { html, statusCode: 200 };
@@ -518,7 +528,7 @@ export async function render404Page(categoryGroups: CategoryGroup[]): Promise<Re
         </a>
       </div>
     </main>
-    ${renderFooter()}
+    ${renderFooter(categoryGroups)}
   `;
 
   return { html, statusCode: 404 };
@@ -558,7 +568,7 @@ export async function renderAllFoodsPage(
         ` : ''}
       </div>
     </main>
-    ${renderFooter()}
+    ${renderFooter(categoryGroups)}
   `;
 
   return { html, statusCode: 200 };
@@ -618,7 +628,7 @@ export async function renderCategoryPage(
         `}
       </div>
     </main>
-    ${renderFooter()}
+    ${renderFooter(categoryGroups)}
   `;
 
   return { html, statusCode: 200 };
@@ -721,7 +731,7 @@ export async function renderCalculatorsHubPage(categoryGroups: CategoryGroup[]):
         </div>
       </section>
     </main>
-    ${renderFooter()}
+    ${renderFooter(categoryGroups)}
   `;
 
   return { html, statusCode: 200 };
@@ -847,7 +857,7 @@ function renderDailyCalorieCalculator(categoryGroups: CategoryGroup[]): RenderRe
         </article>
       </div>
     </main>
-    ${renderFooter()}
+    ${renderFooter(categoryGroups)}
   `;
   return { html, statusCode: 200 };
 }
@@ -936,7 +946,7 @@ function renderBMICalculator(categoryGroups: CategoryGroup[]): RenderResult {
         </article>
       </div>
     </main>
-    ${renderFooter()}
+    ${renderFooter(categoryGroups)}
   `;
   return { html, statusCode: 200 };
 }
@@ -1030,7 +1040,7 @@ function renderBodyFatCalculator(categoryGroups: CategoryGroup[]): RenderResult 
         </article>
       </div>
     </main>
-    ${renderFooter()}
+    ${renderFooter(categoryGroups)}
   `;
   return { html, statusCode: 200 };
 }
@@ -1098,7 +1108,7 @@ function renderIdealWeightCalculator(categoryGroups: CategoryGroup[]): RenderRes
         </article>
       </div>
     </main>
-    ${renderFooter()}
+    ${renderFooter(categoryGroups)}
   `;
   return { html, statusCode: 200 };
 }
@@ -1164,7 +1174,7 @@ function renderWaterIntakeCalculator(categoryGroups: CategoryGroup[]): RenderRes
         </article>
       </div>
     </main>
-    ${renderFooter()}
+    ${renderFooter(categoryGroups)}
   `;
   return { html, statusCode: 200 };
 }
@@ -1229,7 +1239,7 @@ function renderProteinCalculator(categoryGroups: CategoryGroup[]): RenderResult 
         </article>
       </div>
     </main>
-    ${renderFooter()}
+    ${renderFooter(categoryGroups)}
   `;
   return { html, statusCode: 200 };
 }
@@ -1294,7 +1304,7 @@ function renderPortionConverterCalculator(categoryGroups: CategoryGroup[]): Rend
         </article>
       </div>
     </main>
-    ${renderFooter()}
+    ${renderFooter(categoryGroups)}
   `;
   return { html, statusCode: 200 };
 }
@@ -1366,7 +1376,7 @@ function renderWeightLossTimeCalculator(categoryGroups: CategoryGroup[]): Render
         </article>
       </div>
     </main>
-    ${renderFooter()}
+    ${renderFooter(categoryGroups)}
   `;
   return { html, statusCode: 200 };
 }
@@ -1530,7 +1540,7 @@ export async function renderAboutPage(categoryGroups: CategoryGroup[]): Promise<
         </div>
       </section>
     </main>
-    ${renderFooter()}
+    ${renderFooter(categoryGroups)}
   `;
 
   return { html, statusCode: 200 };
@@ -1665,7 +1675,7 @@ export async function renderContactPage(categoryGroups: CategoryGroup[]): Promis
         </div>
       </section>
     </main>
-    ${renderFooter()}
+    ${renderFooter(categoryGroups)}
   `;
 
   return { html, statusCode: 200 };
@@ -1806,7 +1816,7 @@ export async function renderPrivacyPage(categoryGroups: CategoryGroup[]): Promis
           </div>
         </div>
       </main>
-      ${renderFooter()}
+      ${renderFooter(categoryGroups)}
     </body>
     </html>
   `;
@@ -1925,7 +1935,7 @@ export async function renderTermsPage(categoryGroups: CategoryGroup[]): Promise<
           </div>
         </div>
       </main>
-      ${renderFooter()}
+      ${renderFooter(categoryGroups)}
     </body>
     </html>
   `;
@@ -2052,7 +2062,7 @@ export async function renderCookiePage(categoryGroups: CategoryGroup[]): Promise
           </div>
         </div>
       </main>
-      ${renderFooter()}
+      ${renderFooter(categoryGroups)}
     </body>
     </html>
   `;
