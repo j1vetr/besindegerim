@@ -234,6 +234,169 @@ export default function HomePage({
         {/* Decorative Divider */}
         <div className="h-2 bg-gradient-to-r from-emerald-600 via-green-500 to-emerald-600"></div>
 
+        {/* Calculators Section - Futuristic Glass Design */}
+        <section className="relative py-12 md:py-16 bg-gradient-to-b from-emerald-100 via-teal-50 to-cyan-50 overflow-hidden border-t-4 border-emerald-400">
+          <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8">
+            {/* Section Header */}
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-3 mb-6">
+                <div className="h-1 w-12 bg-gradient-to-r from-transparent to-emerald-500 rounded-full"></div>
+                <Zap className="w-6 h-6 text-emerald-500" />
+                <div className="h-1 w-12 bg-gradient-to-l from-transparent to-emerald-500 rounded-full"></div>
+              </div>
+              
+              <h2 className="text-4xl md:text-6xl font-black mb-4 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                Ücretsiz Hesaplayıcılar
+              </h2>
+              
+              <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto">
+                16 bilimsel hesaplayıcı ile beslenme ve fitness hedeflerinize ulaşın
+              </p>
+
+              {/* Emerald Accent Line */}
+              <div className="mt-6 mx-auto w-24 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 rounded-full shadow-lg shadow-emerald-500/50"></div>
+            </div>
+
+            {/* Calculators Grid - 8 Featured */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Daily Calorie Calculator */}
+              <a
+                href="/hesaplayici/gunluk-kalori-ihtiyaci"
+                className="group backdrop-blur-xl bg-white/80 border-2 border-emerald-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-emerald-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-emerald-500/10 hover:shadow-xl hover:shadow-emerald-500/30"
+                data-testid="calc-card-gunluk-kalori"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <Database className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">Günlük Kalori İhtiyacı</h3>
+                  <p className="text-sm text-slate-600">BMR, TDEE ve makro hesaplama</p>
+                </div>
+              </a>
+
+              {/* BMI Calculator */}
+              <a
+                href="/hesaplayici/bmi"
+                className="group backdrop-blur-xl bg-white/80 border-2 border-blue-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-blue-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-blue-500/10 hover:shadow-xl hover:shadow-blue-500/30"
+                data-testid="calc-card-bmi"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <TrendingUp className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">BMI Hesaplayıcı</h3>
+                  <p className="text-sm text-slate-600">Sağlıklı kilo aralığınız</p>
+                </div>
+              </a>
+
+              {/* Protein Calculator */}
+              <a
+                href="/hesaplayici/protein-gereksinimi"
+                className="group backdrop-blur-xl bg-white/80 border-2 border-red-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-red-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-red-500/10 hover:shadow-xl hover:shadow-red-500/30"
+                data-testid="calc-card-protein"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-orange-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <Beef className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">Protein Gereksinimi</h3>
+                  <p className="text-sm text-slate-600">Günlük protein hedefi</p>
+                </div>
+              </a>
+
+              {/* Water Intake Calculator */}
+              <a
+                href="/hesaplayici/gunluk-su-ihtiyaci"
+                className="group backdrop-blur-xl bg-white/80 border-2 border-sky-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-sky-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-sky-500/10 hover:shadow-xl hover:shadow-sky-500/30"
+                data-testid="calc-card-water"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <HelpCircle className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">Su İhtiyacı</h3>
+                  <p className="text-sm text-slate-600">Günlük su tüketimi</p>
+                </div>
+              </a>
+
+              {/* Body Fat Calculator */}
+              <a
+                href="/hesaplayici/vucut-yag-yuzde"
+                className="group backdrop-blur-xl bg-white/80 border-2 border-purple-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-purple-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-purple-500/10 hover:shadow-xl hover:shadow-purple-500/30"
+                data-testid="calc-card-bodyfat"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <Sparkles className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">Vücut Yağ Yüzdesi</h3>
+                  <p className="text-sm text-slate-600">Navy Method ile hesaplama</p>
+                </div>
+              </a>
+
+              {/* Macro Calculator */}
+              <a
+                href="/hesaplayici/makro-hesaplayici"
+                className="group backdrop-blur-xl bg-white/80 border-2 border-teal-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-teal-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-teal-500/10 hover:shadow-xl hover:shadow-teal-500/30"
+                data-testid="calc-card-macro"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-500 to-cyan-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <Pizza className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">Makro Dağılımı</h3>
+                  <p className="text-sm text-slate-600">Optimal protein/karb/yağ</p>
+                </div>
+              </a>
+
+              {/* Calorie Burn Calculator */}
+              <a
+                href="/hesaplayici/kalori-yakma"
+                className="group backdrop-blur-xl bg-white/80 border-2 border-amber-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-amber-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-amber-500/10 hover:shadow-xl hover:shadow-amber-500/30"
+                data-testid="calc-card-burn"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <Zap className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">Kalori Yakma</h3>
+                  <p className="text-sm text-slate-600">25+ egzersiz türü</p>
+                </div>
+              </a>
+
+              {/* Food Comparison */}
+              <a
+                href="/hesaplayici/gida-karsilastirma"
+                className="group backdrop-blur-xl bg-white/80 border-2 border-lime-200/50 rounded-3xl p-6 hover:bg-white/95 hover:border-lime-500/50 hover:scale-105 transition-all duration-500 shadow-lg shadow-lime-500/10 hover:shadow-xl hover:shadow-lime-500/30"
+                data-testid="calc-card-compare"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-lime-500 to-green-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                    <Salad className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">Gıda Karşılaştırma</h3>
+                  <p className="text-sm text-slate-600">İki gıdayı yan yana incele</p>
+                </div>
+              </a>
+            </div>
+
+            {/* View All Calculators CTA */}
+            <div className="text-center mt-16">
+              <a
+                href="/hesaplayicilar"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-8 py-4 rounded-full text-lg font-bold transition-all duration-500 shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/50 hover:scale-105"
+                data-testid="link-all-calculators"
+              >
+                <span>Tüm Hesaplayıcıları Gör (16 Araç)</span>
+                <ChevronDown className="w-5 h-5 rotate-[-90deg]" />
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* Decorative Divider */}
+        <div className="h-2 bg-gradient-to-r from-teal-600 via-emerald-500 to-teal-600"></div>
+
         {/* FAQ Section - SEO Optimized */}
         <section className="relative py-16 md:py-24 bg-gradient-to-b from-white via-green-50/30 to-emerald-50/30 overflow-hidden border-t-4 border-emerald-500">
           <div className="max-w-4xl mx-auto px-4 md:px-8">

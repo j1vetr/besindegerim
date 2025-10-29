@@ -149,12 +149,8 @@ export async function handleSSRRequest(req: Request, res: Response): Promise<voi
 
     // Ana sayfa
     if (requestPath === "/") {
-      const popularCacheKey = "popular_foods";
-      let foods: Food[] | undefined = cache.get<Food[]>(popularCacheKey);
-      if (!foods) {
-        foods = await storage.getPopularFoods(12);
-        cache.set(popularCacheKey, foods, 600000);
-      }
+      // Always get random foods for homepage (no caching for variety)
+      const foods = await storage.getRandomFoods(12);
       const renderResult = await renderHomePage(foods || [], categoryGroups);
       const meta = buildMetaForHome();
       return await renderHTMLWithMeta(req, res, templatePath, renderResult, meta);
@@ -373,13 +369,8 @@ export function registerSSRRoutes(app: Express): void {
         cache.set(categoryGroupsCacheKey, categoryGroups, 3600000);
       }
 
-      // Get popular foods
-      const popularCacheKey = "popular_foods";
-      let foods: Food[] | undefined = cache.get<Food[]>(popularCacheKey);
-      if (!foods) {
-        foods = await storage.getPopularFoods(12);
-        cache.set(popularCacheKey, foods, 600000);
-      }
+      // Get random foods (no caching for variety on each visit)
+      const foods = await storage.getRandomFoods(12);
 
       // Render (foods guaranteed to exist)
       const renderResult = await renderHomePage(foods || [], categoryGroups);
@@ -546,7 +537,7 @@ export function registerSSRRoutes(app: Express): void {
       const { renderCalculatorsHubPage } = await import("./render");
       const renderResult = await renderCalculatorsHubPage(categoryGroups);
       const meta = {
-        title: "Beslenme Hesaplayıcıları - 7 Ücretsiz Araç | besindegerim.com",
+        title: "Beslenme Hesaplayıcıları - 16 Ücretsiz Araç | besindegerim.com",
         description: "Günlük kalori, BMI, protein gereksinimi, su ihtiyacı ve daha fazlası. Bilimsel formüllerle desteklenen ücretsiz hesaplayıcılar.",
         keywords: "kalori hesaplama, BMI, protein hesaplama, su ihtiyacı, beslenme hesaplayıcı",
         canonical: `${process.env.BASE_URL || "https://besindegerim.com"}/hesaplayicilar`,
