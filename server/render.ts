@@ -376,8 +376,9 @@ export async function renderFoodDetailPage(food: Food, categoryGroups: CategoryG
           ${food.imageUrl ? `
             <img 
               src="${food.imageUrl}" 
-              alt="${food.name}"
+              alt="${food.name} besin değerleri - ${food.servingLabel || `${food.servingSize}g`} başına ${Math.round(parseFloat(food.calories))} kalori"
               class="w-full max-h-96 object-cover rounded-xl mb-8"
+              loading="lazy"
             />
           ` : ''}
           
